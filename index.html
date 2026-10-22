@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课程作业导航</title>
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #16161f;
+            --border: #26263a;
+            --text: #e8e8f0;
+            --text-dim: #9a9ab8;
+            --accent: #a855f7;
+            --accent2: #3b82f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: radial-gradient(circle at 20% 0%, #1a1530 0%, var(--bg) 55%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 64px 20px;
+        }
+        h1 {
+            font-size: 34px;
+            margin-bottom: 8px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle { color: var(--text-dim); margin-bottom: 40px; font-size: 15px; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 22px;
+            width: 100%;
+            max-width: 720px;
+        }
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 26px;
+            text-decoration: none;
+            color: var(--text);
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 12px 30px rgba(168,85,247,.18);
+        }
+        .card .tag {
+            display: inline-block;
+            font-size: 12px;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 999px;
+            padding: 3px 10px;
+            margin-bottom: 14px;
+        }
+        .card h2 { font-size: 20px; margin-bottom: 10px; }
+        .card p { color: var(--text-dim); font-size: 14px; line-height: 1.6; }
+        .footer {
+            margin-top: 48px;
+            color: var(--text-dim);
+            font-size: 13px;
+            text-align: center;
+            line-height: 1.8;
+        }
+        .footer code {
+            background: #1e1e2e;
+            color: #d4d4d4;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>我的课程作业</h1>
+    <div class="subtitle">点击卡片查看渲染后的作业网页（不是源代码）</div>
+
+    <div class="grid">
+        <a class="card" href="homework1.html">
+            <span class="tag">第 1 次作业</span>
+            <h2>AI 编程工具作品展示</h2>
+            <p>用 AI 编程工具完成的幻方、质数生成等作品，含过程截图与心得总结。</p>
+        </a>
+        <a class="card" href="homework2.html">
+            <span class="tag">第 2 次作业</span>
+            <h2>MLP 对比报告</h2>
+            <p>原版 2-2-1 XOR 网络 vs 新版深层 MLP，代码对照 + 多维度可视化分析。</p>
+        </a>
+    </div>
+
+    <div class="footer">
+        若直接打开本文件看到的是源代码，说明你是在 GitHub 仓库里看的。<br>
+        请在仓库 <code>Settings → Pages</code> 开启 Pages，再访问
+        <code>https://he-yikang.github.io/homework/</code> 即可看到此导航页。
+    </div>
+</body>
+</html>
