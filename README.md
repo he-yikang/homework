@@ -9,7 +9,7 @@
 ![封面](banner.svg)
 
 [![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fhe-yikang.github.io%2Fhomework%2F&label=GitHub%20Pages&up_message=online&down_message=offline&color=0a0a0f)](https://he-yikang.github.io/homework/)
-[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.14-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Last Commit](https://img.shields.io/github/last-commit/he-yikang/homework)](https://github.com/he-yikang/homework/commits/main)
 [![Repo Size](https://img.shields.io/github/repo-size/he-yikang/homework)](https://github.com/he-yikang/homework)
