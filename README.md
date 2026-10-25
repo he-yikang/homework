@@ -199,7 +199,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 | 项目 | 说明 |
 |:--|:--|
-| 技术栈 | Python 3.13 · PyTorch 2.14 (CPU) · matplotlib · numpy |
+| 技术栈 | Python 3.14 · PyTorch 2.14 (CPU) · matplotlib · numpy |
 | 可视化 | 深色科技风 HTML 报告（图片内联，单文件自包含，可直接分享） |
 | 部署 | GitHub Pages 自动从 `main` 分支构建，每次 push 即更新线上 |
 | 协作工具 | WorkBuddy · DeepSeek Codex · TRAE |
