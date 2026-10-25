@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0a0f"/>
+      <stop offset="1" stop-color="#14141f"/>
+    </linearGradient>
+    <radialGradient id="gP" cx="16%" cy="26%" r="58%">
+      <stop offset="0" stop-color="#a855f7" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#a855f7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="gB" cx="90%" cy="84%" r="58%">
+      <stop offset="0" stop-color="#3b82f6" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="ttl" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#c084fc"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="360" fill="url(#bg)"/>
+  <rect width="1280" height="360" fill="url(#gP)"/>
+  <rect width="1280" height="360" fill="url(#gB)"/>
+
+  <!-- 神经网络剪影（输入 2 -> 隐藏 -> 输出 3） -->
+  <g stroke="#8b5cf6" stroke-opacity="0.16" stroke-width="1">
+    <line x1="800" y1="120" x2="920" y2="90"/>
+    <line x1="800" y1="120" x2="920" y2="180"/>
+    <line x1="800" y1="120" x2="920" y2="270"/>
+    <line x1="800" y1="240" x2="920" y2="90"/>
+    <line x1="800" y1="240" x2="920" y2="180"/>
+    <line x1="800" y1="240" x2="920" y2="270"/>
+    <line x1="920" y1="90" x2="1040" y2="90"/>
+    <line x1="920" y1="90" x2="1040" y2="180"/>
+    <line x1="920" y1="90" x2="1040" y2="270"/>
+    <line x1="920" y1="180" x2="1040" y2="90"/>
+    <line x1="920" y1="180" x2="1040" y2="180"/>
+    <line x1="920" y1="180" x2="1040" y2="270"/>
+    <line x1="920" y1="270" x2="1040" y2="90"/>
+    <line x1="920" y1="270" x2="1040" y2="180"/>
+    <line x1="920" y1="270" x2="1040" y2="270"/>
+    <line x1="1040" y1="90" x2="1160" y2="150"/>
+    <line x1="1040" y1="90" x2="1160" y2="240"/>
+    <line x1="1040" y1="180" x2="1160" y2="150"/>
+    <line x1="1040" y1="180" x2="1160" y2="240"/>
+    <line x1="1040" y1="270" x2="1160" y2="150"/>
+    <line x1="1040" y1="270" x2="1160" y2="240"/>
+  </g>
+  <g>
+    <circle cx="800" cy="120" r="11" fill="#a855f7" fill-opacity="0.10"/><circle cx="800" cy="120" r="5" fill="#a855f7" fill-opacity="0.55"/>
+    <circle cx="800" cy="240" r="11" fill="#a855f7" fill-opacity="0.10"/><circle cx="800" cy="240" r="5" fill="#a855f7" fill-opacity="0.55"/>
+    <circle cx="920" cy="90" r="11" fill="#8b5cf6" fill-opacity="0.10"/><circle cx="920" cy="90" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
+    <circle cx="920" cy="180" r="11" fill="#8b5cf6" fill-opacity="0.10"/><circle cx="920" cy="180" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
+    <circle cx="920" cy="270" r="11" fill="#8b5cf6" fill-opacity="0.10"/><circle cx="920" cy="270" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
+    <circle cx="1040" cy="90" r="11" fill="#3b82f6" fill-opacity="0.10"/><circle cx="1040" cy="90" r="5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="1040" cy="180" r="11" fill="#3b82f6" fill-opacity="0.10"/><circle cx="1040" cy="180" r="5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="1040" cy="270" r="11" fill="#3b82f6" fill-opacity="0.10"/><circle cx="1040" cy="270" r="5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle cx="1160" cy="150" r="11" fill="#22d3ee" fill-opacity="0.10"/><circle cx="1160" cy="150" r="5" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle cx="1160" cy="240" r="11" fill="#22d3ee" fill-opacity="0.10"/><circle cx="1160" cy="240" r="5" fill="#22d3ee" fill-opacity="0.6"/>
+  </g>
+
+  <!-- 文字 -->
+  <text x="72" y="150" font-size="62" font-weight="800" fill="url(#ttl)">人工智能概论</text>
+  <text x="74" y="190" font-size="16" letter-spacing="3" fill="#22d3ee">AI INTRODUCTION · COURSE PORTFOLIO</text>
+  <text x="74" y="232" font-size="22" fill="#e8e8f0">课程作业集 — AI 编程实践 × 深度学习可视化</text>
+
+  <g font-size="15" font-weight="600">
+    <rect x="74" y="262" width="96" height="34" rx="17" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-opacity="0.5"/>
+    <text x="122" y="284" fill="#e9d5ff" text-anchor="middle">作业 1</text>
+    <rect x="184" y="262" width="96" height="34" rx="17" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-opacity="0.5"/>
+    <text x="232" y="284" fill="#bfdbfe" text-anchor="middle">作业 2</text>
+    <rect x="294" y="262" width="150" height="34" rx="17" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-opacity="0.5"/>
+    <text x="369" y="284" fill="#bbf7d0" text-anchor="middle">GitHub Pages</text>
+  </g>
+</svg>

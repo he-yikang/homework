@@ -4,6 +4,20 @@
 
 </div>
 
+<div align="center">
+
+![封面](banner.svg)
+
+[![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fhe-yikang.github.io%2Fhomework%2F&label=GitHub%20Pages&up_message=online&down_message=offline&color=0a0a0f)](https://he-yikang.github.io/homework/)
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.14-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Last Commit](https://img.shields.io/github/last-commit/he-yikang/homework)](https://github.com/he-yikang/homework/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/he-yikang/homework)](https://github.com/he-yikang/homework)
+
+</div>
+
+<a id="info"></a>
+
 <table>
 <tr>
 <td width="30%"><b>姓名 / 学号</b></td>
@@ -23,7 +37,52 @@
 </tr>
 </table>
 
+<a id="preview"></a>
+
+## 🌐 在线预览（GitHub Pages）
+
+> 本仓库已开启 **GitHub Pages**。下面三个地址就是渲染后的"网页版"作业，**点开即看，无需下载**——这也是老师 / 同学审阅作业最方便的方式。
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+🏠<br><br>
+<b>首页导航</b><br>
+<span>作业入口 · 站点说明</span><br><br>
+<a href="https://he-yikang.github.io/homework/"><b>打开站点 →</b></a>
+
+</td>
+<td width="33%" align="center">
+
+📘<br><br>
+<b>第 1 次作业</b><br>
+<span>GitHub 注册 + AI 编程作品</span><br><br>
+<a href="https://he-yikang.github.io/homework/homework1.html"><b>打开作业 1 →</b></a>
+
+</td>
+<td width="33%" align="center">
+
+📗<br><br>
+<b>第 2 次作业</b><br>
+<span>深层 MLP 对比可视化</span><br><br>
+<a href="https://he-yikang.github.io/homework/homework2.html"><b>打开作业 2 →</b></a>
+
+</td>
+</tr>
+</table>
+
+## 📑 目录
+
+- [🌐 在线预览（GitHub Pages）](#preview)
+- [📋 学生信息](#info)
+- [第 1 次作业](#hw1)
+- [第 2 次作业](#hw2)
+- [📎 关于本仓库](#about)
+
 ---
+
+<a id="hw1"></a>
 
 ## 第 1 次作业：GitHub 注册 + 环境搭建
 
@@ -86,6 +145,8 @@ AI 帮我省了很多查教程、敲命令的时间，但账号注册的人机�
 
 ---
 
+<a id="hw2"></a>
+
 ## 第 2 次作业：用 PyTorch 搭建深层 MLP 并做原版 / 新版对比可视化
 
 ### 1. 任务
@@ -130,3 +191,19 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 另外我也**验证了**一个想法：玩具网络（9 个参数）和工程化的深层网络（1 万多个参数）解决问题能力的差距是**数量级**的；AI 能帮你把整套流程快速搭出来，但环境、版本这类坑还是得自己踩、自己定位。
 
+---
+
+<a id="about"></a>
+
+## 📎 关于本仓库
+
+| 项目 | 说明 |
+|:--|:--|
+| 技术栈 | Python 3.13 · PyTorch 2.14 (CPU) · matplotlib · numpy |
+| 可视化 | 深色科技风 HTML 报告（图片内联，单文件自包含，可直接分享） |
+| 部署 | GitHub Pages 自动从 `main` 分支构建，每次 push 即更新线上 |
+| 协作工具 | WorkBuddy · DeepSeek Codex · TRAE |
+
+<p align="center">
+由 AI 编程 Agent 协助完成 · 何奕康 · 2026
+</p>
