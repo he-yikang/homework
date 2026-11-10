@@ -9,7 +9,7 @@
 ![封面](banner.svg)
 
 [![GitHub Pages](https://img.shields.io/website?url=https%3A%2F%2Fhe-yikang.github.io%2Fhomework%2F&label=GitHub%20Pages&up_message=online&down_message=offline&color=0a0a0f)](https://he-yikang.github.io/homework/)
-[![Python](https://img.shields.io/badge/Python-3.14-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.15.2-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.15.0-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Last Commit](https://img.shields.io/github/last-commit/he-yikang/homework)](https://github.com/he-yikang/homework/commits/main)
 [![Repo Size](https://img.shields.io/github/repo-size/he-yikang/homework)](https://github.com/he-yikang/homework)
@@ -199,7 +199,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 | 项目 | 说明 |
 |:--|:--|
-| 技术栈 | Python 3.14 · PyTorch 2.15.0 (CPU) · matplotlib · numpy |
+| 技术栈 | Python 3.15.2 · PyTorch 2.15.0 (CPU) · matplotlib · numpy |
 | 可视化 | 深色科技风 HTML 报告（图片内联，单文件自包含，可直接分享） |
 | 部署 | GitHub Pages 自动从 `main` 分支构建，每次 push 即更新线上 |
 | 协作工具 | WorkBuddy · DeepSeek Codex · TRAE |
