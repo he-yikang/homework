@@ -110,12 +110,14 @@
         <a href="index.html" class="active">首页</a>
         <a href="homework1.html">作业 1</a>
         <a href="homework2.html">作业 2</a>
+        <a href="lab.html">实时实验室 ✦</a>
     </nav>
     <nav class="toc">
         <h3>站内导航</h3>
         <a href="index.html">首页（本页）</a>
         <a href="homework1.html">第 1 次作业</a>
         <a href="homework2.html">第 2 次作业</a>
+        <a href="lab.html">实时实验室 ✦</a>
     </nav>
     <img class="hero-banner" src="banner.svg" alt="人工智能概论 · 课程作业集（动态封面）">
     <h1>我的课程作业</h1>
@@ -132,6 +134,11 @@
             <h2>MLP 学习参数的实现和可视化</h2>
             <p>交互式训练时间轴：逐帧观察权重分布、决策边界与 loss / 准确率 / lr 的演化，附架构对比与多维度可视化分析。</p>
         </a>
+        <a class="card" href="lab.html" style="grid-column:1/-1;border-color:rgba(45,212,191,.45);background:linear-gradient(135deg,rgba(45,212,191,.10),rgba(168,85,247,.10))">
+            <span class="tag" style="color:#2dd4bf">✦ 交互式实验 · NEW</span>
+            <h2>实时神经网络训练台</h2>
+            <p>不再只是看回放：在浏览器里画数据、改隐藏层与激活函数、调学习率，用纯 JavaScript 现场训练 MLP，实时观察决策边界生长、神经元感受野、逐层激活，还能让原版玩具网络同场赛跑。</p>
+        </a>
     </div>
 
     <div class="footer">
@@ -144,5 +151,62 @@
         var b=document.getElementById('totop');
         window.addEventListener('scroll',function(){if(window.scrollY>400)b.classList.add('show');else b.classList.remove('show');});
     </script>
+<style>
+#hwcmd-ov{position:fixed;inset:0;background:rgba(5,5,10,.72);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding-top:14vh}
+#hwcmd-ov.show{display:flex}
+#hwcmd-box{width:min(560px,92vw);background:#16161f;border:1px solid #a855f7;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.7);overflow:hidden}
+#hwcmd-in{width:100%;background:transparent;border:none;border-bottom:1px solid #26263a;color:#e8e8f0;font-size:16px;padding:16px;outline:none;box-sizing:border-box}
+#hwcmd-list{max-height:320px;overflow:auto;padding:8px}
+#hwcmd-list a{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:8px;color:#e8e8f0;font-size:13px;cursor:pointer;text-decoration:none}
+#hwcmd-list a:hover,#hwcmd-list a.sel{background:rgba(168,85,247,.18)}
+#hwcmd-list small{color:#9a9ab8;white-space:nowrap}
+#hwcmd-fab{position:fixed;right:22px;bottom:84px;z-index:90;background:linear-gradient(135deg,#a855f7,#3b82f6);color:#fff;border:none;border-radius:99px;padding:11px 16px;font-size:12px;cursor:pointer;box-shadow:0 8px 24px rgba(168,85,247,.4)}
+#hwcmd-fab:hover{filter:brightness(1.15)}
+#hwcmd-prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#a855f7,#2dd4bf);z-index:210;transition:width .1s}
+@media(max-width:640px){#hwcmd-fab{right:12px;bottom:76px;padding:9px 12px}}
+</style>
+<div id="hwcmd-prog"></div>
+<button id="hwcmd-fab" title="站内搜索 (Ctrl/⌘+K)">⌘K 站内搜索</button>
+<div id="hwcmd-ov"><div id="hwcmd-box"><input id="hwcmd-in" placeholder="搜索页面或章节，回车跳转…" autocomplete="off"><div id="hwcmd-list"></div></div></div>
+<script>
+(function(){
+var ITEMS=[
+ {t:'首页 · 课程作业导航',u:'index.html',d:'首页',k:'首页 home index 导航'},
+ {t:'第 1 次作业 · AI 编程工具作品展示',u:'homework1.html',d:'作业 1',k:'workbuddy deepseek trae 幻方 质数 agent'},
+ {t:'第 2 次作业 · MLP 学习参数的实现和可视化',u:'homework2.html',d:'作业 2',k:'MLP 对比报告 参数 可视化 训练'},
+ {t:'实时神经网络训练台 · 自己动手训练',u:'lab.html',d:'LIVE 实验室',k:'实时 训练 交互 画数据 神经元 探针 赛跑 决策边界'},
+ {t:'作业 2 · 动态训练实验室（逐帧回放）',u:'homework2.html#lab',d:'章节',k:'时间轴 帧 回放 权重分布'},
+ {t:'作业 2 · 架构与训练配置对比',u:'homework2.html#arch',d:'章节',k:'架构 超参数 表格'},
+ {t:'作业 2 · 多维度可视化分析',u:'homework2.html#viz',d:'章节',k:'PCA 混淆矩阵 雷达 拓扑 图表'},
+ {t:'作业 1 · Agent 思考',u:'homework1.html#agent',d:'章节',k:'思考 反思'}
+];
+var ov=document.getElementById('hwcmd-ov'),inp=document.getElementById('hwcmd-in'),list=document.getElementById('hwcmd-list'),sel=0,shown=[];
+function render(q){
+ shown=ITEMS.filter(function(i){return (i.t+i.k+i.d).toLowerCase().indexOf(q.toLowerCase())>=0;});sel=0;
+ list.innerHTML=shown.length?shown.map(function(i,n){return '<a class="'+(n===0?'sel':'')+'" href="'+i.u+'">'+i.t+'<small>'+i.d+'</small></a>';}).join(''):'<div style="color:#6f6f90;text-align:center;padding:16px;font-size:12px">没有匹配的页面或章节</div>';
+}
+function open(){ov.classList.add('show');inp.value='';render('');inp.focus();}
+function close(){ov.classList.remove('show');}
+document.getElementById('hwcmd-fab').onclick=open;
+ov.onclick=function(e){if(e.target===ov)close();};
+inp.addEventListener('input',function(){render(inp.value);});
+inp.addEventListener('keydown',function(e){
+ if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(shown.length-1,sel+1);}
+ else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(0,sel-1);}
+ else if(e.key==='Enter'){if(shown[sel])location.href=shown[sel].u;}
+ else if(e.key==='Escape')close();
+ var a=list.querySelectorAll('a');for(var i=0;i<a.length;i++)a[i].classList.toggle('sel',i===sel);
+});
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();ov.classList.contains('show')?close():open();}
+ else if(e.key==='Escape')close();
+});
+window.addEventListener('scroll',function(){
+ var h=document.documentElement.scrollHeight-window.innerHeight;
+ document.getElementById('hwcmd-prog').style.width=(h>0?window.scrollY/h*100:0)+'%';
+});
+})();
+</script>
+
 </body>
 </html>
