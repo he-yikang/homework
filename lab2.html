@@ -101,6 +101,7 @@ tr:hover td{background:rgba(168,85,247,.07);cursor:pointer}
   <span class="spacer"></span>
   <span class="kbd">Ctrl/⌘ + K</span>
   <button class="btn sm" style="width:auto" onclick="openCmd()">站内搜索</button>
+  <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
 
 <div class="wrap">
@@ -224,7 +225,7 @@ tr:hover td{background:rgba(168,85,247,.07);cursor:pointer}
   <div class="foot">
     纯 JavaScript 实现的全连接网络：Xavier/He 初始化 → 前向传播 → Softmax 交叉熵 → 反向传播 → 梯度裁剪 → Adam / SGD 更新。<br>
     与 <a href="homework2.html">作业 2 的 PyTorch 对比报告</a> 是同一套原理，这里把「看结果」换成了「自己动手跑」。<br>
-    <a href="index.html">首页</a> · <a href="homework1.html">作业 1</a> · <a href="lab1.html">实验室 1</a> · <a href="homework2.html">作业 2</a> · <a href="lab2.html">实验室 2</a> · <a href="https://github.com/he-yikang/homework">GitHub 仓库</a>
+    <a href="index.html">首页</a> · <a href="homework1.html">作业 1</a> · <a href="lab1.html">实验室 1</a> · <a href="homework2.html">作业 2</a> · <a href="lab2.html">实验室 2</a> · <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf">↗ 返回 GitHub 仓库</a>
   </div>
 </div>
 
@@ -724,7 +725,8 @@ const CMD_ITEMS=[
   {t:'作业 2 · 多维度可视化分析',u:'homework2.html#viz',k:'图表 PCA 混淆矩阵 雷达 拓扑'},
   {t:'实验室 1 · 幻方实验室',u:'lab1.html#magic',k:'幻方 矩阵 校验 斯特雷奇'},
   {t:'实验室 1 · 质数实验室',u:'lab1.html#prime',k:'质数 筛法 试除 算法竞赛'},
-  {t:'作业 1 · Agent 思考',u:'homework1.html#agent',k:'思考 agent 反思'}
+  {t:'作业 1 · Agent 思考',u:'homework1.html#agent',k:'思考 agent 反思'},
+  {t:'↗ GitHub 仓库 · 源码 / README / 提交记录',u:'https://github.com/he-yikang/homework',k:'仓库 源码 github repository readme 返回仓库 提交'}
 ];
 let cmdSel=0,cmdShown=[];
 function openCmd(){$('cmdk').classList.add('show');$('cmdInput').value='';$('cmdInput').focus();renderCmd('');}
