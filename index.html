@@ -109,15 +109,17 @@
         <span class="logo">课程作业导航</span>
         <a href="index.html" class="active">首页</a>
         <a href="homework1.html">作业 1</a>
+        <a href="lab1.html">实验室 1</a>
         <a href="homework2.html">作业 2</a>
-        <a href="lab.html">实时实验室 ✦</a>
+        <a href="lab2.html">实验室 2</a>
     </nav>
     <nav class="toc">
         <h3>站内导航</h3>
         <a href="index.html">首页（本页）</a>
-        <a href="homework1.html">第 1 次作业</a>
-        <a href="homework2.html">第 2 次作业</a>
-        <a href="lab.html">实时实验室 ✦</a>
+        <a href="homework1.html">作业 1</a>
+        <a href="lab1.html">实验室 1</a>
+        <a href="homework2.html">作业 2</a>
+        <a href="lab2.html">实验室 2</a>
     </nav>
     <img class="hero-banner" src="banner.svg" alt="人工智能概论 · 课程作业集（动态封面）">
     <h1>我的课程作业</h1>
@@ -127,21 +129,26 @@
         <a class="card" href="homework1.html">
             <span class="tag">第 1 次作业</span>
             <h2>AI 编程工具作品展示</h2>
-            <p>用 AI 编程工具完成的幻方、质数生成等作品，含过程截图与心得总结。现在还多了 ✦ <span style="color:#2dd4bf">幻方 / 质数互动实验室</span>：亲手调阶数、看筛法动画、比四种算法耗时。</p>
+            <p>用 AI 编程工具完成的幻方、质数生成等作品，含过程截图、核心代码与心得总结。</p>
+        </a>
+        <a class="card" href="lab1.html" style="border-color:rgba(45,212,191,.35)">
+            <span class="tag" style="color:#2dd4bf">✦ 实验室 1 · 互动</span>
+            <h2>幻方与质数互动实验室</h2>
+            <p>亲手拖阶数看三种幻方算法逐格构造并校验，播放四种质数筛法动画、比耗时、分解质因数。纯 JavaScript，打开即玩。</p>
         </a>
         <a class="card" href="homework2.html">
             <span class="tag">第 2 次作业</span>
             <h2>MLP 学习参数的实现和可视化</h2>
             <p>交互式训练时间轴：逐帧观察权重分布、决策边界与 loss / 准确率 / lr 的演化，附架构对比与多维度可视化分析。</p>
         </a>
-        <a class="card" href="lab.html" style="grid-column:1/-1;border-color:rgba(45,212,191,.45);background:linear-gradient(135deg,rgba(45,212,191,.10),rgba(168,85,247,.10))">
-            <span class="tag" style="color:#2dd4bf">✦ 交互式实验 · NEW</span>
+        <a class="card" href="lab2.html" style="border-color:rgba(45,212,191,.35)">
+            <span class="tag" style="color:#2dd4bf">✦ 实验室 2 · LIVE</span>
             <h2>实时神经网络训练台</h2>
-            <p>不再只是看回放：在浏览器里画数据、改隐藏层与激活函数、调学习率，用纯 JavaScript 现场训练 MLP，实时观察决策边界生长、神经元感受野、逐层激活，还能让原版玩具网络同场赛跑。</p>
+            <p>不再只是看回放：在浏览器里画数据、改隐藏层与激活函数、调学习率，用纯 JavaScript 现场训练 MLP，实时观察决策边界与神经元感受野。</p>
         </a>
     </div>
 
-    <div style="text-align:center;margin:18px 0 0;font-size:13px;color:var(--text-dim)">✦ 想直接动手？<a href="homework1.html#labs" style="color:#2dd4bf">进入作业 1 的幻方 / 质数互动实验室 →</a></div>
+    <div style="text-align:center;margin:18px 0 0;font-size:13px;color:var(--text-dim)">✦ 站点顺序：作业 1 → <a href="lab1.html" style="color:#2dd4bf">实验室 1</a> → 作业 2 → <a href="lab2.html" style="color:#2dd4bf">实验室 2</a>　·　按 <code>Ctrl/⌘ + K</code> 可站内搜索</div>
 
     <div class="footer">
         若直接打开本文件看到的是源代码，说明你是在 GitHub 仓库里看的。<br>
@@ -174,14 +181,15 @@
 (function(){
 var ITEMS=[
  {t:'首页 · 课程作业导航',u:'index.html',d:'首页',k:'首页 home index 导航'},
- {t:'第 1 次作业 · AI 编程工具作品展示',u:'homework1.html',d:'作业 1',k:'workbuddy deepseek trae 幻方 质数 agent'},
- {t:'第 2 次作业 · MLP 学习参数的实现和可视化',u:'homework2.html',d:'作业 2',k:'MLP 对比报告 参数 可视化 训练'},
- {t:'实时神经网络训练台 · 自己动手训练',u:'lab.html',d:'LIVE 实验室',k:'实时 训练 交互 画数据 神经元 探针 赛跑 决策边界'},
+ {t:'作业 1 · AI 编程工具作品展示',u:'homework1.html',d:'作业 1',k:'workbuddy deepseek trae 幻方 质数 agent'},
+ {t:'实验室 1 · 幻方与质数互动实验室',u:'lab1.html',d:'实验室 1',k:'幻方 质数 互动 算法 动画 实验室1'},
+ {t:'实验室 1 · 幻方实验室',u:'lab1.html#magic',d:'章节',k:'幻方 矩阵 校验 斯特雷奇 连续摆数法'},
+ {t:'实验室 1 · 质数实验室',u:'lab1.html#prime',d:'章节',k:'质数 筛法 试除 埃氏 欧拉 算法竞赛'},
+ {t:'作业 2 · MLP 学习参数的实现和可视化',u:'homework2.html',d:'作业 2',k:'MLP 对比报告 参数 可视化 训练'},
+ {t:'实验室 2 · 实时神经网络训练台',u:'lab2.html',d:'实验室 2',k:'实时 训练 交互 画数据 神经元 探针 赛跑 决策边界 实验室2'},
  {t:'作业 2 · 动态训练实验室（逐帧回放）',u:'homework2.html#lab',d:'章节',k:'时间轴 帧 回放 权重分布'},
  {t:'作业 2 · 架构与训练配置对比',u:'homework2.html#arch',d:'章节',k:'架构 超参数 表格'},
  {t:'作业 2 · 多维度可视化分析',u:'homework2.html#viz',d:'章节',k:'PCA 混淆矩阵 雷达 拓扑 图表'},
- {t:'作业 1 · 幻方实验室',u:'homework1.html#labs',d:'互动',k:'幻方 矩阵 校验 斯特雷奇 连续摆数法'},
- {t:'作业 1 · 质数实验室',u:'homework1.html#labs',d:'互动',k:'质数 筛法 试除 埃氏 欧拉 算法竞赛'},
  {t:'作业 1 · Agent 思考',u:'homework1.html#agent',d:'章节',k:'思考 反思'}
 ];
 var ov=document.getElementById('hwcmd-ov'),inp=document.getElementById('hwcmd-in'),list=document.getElementById('hwcmd-list'),sel=0,shown=[];

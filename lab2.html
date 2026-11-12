@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>实验室 2 · 实时神经网络训练台 · 人工智能概论课程作业</title>
+<style>
+:root{--bg:#0a0a0f;--card:#16161f;--card2:#1c1c28;--border:#26263a;--text:#e8e8f0;--dim:#9a9ab8;--purple:#a855f7;--blue:#3b82f6;--teal:#2dd4bf;--orange:#fb923c;--red:#fb7185}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradient(circle at 12% 0%,#1a1530 0%,var(--bg) 52%) fixed;color:var(--text);line-height:1.6;min-height:100vh}
+.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(10,10,15,.8);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.topnav .logo{font-weight:700;font-size:16px;background:linear-gradient(90deg,var(--purple),var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;margin-right:8px}
+.topnav a{color:var(--dim);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px;transition:.2s;white-space:nowrap}
+.topnav a:hover,.topnav a.active{color:#fff;background:rgba(168,85,247,.18)}
+.topnav .spacer{flex:1}
+.kbd{font:11px Consolas,monospace;border:1px solid var(--border);background:var(--card2);color:var(--dim);padding:2px 6px;border-radius:5px}
+.wrap{max-width:1500px;margin:0 auto;padding:24px}
+.hero{text-align:center;padding:22px 12px 10px}
+.hero .badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:1px;color:var(--teal);border:1px solid rgba(45,212,191,.35);background:rgba(45,212,191,.08);padding:5px 14px;border-radius:99px;margin-bottom:14px}
+.hero .dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.45;transform:scale(.8)}50%{opacity:1;transform:scale(1.25)}}
+.hero h1{font-size:clamp(26px,4vw,40px);letter-spacing:1px;background:linear-gradient(100deg,#fff 10%,var(--purple) 45%,var(--blue) 75%,var(--teal));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--dim);font-size:14px;margin-top:8px}
+.hero .hint{font-size:12px;color:#6f6f90;margin-top:10px}
+.grid{display:grid;grid-template-columns:280px minmax(420px,1fr) 330px;gap:16px;align-items:start;margin-top:20px}
+@media(max-width:1250px){.grid{grid-template-columns:260px 1fr}.col-right{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.col-right .panel{height:auto}}
+@media(max-width:860px){.grid{grid-template-columns:1fr}.col-right{grid-column:auto;grid-template-columns:1fr}}
+.panel{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+.panel h2{font-size:14px;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel h2::before{content:'';width:3px;height:15px;border-radius:3px;background:linear-gradient(var(--purple),var(--blue))}
+.panel h3{font-size:12px;color:var(--dim);margin:16px 0 8px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.ctl{margin-bottom:11px}
+.ctl label{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-bottom:5px}
+.ctl label b{color:var(--teal);font:12px Consolas,monospace;font-weight:400}
+input[type=range]{width:100%;accent-color:var(--purple);height:5px;cursor:pointer}
+select,.txt{width:100%;background:#101018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:13px;outline:none}
+select:focus,.txt:focus{border-color:var(--purple)}
+.seg{display:flex;gap:5px;flex-wrap:wrap}
+.seg button{flex:1;min-width:52px;background:#101018;border:1px solid var(--border);color:var(--dim);border-radius:8px;padding:7px 4px;font-size:12px;cursor:pointer;transition:.18s}
+.seg button:hover{border-color:var(--purple);color:#fff}
+.seg button.on{background:linear-gradient(135deg,rgba(168,85,247,.32),rgba(59,130,246,.3));border-color:var(--purple);color:#fff}
+.btn{width:100%;background:#101018;border:1px solid var(--border);color:var(--text);border-radius:9px;padding:9px;font-size:13px;cursor:pointer;transition:.2s;margin-top:7px}
+.btn:hover{border-color:var(--purple);background:rgba(168,85,247,.1)}
+.btn.primary{background:linear-gradient(120deg,var(--purple),var(--blue));border:none;color:#fff;font-weight:600;box-shadow:0 6px 20px rgba(168,85,247,.3)}
+.btn.primary:hover{filter:brightness(1.15)}
+.btn.sm{width:auto;flex:1;margin-top:0;padding:7px 6px;font-size:12px}
+.row{display:flex;gap:7px;margin-top:7px}
+.tip{font-size:11px;color:#6f6f90;line-height:1.5;margin-top:6px}
+.chk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--dim);cursor:pointer;margin-top:9px}
+.chk input{accent-color:var(--purple)}
+.canvas-box{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0b0b12}
+canvas{display:block;width:100%;height:auto;touch-action:none}
+#boundary{cursor:crosshair}
+.canvas-box .overlay{position:absolute;top:8px;left:10px;font:11px Consolas,monospace;color:var(--dim);background:rgba(10,10,15,.7);padding:3px 8px;border-radius:6px;pointer-events:none}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--dim);margin-top:9px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:#101018;border:1px solid var(--border);border-radius:10px;padding:9px 10px}
+.stat span{display:block;font-size:10px;color:var(--dim);letter-spacing:.5px}
+.stat b{display:block;font:17px Consolas,monospace;color:var(--teal);margin-top:2px;font-weight:500}
+.stat.p b{color:var(--purple)}.stat.o b{color:var(--orange)}
+.paint-bar{display:flex;gap:6px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.paint-bar .c{width:26px;height:26px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:.15s}
+.paint-bar .c.on{border-color:#fff;transform:scale(1.12)}
+.paint-bar .lbl{font-size:11px;color:var(--dim);margin-right:4px}
+.probe-title{font-size:11px;color:var(--dim);margin:10px 0 4px;display:flex;justify-content:space-between}
+.probe-title b{color:var(--teal);font-weight:400;font-family:Consolas,monospace}
+.bar-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dim);margin-bottom:5px}
+.bar-row .track{flex:1;height:7px;border-radius:5px;background:#101018;overflow:hidden}
+.bar-row .fill{height:100%;border-radius:5px;transition:width .12s}
+.bar-row .v{width:38px;text-align:right;font-family:Consolas,monospace;color:var(--text)}
+table{width:100%;border-collapse:collapse;font-size:11px}
+th,td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--border);white-space:nowrap}
+th{color:var(--dim);font-weight:500}
+td{font-family:Consolas,monospace;color:var(--text)}
+tr:hover td{background:rgba(168,85,247,.07);cursor:pointer}
+.empty{color:#6f6f90;font-size:11px;text-align:center;padding:14px}
+.foot{color:#6f6f90;font-size:12px;text-align:center;padding:26px 12px 34px;line-height:1.9}
+.foot a{color:var(--teal);text-decoration:none}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#20202e;border:1px solid var(--purple);color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.cmdk{position:fixed;inset:0;background:rgba(5,5,10,.72);backdrop-filter:blur(6px);z-index:100;display:none;align-items:flex-start;justify-content:center;padding-top:14vh}
+.cmdk.show{display:flex}
+.cmdk .box{width:min(560px,92vw);background:var(--card);border:1px solid var(--purple);border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.7);overflow:hidden}
+.cmdk input{width:100%;background:transparent;border:none;border-bottom:1px solid var(--border);color:#fff;font-size:16px;padding:16px;outline:none}
+.cmdk .list{max-height:320px;overflow:auto;padding:8px}
+.cmdk .item{display:flex;justify-content:space-between;padding:10px 12px;border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;text-decoration:none}
+.cmdk .item:hover,.cmdk .item.sel{background:rgba(168,85,247,.18)}
+.cmdk .item small{color:var(--dim)}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <span class="logo">实验室 2 · 实时训练台</span>
+  <a href="index.html">首页</a>
+  <a href="homework1.html">作业 1</a>
+  <a href="lab1.html">实验室 1</a>
+  <a href="homework2.html">作业 2</a>
+  <a href="lab2.html" class="active">实验室 2</a>
+  <span class="spacer"></span>
+  <span class="kbd">Ctrl/⌘ + K</span>
+  <button class="btn sm" style="width:auto" onclick="openCmd()">站内搜索</button>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="badge"><span class="dot"></span>实验室 2 · LIVE 浏览器内真实训练 · 零依赖</div>
+    <h1>自己搭一个神经网络，然后看着它学会分类</h1>
+    <p>画数据 · 改结构 · 调超参 · 看决策边界生长 · 点开神经元看它到底学到了什么</p>
+    <p class="hint">全部计算由本页纯 JavaScript 完成（前向传播 / 反向传播 / Adam、SGD），不调用任何服务器或第三方库，断网也能跑。</p>
+  </div>
+
+  <div class="grid">
+    <!-- 左：控制台 -->
+    <div class="panel">
+      <h2>控制台</h2>
+      <h3>① 数据集</h3>
+      <div class="ctl"><label>分布<b id="dsNameLabel">自定义</b></label>
+        <select id="dataset">
+          <option value="spiral">三类螺旋（难）</option>
+          <option value="moons">双月（中）</option>
+          <option value="rings">同心环（中）</option>
+          <option value="xor">XOR 四簇（易）</option>
+          <option value="custom">自己画 ✏️</option>
+        </select>
+      </div>
+      <div class="seg" id="dsQuick">
+        <button data-ds="spiral">螺旋</button><button data-ds="moons">双月</button><button data-ds="xor">XOR</button><button data-ds="custom">清空画布</button>
+      </div>
+      <div class="ctl" style="margin-top:10px"><label>样本数 <b id="nV">360</b></label><input type="range" id="n" min="60" max="720" step="30" value="360"></div>
+      <div class="ctl"><label>噪声 <b id="noiseV">0.18</b></label><input type="range" id="noise" min="0" max="0.45" step="0.01" value="0.18"></div>
+      <div class="ctl"><label>随机种子 <b id="seedV">42</b></label><input type="range" id="seed" min="1" max="999" step="1" value="42"></div>
+      <div class="paint-bar">
+        <span class="lbl">画笔类别</span>
+        <span class="c on" data-cls="0" style="background:#a855f7"></span>
+        <span class="c" data-cls="1" style="background:#2dd4bf"></span>
+        <span class="c" data-cls="2" style="background:#fb923c"></span>
+        <label class="chk" style="margin:0"><input type="checkbox" id="paintMode"> 绘制模式</label>
+      </div>
+      <p class="tip">勾选「绘制模式」后，在右侧决策边界上按住拖动即可画点；切到「自己画」会清空预设数据。不勾选时移动鼠标是「输入探针」。</p>
+
+      <h3>② 网络结构</h3>
+      <div class="ctl"><label>隐藏层数 <b id="layersV">2</b></label><input type="range" id="layers" min="1" max="3" step="1" value="2"></div>
+      <div class="ctl"><label>每层宽度 <b id="widthV">24</b></label><input type="range" id="width" min="2" max="64" step="2" value="24"></div>
+      <div class="ctl"><label>激活函数<b>ReLU</b></label>
+        <select id="act"><option value="relu">ReLU</option><option value="tanh">Tanh</option><option value="sigmoid">Sigmoid</option><option value="linear">Linear（无激活）</option></select>
+      </div>
+      <div class="ctl"><label>结构预览 <b id="archV">2→24→24→3</b></label></div>
+      <p class="tip" id="paramsTip">参数量会随结构实时计算；输出维度自动跟随数据类别数。</p>
+
+      <h3>③ 优化过程</h3>
+      <div class="ctl"><label>优化器<b>Adam</b></label>
+        <select id="opt"><option value="adam">Adam</option><option value="sgd">SGD</option></select>
+      </div>
+      <div class="ctl"><label>学习率 <b id="lrV">0.030</b></label><input type="range" id="lr" min="-3.5" max="-0.7" step="0.05" value="-1.52"></div>
+      <div class="ctl"><label>L2 正则 <b id="l2V">0.0005</b></label><input type="range" id="l2" min="0" max="0.02" step="0.0005" value="0.0005"></div>
+      <div class="ctl"><label>批大小 <b id="bsV">32</b></label><input type="range" id="bs" min="8" max="128" step="8" value="32"></div>
+      <div class="ctl"><label>每帧训练轮数 <b id="speedV">2</b></label><input type="range" id="speed" min="1" max="8" step="1" value="2"></div>
+      <div class="ctl"><label>目标轮数 <b id="maxEpochV">300</b></label><input type="range" id="maxEpoch" min="50" max="1000" step="50" value="300"></div>
+      <label class="chk"><input type="checkbox" id="race"> 让「原版玩具网络」同场赛跑</label>
+      <p class="tip">赛跑方固定为 2→2→输出、Sigmoid 的极小网络，与主网络用同一份数据、同一个学习率，直观看出模型容量的差距。</p>
+    </div>
+
+    <!-- 中：决策边界 -->
+    <div class="panel">
+      <h2>决策边界 · 实时热力图 <span style="font-size:11px;color:var(--dim);font-weight:400" id="frameInfo">等待训练</span></h2>
+      <div class="canvas-box">
+        <canvas id="boundary" width="520" height="520"></canvas>
+        <div class="overlay" id="ovText">移动鼠标 = 输入探针 · 按住拖动 = 画点</div>
+      </div>
+      <div class="legend">
+        <span><i style="background:#a855f7"></i>类别 A</span>
+        <span><i style="background:#2dd4bf"></i>类别 B</span>
+        <span><i style="background:#fb923c"></i>类别 C</span>
+        <span><i style="background:#8b8ba8"></i>浅色细带 = 决策边界（两类概率接近）</span>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="playBtn" style="flex:2">▶ 开始训练</button>
+        <button class="btn sm" id="stepBtn">单步</button>
+        <button class="btn sm" id="resetBtn">重置网络</button>
+      </div>
+      <div class="row">
+        <button class="btn sm" id="saveBtn">保存本次实验</button>
+        <button class="btn sm" id="shareBtn">复制实验链接</button>
+        <button class="btn sm" id="exportBtn">导出 JSON</button>
+      </div>
+      <p class="tip">快捷键：<span class="kbd">空格</span> 播放/暂停 · <span class="kbd">S</span> 单步 · <span class="kbd">R</span> 重置 · <span class="kbd">Ctrl/⌘+K</span> 站内搜索。</p>
+      <h3>输入探针 · 一次前向传播的全过程</h3>
+      <div id="probeBars"></div>
+      <p class="tip" id="probeHint">把鼠标移到上方热力图任意位置，这里会显示该点经过每一层后的激活强度与最终分类概率。</p>
+    </div>
+
+    <!-- 右：可视化 -->
+    <div class="col-right">
+      <div class="panel">
+        <h2>训练状态</h2>
+        <div class="stats">
+          <div class="stat"><span>EPOCH</span><b id="sEpoch">0</b></div>
+          <div class="stat p"><span>LOSS</span><b id="sLoss">—</b></div>
+          <div class="stat o"><span>ACC</span><b id="sAcc">—</b></div>
+          <div class="stat"><span>参数量</span><b id="sParams">0</b></div>
+          <div class="stat"><span>训练耗时</span><b id="sTime">0ms</b></div>
+          <div class="stat"><span>样本 / 类别</span><b id="sData">0 / 0</b></div>
+        </div>
+        <div class="canvas-box"><canvas id="curves" width="320" height="170"></canvas></div>
+        <p class="tip">紫 = 主网络 loss，橙虚线 = 主网络准确率，青 = 玩具网络 loss（赛跑时）。</p>
+      </div>
+      <div class="panel">
+        <h2>网络拓扑 · 点击任一神经元</h2>
+        <div class="canvas-box"><canvas id="topo" width="320" height="190"></canvas></div>
+        <p class="tip">连线颜色：紫=正权重 / 青=负权重，粗细 = 权重绝对值；节点亮度 = 该神经元近期的平均激活。点击节点可查看它的「感受野」。</p>
+        <div class="probe-title"><span>神经元探针 · 它在输入空间看见了什么</span><b id="probeLabel">未选中</b></div>
+        <div class="canvas-box"><canvas id="neuron" width="320" height="150"></canvas></div>
+      </div>
+      <div class="panel" style="grid-column:1/-1">
+        <h2>实验记录 · 把不同配置放在一起比</h2>
+        <div id="expBox"><div class="empty">还没有记录。训练一会儿，点「保存本次实验」，或跑到目标轮数自动记录。</div></div>
+        <div class="row"><button class="btn sm" id="clearExpBtn">清空记录</button><button class="btn sm" id="backBtn">返回作业 2 对比报告</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    纯 JavaScript 实现的全连接网络：Xavier/He 初始化 → 前向传播 → Softmax 交叉熵 → 反向传播 → 梯度裁剪 → Adam / SGD 更新。<br>
+    与 <a href="homework2.html">作业 2 的 PyTorch 对比报告</a> 是同一套原理，这里把「看结果」换成了「自己动手跑」。<br>
+    <a href="index.html">首页</a> · <a href="homework1.html">作业 1</a> · <a href="lab1.html">实验室 1</a> · <a href="homework2.html">作业 2</a> · <a href="lab2.html">实验室 2</a> · <a href="https://github.com/he-yikang/homework">GitHub 仓库</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="cmdk" id="cmdk" onclick="if(event.target===this)closeCmd()">
+  <div class="box">
+    <input id="cmdInput" placeholder="搜索页面或章节，回车跳转…" autocomplete="off">
+    <div class="list" id="cmdList"></div>
+  </div>
+</div>
+
+<script>
+// ============================ NN CORE START ============================
+// 纯计算核心：不触碰 DOM，可在 Node 中单独测试
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+function makeRng(seed){return mulberry32(seed>>>0);}
+
+function createNet(sizes,actName,seed){
+  const rng=makeRng(seed),W=[],b=[],mW=[],vW=[],mb=[],vb=[];
+  let params=0;
+  for(let l=0;l<sizes.length-1;l++){
+    const nin=sizes[l],nout=sizes[l+1];
+    const he=(actName==='relu'),limit=he?Math.sqrt(6/nin):Math.sqrt(6/(nin+nout));
+    const w=new Float64Array(nin*nout),bb=new Float64Array(nout);
+    for(let i=0;i<w.length;i++)w[i]=(rng()*2-1)*limit;
+    for(let j=0;j<nout;j++)bb[j]=0;
+    W.push(w);b.push(bb);mW.push(new Float64Array(w.length));vW.push(new Float64Array(w.length));
+    mb.push(new Float64Array(nout));vb.push(new Float64Array(nout));
+    params+=w.length+nout;
+  }
+  return {sizes:sizes.slice(),actName,W,b,mW,vW,mb,vb,t:0,epoch:0,params};
+}
+function act(name,x){
+  if(name==='relu')return x>0?x:0;
+  if(name==='tanh')return Math.tanh(x);
+  if(name==='sigmoid')return 1/(1+Math.exp(-Math.max(-60,Math.min(60,x))));
+  return x;
+}
+function dact(name,z,y){
+  if(name==='relu')return z>0?1:0;
+  if(name==='tanh')return 1-y*y;
+  if(name==='sigmoid')return y*(1-y);
+  return 1;
+}
+function forward(net,x,cache){
+  let a=Float64Array.from(x);
+  if(cache){cache.z=[];cache.a=[a];}
+  for(let l=0;l<net.W.length;l++){
+    const nin=net.sizes[l],nout=net.sizes[l+1],w=net.W[l],bb=net.b[l];
+    const z=new Float64Array(nout);
+    for(let j=0;j<nout;j++){
+      let s=bb[j];const off=j*nin;
+      for(let i=0;i<nin;i++)s+=w[off+i]*a[i];
+      z[j]=s;
+    }
+    const last=(l===net.W.length-1),y=new Float64Array(nout);
+    for(let j=0;j<nout;j++)y[j]=last?z[j]:act(net.actName,z[j]);
+    if(cache){cache.z.push(z);cache.a.push(y);}
+    a=y;
+  }
+  return a;
+}
+function softmax(z){
+  let mx=-Infinity;for(let i=0;i<z.length;i++)if(z[i]>mx)mx=z[i];
+  const p=new Float64Array(z.length);let s=0;
+  for(let i=0;i<z.length;i++){p[i]=Math.exp(z[i]-mx);s+=p[i];}
+  for(let i=0;i<z.length;i++)p[i]/=s;
+  return p;
+}
+function zeroGrads(net){
+  const g={W:[],b:[]};
+  for(let l=0;l<net.W.length;l++){g.W.push(new Float64Array(net.W[l].length));g.b.push(new Float64Array(net.b[l].length));}
+  return g;
+}
+function backward(net,y,cache,g){
+  const L=net.W.length,nout=net.sizes[L],p=softmax(cache.a[L]);
+  let delta=new Float64Array(nout);
+  for(let j=0;j<nout;j++)delta[j]=p[j]-(j===y?1:0);
+  for(let l=L-1;l>=0;l--){
+    const nin=net.sizes[l],no=net.sizes[l+1],gW=g.W[l],gb=g.b[l],aPrev=cache.a[l];
+    for(let j=0;j<no;j++){
+      const off=j*nin;gb[j]+=delta[j];
+      for(let i=0;i<nin;i++)gW[off+i]+=delta[j]*aPrev[i];
+    }
+    if(l>0){
+      const w=net.W[l],zPrev=cache.z[l-1],aCur=cache.a[l],nd=new Float64Array(nin);
+      for(let i=0;i<nin;i++){
+        let s=0;for(let j=0;j<no;j++)s+=w[j*nin+i]*delta[j];
+        nd[i]=s*dact(net.actName,zPrev[i],aCur[i]);
+      }
+      delta=nd;
+    }
+  }
+}
+function step(net,g,cfg){
+  const lr=cfg.lr,N=cfg.N||1,l2=cfg.l2||0;
+  net.t++;
+  const b1=0.9,b2=0.999,eps=1e-8,c1=1-Math.pow(b1,net.t),c2=1-Math.pow(b2,net.t);
+  for(let l=0;l<net.W.length;l++){
+    const W=net.W[l],b=net.b[l],gW=g.W[l],gb=g.b[l],mW=net.mW[l],vW=net.vW[l],mb=net.mb[l],vb=net.vb[l];
+    for(let i=0;i<W.length;i++){
+      let gr=gW[i]/N+l2*W[i];
+      if(cfg.opt==='adam'){
+        mW[i]=b1*mW[i]+(1-b1)*gr;vW[i]=b2*vW[i]+(1-b2)*gr*gr;
+        W[i]-=lr*(mW[i]/c1)/(Math.sqrt(vW[i]/c2)+eps);
+      }else W[i]-=lr*gr;
+    }
+    for(let j=0;j<b.length;j++){
+      let gr=gb[j]/N;
+      if(cfg.opt==='adam'){
+        mb[j]=b1*mb[j]+(1-b1)*gr;vb[j]=b2*vb[j]+(1-b2)*gr*gr;
+        b[j]-=lr*(mb[j]/c1)/(Math.sqrt(vb[j]/c2)+eps);
+      }else b[j]-=lr*gr;
+    }
+  }
+}
+function trainEpoch(net,data,cfg,rng){
+  const n=data.x.length,idx=[];
+  for(let i=0;i<n;i++)idx.push(i);
+  for(let i=n-1;i>0;i--){const j=Math.floor(rng()*(i+1));const t=idx[i];idx[i]=idx[j];idx[j]=t;}
+  const bs=Math.min(cfg.bs,n);
+  for(let s=0;s<n;s+=bs){
+    const batch=idx.slice(s,s+bs),g=zeroGrads(net);
+    for(let k=0;k<batch.length;k++){
+      const cache={};forward(net,data.x[batch[k]],cache);backward(net,data.y[batch[k]],cache,g);
+    }
+    // 全局梯度裁剪，防止大学习率下发散
+    let sq=0;for(let l=0;l<g.W.length;l++){for(let i=0;i<g.W[l].length;i++)sq+=g.W[l][i]*g.W[l][i];for(let j=0;j<g.b[l].length;j++)sq+=g.b[l][j]*g.b[l][j];}
+    const norm=Math.sqrt(sq)/(batch.length||1),scale=norm>5?5/norm:1;
+    if(scale!==1)for(let l=0;l<g.W.length;l++){for(let i=0;i<g.W[l].length;i++)g.W[l][i]*=scale;for(let j=0;j<g.b[l].length;j++)g.b[l][j]*=scale;}
+    step(net,g,{lr:cfg.lr,l2:cfg.l2,opt:cfg.opt,N:batch.length});
+  }
+  net.epoch++;
+}
+function evaluate(net,data){
+  let sum=0,correct=0;const n=data.x.length||1;
+  for(let k=0;k<data.x.length;k++){
+    const p=softmax(forward(net,data.x[k]));
+    sum+=-Math.log(Math.max(p[data.y[k]]||1e-9,1e-9));
+    let best=0;for(let j=1;j<p.length;j++)if(p[j]>p[best])best=j;
+    if(best===data.y[k])correct++;
+  }
+  return {loss:sum/n,acc:correct/n};
+}
+function makeData(kind,n,noise,seed,extra){
+  const rng=makeRng(seed),x=[],y=[];
+  const g=()=>{let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  if(kind==='spiral'){
+    const per=Math.floor(n/3),C=3;
+    for(let c=0;c<C;c++)for(let i=0;i<per;i++){
+      const t=i/per,r=0.12+0.86*t,th=c*2*Math.PI/C+t*3.4+g()*noise*0.55;
+      x.push([r*Math.cos(th),r*Math.sin(th)]);y.push(c);
+    }
+  }else if(kind==='moons'){
+    const per=Math.floor(n/2);
+    for(let c=0;c<2;c++)for(let i=0;i<per;i++){
+      const t=Math.PI*rng(),px=(c?1-Math.cos(t):Math.cos(t)-1)*0.85,py=(c?0.5-Math.sin(t)*0.75:Math.sin(t)*0.75-0.35);
+      x.push([px+g()*noise*0.35,py+g()*noise*0.35]);y.push(c);
+    }
+  }else if(kind==='rings'){
+    const per=Math.floor(n/2);
+    for(let c=0;c<2;c++)for(let i=0;i<per;i++){
+      const th=rng()*2*Math.PI,r=c?0.72+g()*noise*0.35:g()*noise*0.35+0.22;
+      x.push([r*Math.cos(th),r*Math.sin(th)]);y.push(c);
+    }
+  }else if(kind==='xor'){
+    const per=Math.floor(n/4),cent=[[-.55,-.55],[.55,.55],[-.55,.55],[.55,-.55]];
+    for(let c=0;c<4;c++)for(let i=0;i<per;i++){
+      x.push([cent[c][0]+g()*noise*0.75,cent[c][1]+g()*noise*0.75]);y.push(c%2);
+    }
+  }else if(kind==='custom'){
+    if(extra&&extra.x)for(let i=0;i<extra.x.length;i++){x.push(extra.x[i].slice());y.push(extra.y[i]);}
+  }
+  let classes=0;for(let i=0;i<y.length;i++)classes=Math.max(classes,y[i]+1);
+  return {x,y,classes:Math.max(2,classes),kind};
+}
+function netSizes(cfg,classes){
+  const s=[2];for(let i=0;i<cfg.layers;i++)s.push(cfg.width);s.push(classes);return s;
+}
+// ============================= NN CORE END =============================
+
+// ---------------------------- 界面与渲染 ----------------------------
+const $=id=>document.getElementById(id);
+const COLS=[[168,85,247],[45,212,191],[251,146,60],[96,165,250],[244,114,182]];
+const CLS_HEX=['#a855f7','#2dd4bf','#fb923c'];
+let cfg={dataset:'spiral',n:360,noise:0.18,seed:42,layers:2,width:24,act:'relu',opt:'adam',lr:0.03,l2:0.0005,bs:32,speed:2,maxEpoch:300,race:false,cls:0};
+let data=null,net=null,small=null,rng=null,rng2=null,history=[],smallHist=[];
+let running=false,raf=null,frame=0,elapsed=0,lastTick=0,metrics={loss:0,acc:0};
+let hover=null,selected=null,custom={x:[],y:[]},paintMode=false,painting=false,lastPaint=0;
+let exps=[];
+try{exps=JSON.parse(localStorage.getItem('hw_lab_exps')||'[]');}catch(e){exps=[];}
+
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+function fmt(v,d=4){return (typeof v==='number'&&isFinite(v))?v.toFixed(d):'—';}
+function sizes(){return netSizes(cfg,data?data.classes:3);}
+
+function syncUI(){
+  $('nV').textContent=cfg.n;$('noiseV').textContent=fmt(cfg.noise,2);$('seedV').textContent=cfg.seed;
+  $('layersV').textContent=cfg.layers;$('widthV').textContent=cfg.width;
+  $('lrV').textContent=fmt(cfg.lr,3);$('l2V').textContent=fmt(cfg.l2,4);
+  $('bsV').textContent=cfg.bs;$('speedV').textContent=cfg.speed;$('maxEpochV').textContent=cfg.maxEpoch;
+  $('dsNameLabel').textContent=({spiral:'三类螺旋',moons:'双月',rings:'同心环',xor:'XOR',custom:'自定义'})[cfg.dataset];
+  $('archV').textContent=sizes().join('→');
+  $('paramsTip').textContent='参数量 '+countParams(sizes())+' · 输出维度自动跟随数据类别数。';
+  $('dataset').value=cfg.dataset;$('act').value=cfg.act;$('opt').value=cfg.opt;$('race').checked=cfg.race;
+  $('n').value=cfg.n;$('noise').value=cfg.noise;$('seed').value=cfg.seed;$('layers').value=cfg.layers;
+  $('width').value=cfg.width;$('lr').value=Math.log10(cfg.lr);$('l2').value=cfg.l2;$('bs').value=cfg.bs;
+  $('speed').value=cfg.speed;$('maxEpoch').value=cfg.maxEpoch;$('paintMode').checked=paintMode;
+  document.querySelectorAll('#dsQuick button').forEach(b=>b.classList.toggle('on',b.dataset.ds===cfg.dataset));
+  document.querySelectorAll('.paint-bar .c').forEach(c=>c.classList.toggle('on',+c.dataset.cls===cfg.cls));
+}
+function countParams(s){let p=0;for(let i=0;i<s.length-1;i++)p+=s[i]*s[i+1]+s[i+1];return p;}
+
+function regenData(){
+  if(cfg.dataset==='custom')data=makeData('custom',0,0,cfg.seed,custom);
+  else data=makeData(cfg.dataset,cfg.n,cfg.noise,cfg.seed);
+  hover=null;selected=null;
+}
+function resetAll(){
+  running=false;cancelAnimationFrame(raf);
+  regenData();
+  const s=sizes();
+  net=createNet(s,cfg.act,cfg.seed*7919+13);
+  small=cfg.race?createNet([2,2,data.classes],'sigmoid',cfg.seed*104729+7):null;
+  rng=makeRng(cfg.seed*31+1);rng2=makeRng(cfg.seed*31+2);
+  history=[];smallHist=[];frame=0;elapsed=0;metrics=evaluate(net,data);
+  $('playBtn').textContent='▶ 开始训练';$('playBtn').classList.add('primary');
+  $('frameInfo').textContent='等待训练';
+  syncUI();drawAll();
+}
+function trainOne(){
+  const t0=performance.now();
+  trainEpoch(net,data,cfg,rng);
+  if(cfg.race&&small)trainEpoch(small,data,cfg,rng2);
+  elapsed+=performance.now()-t0;
+  metrics=evaluate(net,data);
+  history.push({e:net.epoch,loss:metrics.loss,acc:metrics.acc});
+  if(history.length>1200)history.shift();
+  if(cfg.race&&small){const m=evaluate(small,data);smallHist.push(m.loss);if(smallHist.length>1200)smallHist.shift();}
+}
+function tick(){
+  if(!running)return;
+  for(let i=0;i<cfg.speed;i++){
+    trainOne();
+    if(net.epoch>=cfg.maxEpoch){running=false;saveExp(true);break;}
+  }
+  frame++;
+  $('frameInfo').textContent='第 '+net.epoch+' 轮 · '+(running?'训练中':'已暂停/完成');
+  updateStats();
+  if(frame%2===0||!running)drawBoundary();
+  drawCurves();drawTopo();drawNeuron();
+  $('playBtn').textContent=running?'⏸ 暂停':'▶ 开始训练';
+  if(running)raf=requestAnimationFrame(tick);
+}
+function togglePlay(){
+  if(data.x.length<4){toast('请先生成或绘制至少几条数据');return;}
+  const uniq=new Set(data.y).size;
+  if(uniq<2){toast('至少画两个类别，网络才有东西可学');return;}
+  running=!running;
+  if(running){lastTick=performance.now();raf=requestAnimationFrame(tick);}
+  else cancelAnimationFrame(raf);
+  $('playBtn').textContent=running?'⏸ 暂停':'▶ 开始训练';
+  $('frameInfo').textContent='第 '+net.epoch+' 轮 · '+(running?'训练中':'已暂停');
+}
+function updateStats(){
+  $('sEpoch').textContent=net.epoch;
+  $('sLoss').textContent=fmt(metrics.loss,3);
+  $('sAcc').textContent=(metrics.acc*100).toFixed(1)+'%';
+  $('sParams').textContent=net.params;
+  $('sTime').textContent=elapsed<1000?Math.round(elapsed)+'ms':(elapsed/1000).toFixed(1)+'s';
+  $('sData').textContent=data.x.length+' / '+data.classes;
+}
+
+// 决策边界热力图（离屏低分辨率网格 + 平滑放大）
+const off=document.createElement('canvas');off.width=off.height=64;
+const offCtx=off.getContext('2d');
+const bctx=$('boundary').getContext('2d');
+function drawBoundary(){
+  const G=64,img=offCtx.createImageData(G,G),d=img.data;
+  const cache={};
+  for(let gy=0;gy<G;gy++)for(let gx=0;gx<G;gx++){
+    const px=(gx+.5)/G*2-1,py=1-(gy+.5)/G*2;
+    const p=softmax(forward(net,[px,py],cache));
+    let best=0,second=0;
+    for(let c=0;c<p.length;c++){if(p[c]>p[best]){second=best;best=c;}else if(p[c]>p[second])second=c;}
+    const conf=p[best],col=COLS[best%COLS.length];
+    const k=0.18+0.82*Math.pow(conf,1.4),o=(gy*G+gx)*4;
+    let r=11+col[0]*k*0.85,g=12+col[1]*k*0.85,b=20+col[2]*k*0.85;
+    if(conf-p[second]<0.10){r+=95;g+=95;b+=105;}
+    d[o]=Math.min(255,r);d[o+1]=Math.min(255,g);d[o+2]=Math.min(255,b);d[o+3]=255;
+  }
+  offCtx.putImageData(img,0,0);
+  bctx.imageSmoothingEnabled=true;
+  bctx.clearRect(0,0,520,520);
+  bctx.drawImage(off,0,0,64,64,0,0,520,520);
+  // 网格与坐标轴
+  bctx.strokeStyle='rgba(255,255,255,.055)';bctx.lineWidth=1;
+  for(let i=1;i<8;i++){const q=i*520/8;bctx.beginPath();bctx.moveTo(q,0);bctx.lineTo(q,520);bctx.moveTo(0,q);bctx.lineTo(520,q);bctx.stroke();}
+  bctx.strokeStyle='rgba(255,255,255,.16)';
+  bctx.beginPath();bctx.moveTo(260,0);bctx.lineTo(260,520);bctx.moveTo(0,260);bctx.lineTo(520,260);bctx.stroke();
+  // 数据点
+  for(let i=0;i<data.x.length;i++){
+    const sx=(data.x[i][0]+1)/2*520,sy=(1-data.x[i][1])/2*520,c=CLS_HEX[data.y[i]%3];
+    bctx.beginPath();bctx.arc(sx,sy,3.4,0,7);bctx.fillStyle=c;bctx.fill();
+    bctx.lineWidth=.8;bctx.strokeStyle='rgba(0,0,0,.65)';bctx.stroke();
+  }
+  if(hover){
+    const sx=(hover[0]+1)/2*520,sy=(1-hover[1])/2*520;
+    bctx.strokeStyle='rgba(255,255,255,.8)';bctx.lineWidth=1;
+    bctx.beginPath();bctx.moveTo(sx-9,sy);bctx.lineTo(sx+9,sy);bctx.moveTo(sx,sy-9);bctx.lineTo(sx,sy+9);bctx.stroke();
+    bctx.beginPath();bctx.arc(sx,sy,6,0,7);bctx.stroke();
+  }
+}
+function canvasPos(canvas,e){
+  const r=canvas.getBoundingClientRect();
+  return [(e.clientX-r.left)/r.width*canvas.width,(e.clientY-r.top)/r.height*canvas.height];
+}
+function toCoord(px,py){return [px/520*2-1,1-py/520*2];}
+function paintAt(e){
+  const [px,py]=canvasPos($('boundary'),e),c=toCoord(px,py);
+  if(custom.x.length>=900){toast('自定义数据上限 900 点');return;}
+  custom.x.push(c);custom.y.push(cfg.cls);
+  cfg.dataset='custom';data=makeData('custom',0,0,cfg.seed,custom);
+  metrics=evaluate(net,data);
+  if(net.sizes[net.sizes.length-1]!==data.classes)resetAll();
+  else{syncUI();drawBoundary();}
+}
+function showProbe(c){
+  const cache={};const logits=forward(net,c,cache);const p=softmax(logits);
+  let html='';
+  for(let l=1;l<cache.a.length;l++){
+    const a=cache.a[l],show=Math.min(a.length,10);
+    html+='<div style="font-size:10px;color:#6f6f90;margin:7px 0 3px">'+(l===cache.a.length-1?'输出层 · 各类别概率':'隐藏层 '+l+' · 前 '+show+' 个神经元')+'</div>';
+    for(let j=0;j<show;j++){
+      const raw=l===cache.a.length-1?p[j]*100:Math.max(0,a[j]);
+      const w=l===cache.a.length-1?Math.min(100,p[j]*100):Math.min(100,Math.abs(a[j])*55);
+      const col=l===cache.a.length-1?CLS_HEX[j%3]:'linear-gradient(90deg,#a855f7,#3b82f6)';
+      html+='<div class="bar-row"><span style="width:26px">'+j+'</span><span class="track"><span class="fill" style="width:'+w.toFixed(1)+'%;background:'+col+'"></span></span><span class="v">'+fmt(raw,1)+'</span></div>';
+    }
+  }
+  $('probeBars').innerHTML=html;
+  let best=0;for(let j=1;j<p.length;j++)if(p[j]>p[best])best=j;
+  $('probeHint').textContent='输入 ('+fmt(c[0],2)+', '+fmt(c[1],2)+') → 判定为类别 '+String.fromCharCode(65+best)+'，置信度 '+(p[best]*100).toFixed(1)+'%。';
+}
+
+// 网络拓扑（节点 = 平均激活，连线 = 权重）
+const tctx=$('topo').getContext('2d');let nodePos=[];
+function drawTopo(){
+  const W=320,H=190,c=net.sizes,L=c.length;
+  tctx.clearRect(0,0,W,H);tctx.fillStyle='#0b0b12';tctx.fillRect(0,0,W,H);
+  const cap=18,counts=c.map(v=>Math.min(v,cap));
+  const xs=[],ys=[];
+  for(let l=0;l<L;l++){
+    const xx=24+l*(W-48)/(L-1),n=counts[l],arr=[];
+    for(let j=0;j<n;j++)arr.push([xx,18+j*(H-36)/Math.max(1,n-1)]);
+    xs.push(arr);
+  }
+  // 连线：每个目标节点取绝对值最大的 3 条输入权重
+  for(let l=0;l<L-1;l++){
+    const nin=c[l],no=c[l+1],w=net.W[l];
+    for(let j=0;j<Math.min(no,cap);j++){
+      const picks=[];
+      for(let i=0;i<nin;i++)picks.push([Math.abs(w[j*nin+i]),i,w[j*nin+i]]);
+      picks.sort((a,b)=>b[0]-a[0]);
+      for(let k=0;k<Math.min(3,picks.length);k++){
+        const [mag,i,val]=picks[k];if(i>=cap||!xs[l][i])continue;
+        const [x1,y1]=xs[l][i],[x2,y2]=xs[l+1][j];
+        tctx.strokeStyle=val>0?'rgba(168,85,247,'+Math.min(.75,.15+mag*.9)+')':'rgba(45,212,191,'+Math.min(.75,.15+mag*.9)+')';
+        tctx.lineWidth=Math.min(2.6,.4+mag*2.2);
+        tctx.beginPath();tctx.moveTo(x1,y1);tctx.lineTo(x2,y2);tctx.stroke();
+      }
+    }
+  }
+  // 节点：亮度用近期平均激活近似（对若干样本前向求均值）
+  const acts=[];
+  for(let l=0;l<L;l++)acts.push(new Float64Array(Math.min(c[l],cap)));
+  const sampleN=Math.min(24,data.x.length||0);
+  for(let s=0;s<sampleN;s++){
+    const ca={};forward(net,data.x[s],ca);
+    for(let l=0;l<L;l++)for(let j=0;j<acts[l].length;j++)acts[l][j]+=Math.abs(ca.a[l][j]);
+  }
+  for(let l=0;l<L;l++)for(let j=0;j<acts[l].length;j++)acts[l][j]/=Math.max(1,sampleN);
+  nodePos=[];
+  const layerNames=['输入','隐藏','隐藏','输出'];
+  for(let l=0;l<L;l++){
+    for(let j=0;j<xs[l].length;j++){
+      const [xx,yy]=xs[l][j],v=Math.min(1,acts[l][j]/1.2),sel=selected&&selected[0]===l&&selected[1]===j;
+      tctx.beginPath();tctx.arc(xx,yy,sel?6.5:4.2,0,7);
+      tctx.fillStyle='rgb('+Math.round(38+v*170)+','+Math.round(38+v*70)+','+Math.round(60+v*190)+')';tctx.fill();
+      tctx.lineWidth=sel?2:1;tctx.strokeStyle=sel?'#fff':'rgba(255,255,255,.28)';tctx.stroke();
+      if(l>0&&l<L-1)nodePos.push({l,j,x:xx,y:yy});
+    }
+    tctx.fillStyle='#6f6f90';tctx.font='10px Consolas,monospace';tctx.textAlign='center';
+    tctx.fillText(l===0?'输入 2':l===L-1?'输出 '+c[l]:'H'+l+' ('+c[l]+')',xs[l][0][0],H-4);
+  }
+}
+// 神经元感受野
+const nctx=$('neuron').getContext('2d');
+const noff=document.createElement('canvas');noff.width=48;noff.height=24;const noffc=noff.getContext('2d');
+function drawNeuron(){
+  const W=320,H=150;nctx.clearRect(0,0,W,H);nctx.fillStyle='#0b0b12';nctx.fillRect(0,0,W,H);
+  $('probeLabel').textContent=selected?'H'+selected[0]+' · 第 '+selected[1]+' 号':'未选中';
+  if(!selected){nctx.fillStyle='#6f6f90';nctx.font='12px sans-serif';nctx.textAlign='center';nctx.fillText('点击上方拓扑图中的任一隐藏层神经元',W/2,H/2-8);nctx.fillText('查看它在整个输入空间上的响应',W/2,H/2+12);return;}
+  const GX=48,GY=24,img=noffc.createImageData(GX,GY),d=img.data,cache={};
+  let mx=1e-6;
+  const vals=new Float64Array(GX*GY);
+  for(let gy=0;gy<GY;gy++)for(let gx=0;gx<GX;gx++){
+    forward(net,[ (gx+.5)/GX*2-1, 1-(gy+.5)/GY*2 ],cache);
+    const v=cache.a[selected[0]][selected[1]];vals[gy*GX+gx]=v;if(Math.abs(v)>mx)mx=Math.abs(v);
+  }
+  for(let i=0;i<vals.length;i++){
+    const v=vals[i]/mx,o=i*4;
+    d[o]=Math.min(255,20+Math.max(0,v)*225);d[o+1]=Math.min(255,20+Math.abs(v)*60);d[o+2]=Math.min(255,45+Math.max(0,-v)*210);d[o+3]=255;
+  }
+  noffc.putImageData(img,0,0);nctx.imageSmoothingEnabled=true;nctx.drawImage(noff,0,0,GX,GY,0,0,W,H);
+  nctx.fillStyle='rgba(255,255,255,.75)';nctx.font='10px Consolas,monospace';nctx.textAlign='left';
+  nctx.fillText('橙 = 强正响应   蓝 = 强负响应',8,H-8);
+}
+// 训练曲线
+const cctx=$('curves').getContext('2d');
+function drawCurves(){
+  const W=320,H=170;cctx.clearRect(0,0,W,H);cctx.fillStyle='#0b0b12';cctx.fillRect(0,0,W,H);
+  cctx.strokeStyle='rgba(255,255,255,.07)';cctx.lineWidth=1;
+  for(let i=1;i<5;i++){const y=i*H/5;cctx.beginPath();cctx.moveTo(0,y);cctx.lineTo(W,y);cctx.stroke();}
+  if(history.length<2){cctx.fillStyle='#6f6f90';cctx.font='11px sans-serif';cctx.textAlign='center';cctx.fillText('点「开始训练」后曲线实时绘制',W/2,H/2);return;}
+  const maxL=Math.max(0.35,...history.map(h=>h.loss)),n=history.length;
+  const px=i=>i/Math.max(1,n-1)*W,py=v=>H-8-(v/maxL)*(H-20);
+  cctx.strokeStyle='#a855f7';cctx.lineWidth=2;cctx.beginPath();
+  history.forEach((h,i)=>i?cctx.lineTo(px(i),py(h.loss)):cctx.moveTo(px(i),py(h.loss)));cctx.stroke();
+  if(cfg.race&&smallHist.length>1){
+    cctx.strokeStyle='#2dd4bf';cctx.lineWidth=1.6;cctx.setLineDash([4,3]);cctx.beginPath();
+    smallHist.forEach((v,i)=>i?cctx.lineTo(px(Math.min(i,n-1)),py(Math.min(v,maxL))):cctx.moveTo(px(i),py(Math.min(v,maxL))));cctx.stroke();cctx.setLineDash([]);
+  }
+  cctx.strokeStyle='rgba(251,146,60,.9)';cctx.lineWidth=1.6;cctx.setLineDash([5,4]);cctx.beginPath();
+  history.forEach((h,i)=>{const y=H-8-h.acc*(H-20);i?cctx.lineTo(px(i),y):cctx.moveTo(px(i),y);});cctx.stroke();cctx.setLineDash([]);
+  cctx.fillStyle='#9a9ab8';cctx.font='10px Consolas,monospace';cctx.textAlign='left';cctx.fillText('loss '+fmt(metrics.loss,3)+'  acc '+(metrics.acc*100).toFixed(1)+'%',8,13);
+}
+function drawAll(){drawBoundary();drawCurves();drawTopo();drawNeuron();updateStats();}
+
+// ---------------------------- 实验记录 ----------------------------
+function saveExp(auto){
+  if(!net||net.epoch===0){toast('先训练几轮再保存');return;}
+  const rec={time:new Date().toLocaleTimeString('zh-CN',{hour12:false}),ds:cfg.dataset,arch:sizes().join('→'),act:cfg.act,opt:cfg.opt,
+    lr:cfg.lr,bs:cfg.bs,epoch:net.epoch,loss:+fmt(metrics.loss,4),acc:+(metrics.acc*100).toFixed(1),params:net.params,ms:Math.round(elapsed)};
+  exps.unshift(rec);exps=exps.slice(0,12);
+  try{localStorage.setItem('hw_lab_exps',JSON.stringify(exps));}catch(e){}
+  renderExps();
+  if(auto)toast('达到目标轮数，实验已自动记录');
+  else toast('已保存本次实验（共 '+exps.length+' 条）');
+}
+function renderExps(){
+  if(!exps.length){$('expBox').innerHTML='<div class="empty">还没有记录。训练一会儿，点「保存本次实验」，或跑到目标轮数自动记录。</div>';return;}
+  let h='<table><tr><th>#</th><th>数据</th><th>结构</th><th>激活/优化</th><th>lr</th><th>轮</th><th>loss</th><th>acc</th><th>参数</th><th>耗时</th></tr>';
+  exps.forEach((r,i)=>{h+='<tr data-i="'+i+'" title="点击载入这套配置"><td>'+(i+1)+'</td><td>'+r.ds+'</td><td>'+r.arch+'</td><td>'+r.act+'/'+r.opt+'</td><td>'+r.lr+'</td><td>'+r.epoch+'</td><td>'+r.loss+'</td><td>'+r.acc+'%</td><td>'+r.params+'</td><td>'+r.ms+'ms</td></tr>';});
+  $('expBox').innerHTML=h+'</table>';
+  $('expBox').querySelectorAll('tr[data-i]').forEach(tr=>tr.onclick=()=>loadExp(exps[+tr.dataset.i]));
+}
+function loadExp(r){
+  const s=r.arch.split('→').map(Number);
+  cfg.layers=s.length-2;cfg.width=s[1];cfg.act=r.act;cfg.opt=r.opt;cfg.lr=r.lr;cfg.bs=r.bs;cfg.maxEpoch=Math.max(50,r.epoch);
+  cfg.dataset=(r.ds==='custom'&&custom.x.length<4)?'spiral':r.ds;
+  resetAll();toast('已载入实验 #'+(exps.indexOf(r)+1)+' 的配置'+((r.ds==='custom'&&cfg.dataset!=='custom')?'（自定义点已清空，改用螺旋数据）':''));
+}
+function shareCfg(){
+  const payload={cfg:cfg,custom:cfg.dataset==='custom'?custom:null};
+  const enc=btoa(unescape(encodeURIComponent(JSON.stringify(payload)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const url=location.origin+location.pathname+'#c='+enc;
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(()=>toast('实验链接已复制，打开即复现这套配置'),()=>prompt('复制这个链接：',url));
+  else prompt('复制这个链接：',url);
+}
+function loadHash(){
+  const m=location.hash.match(/[#&]c=([A-Za-z0-9_\-]+)/);
+  if(!m)return false;
+  try{
+    const s=m[1].replace(/-/g,'+').replace(/_/g,'/');
+    const o=JSON.parse(decodeURIComponent(escape(atob(s))));
+    Object.assign(cfg,o.cfg||{});
+    if(o.custom&&o.custom.x){custom={x:o.custom.x,y:o.custom.y};}
+    return true;
+  }catch(e){return false;}
+}
+function exportJSON(){
+  const blob=new Blob([JSON.stringify({config:cfg,data:data,experiments:exps},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='nn_lab_experiment.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('已导出实验数据 JSON');
+}
+
+// ---------------------------- 站内搜索 ----------------------------
+const CMD_ITEMS=[
+  {t:'首页 · 课程作业导航',u:'index.html',k:'首页 home index 导航'},
+  {t:'作业 1 · AI 编程工具作品展示',u:'homework1.html',k:'作业1 workbuddy deepseek trae 幻方 质数'},
+  {t:'实验室 1 · 幻方与质数互动实验室',u:'lab1.html',k:'实验室1 幻方 质数 算法 动画'},
+  {t:'作业 2 · MLP 学习参数的实现和可视化',u:'homework2.html',k:'作业2 MLP 对比报告 可视化 参数'},
+  {t:'实验室 2 · 实时神经网络训练台',u:'lab2.html',k:'实验室2 live 训练 交互 神经网络'},
+  {t:'作业 2 · 动态训练实验室（逐帧回放）',u:'homework2.html#lab',k:'回放 时间轴 帧 决策边界'},
+  {t:'作业 2 · 架构与训练配置对比',u:'homework2.html#arch',k:'架构 对比 超参数 表格'},
+  {t:'作业 2 · 多维度可视化分析',u:'homework2.html#viz',k:'图表 PCA 混淆矩阵 雷达 拓扑'},
+  {t:'实验室 1 · 幻方实验室',u:'lab1.html#magic',k:'幻方 矩阵 校验 斯特雷奇'},
+  {t:'实验室 1 · 质数实验室',u:'lab1.html#prime',k:'质数 筛法 试除 算法竞赛'},
+  {t:'作业 1 · Agent 思考',u:'homework1.html#agent',k:'思考 agent 反思'}
+];
+let cmdSel=0,cmdShown=[];
+function openCmd(){$('cmdk').classList.add('show');$('cmdInput').value='';$('cmdInput').focus();renderCmd('');}
+function closeCmd(){$('cmdk').classList.remove('show');}
+function renderCmd(q){
+  cmdShown=CMD_ITEMS.filter(i=>(i.t+i.k).toLowerCase().includes(q.toLowerCase()));cmdSel=0;
+  $('cmdList').innerHTML=cmdShown.length?cmdShown.map((i,n)=>'<a class="item'+(n===0?' sel':'')+'" href="'+i.u+'" data-n="'+n+'">'+i.t+'<small>'+i.u.replace('homework','作业').replace('.html','')+'</small></a>').join(''):'<div class="empty">没有匹配的页面或章节</div>';
+}
+
+// ---------------------------- 事件绑定 ----------------------------
+function bindRange(id,key,transform,rebuild){
+  const el=$(id);
+  el.addEventListener('input',()=>{cfg[key]=transform?transform(+el.value):+el.value;paintMode=$('paintMode').checked;syncUI();});
+  el.addEventListener('change',()=>{if(rebuild)resetAll();else drawAll();});
+}
+bindRange('n','n',null,true);bindRange('noise','noise',null,true);bindRange('seed','seed',null,true);
+bindRange('layers','layers',null,true);bindRange('width','width',null,true);
+bindRange('lr','lr',v=>Math.pow(10,v),false);bindRange('l2','l2',null,false);
+bindRange('bs','bs',null,false);bindRange('speed','speed',null,false);bindRange('maxEpoch','maxEpoch',null,false);
+$('dataset').addEventListener('change',e=>{cfg.dataset=e.target.value;if(cfg.dataset==='custom'){custom={x:[],y:[]};}resetAll();});
+$('act').addEventListener('change',e=>{cfg.act=e.target.value;resetAll();});
+$('opt').addEventListener('change',e=>{cfg.opt=e.target.value;resetAll();});
+$('race').addEventListener('change',e=>{cfg.race=e.target.checked;resetAll();});
+$('paintMode').addEventListener('change',e=>{paintMode=e.target.checked;$('ovText').textContent=paintMode?'绘制模式：按住拖动画点（当前类别 '+String.fromCharCode(65+cfg.cls)+'）':'移动鼠标 = 输入探针 · 按住拖动 = 画点';});
+document.querySelectorAll('#dsQuick button').forEach(b=>b.onclick=()=>{cfg.dataset=b.dataset.ds;if(cfg.dataset==='custom')custom={x:[],y:[]};resetAll();});
+document.querySelectorAll('.paint-bar .c').forEach(c=>c.onclick=()=>{cfg.cls=+c.dataset.cls;syncUI();});
+$('playBtn').onclick=togglePlay;
+$('stepBtn').onclick=()=>{if(running)togglePlay();trainOne();updateStats();drawAll();};
+$('resetBtn').onclick=()=>{resetAll();toast('网络已按当前配置重新初始化');};
+$('saveBtn').onclick=()=>saveExp(false);
+$('shareBtn').onclick=shareCfg;
+$('exportBtn').onclick=exportJSON;
+$('clearExpBtn').onclick=()=>{exps=[];try{localStorage.removeItem('hw_lab_exps');}catch(e){}renderExps();toast('实验记录已清空');};
+$('backBtn').onclick=()=>location.href='homework2.html';
+$('boundary').addEventListener('pointerdown',e=>{
+  if(paintMode){painting=true;paintAt(e);$('boundary').setPointerCapture(e.pointerId);}
+});
+$('boundary').addEventListener('pointermove',e=>{
+  const [px,py]=canvasPos($('boundary'),e),c=toCoord(px,py);
+  if(painting&&paintMode){const now=performance.now();if(now-lastPaint>28){lastPaint=now;paintAt(e);}return;}
+  hover=c;showProbe(c);drawBoundary();
+});
+$('boundary').addEventListener('pointerup',()=>{painting=false;});
+$('boundary').addEventListener('pointerleave',()=>{painting=false;hover=null;drawBoundary();});
+$('topo').addEventListener('click',e=>{
+  const [px,py]=canvasPos($('topo'),e);
+  let best=null,dist=1e9;
+  for(const n of nodePos){const d=(n.x-px)**2+(n.y-py)**2;if(d<dist){dist=d;best=n;}}
+  if(best&&dist<220){selected=[best.l,best.j];drawTopo();drawNeuron();}
+});
+$('cmdInput').addEventListener('input',e=>renderCmd(e.target.value));
+$('cmdInput').addEventListener('keydown',e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();cmdSel=Math.min(cmdShown.length-1,cmdSel+1);}
+  else if(e.key==='ArrowUp'){e.preventDefault();cmdSel=Math.max(0,cmdSel-1);}
+  else if(e.key==='Enter'){if(cmdShown[cmdSel])location.href=cmdShown[cmdSel].u;}
+  else if(e.key==='Escape')closeCmd();
+  const items=$('cmdList').querySelectorAll('.item');items.forEach((el,i)=>el.classList.toggle('sel',i===cmdSel));
+  const sel=$('cmdList').querySelector('.item.sel');if(sel)sel.scrollIntoView({block:'nearest'});
+});
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();$('cmdk').classList.contains('show')?closeCmd():openCmd();return;}
+  if(e.key==='Escape'){closeCmd();return;}
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='select'||tag==='textarea'||$('cmdk').classList.contains('show'))return;
+  if(e.code==='Space'){e.preventDefault();togglePlay();}
+  else if(e.key.toLowerCase()==='s'){if(running)togglePlay();trainOne();updateStats();drawAll();}
+  else if(e.key.toLowerCase()==='r'){resetAll();toast('网络已重置');}
+});
+
+// 启动
+loadHash();
+resetAll();
+renderExps();
+syncUI();
+</script>
+</body>
+</html>
