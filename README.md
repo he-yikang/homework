@@ -81,6 +81,7 @@
 - [📎 关于本仓库](#about)
 - [🧪 实验室 1 · 幻方与质数互动实验室](#lab1)
 - [🧪 实验室 2 · 实时神经网络训练台](#lab2)
+- [🧭 扩展模块 · 八项创新交互](#enhance)
 
 ---
 
@@ -248,3 +249,28 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 ---
 
 > 两个实验室按 **1 → 2** 排序，网站顶部导航顺序为：作业 1 → 实验室 1 → 作业 2 → 实验室 2。全站均支持 `Ctrl/⌘ + K` 站内搜索、章节直达与滚动进度条；旧地址 `lab.html` 会自动跳转到 `lab2.html`。
+
+---
+
+<a id="enhance"></a>
+
+## 🧭 扩展模块 · 八项创新交互
+
+[在 GitHub Pages 上打开知识地图 →](https://he-yikang.github.io/homework/atlas.html)
+
+四个栏目（作业 1 → 实验室 1 → 作业 2 → 实验室 2）的结构、顺序与正文**保持不变**。以下八项能力作为「扩展层」挂在各页，不新增顶层栏目；左下角的 **✦ 扩展能力** 在任何一页都能打开总览，**▶ 带我看一遍** 会按四栏顺序自动导览全站。
+
+| # | 能力 | 落在哪里 | 你能做什么 |
+|:--|:--|:--|:--|
+| A | 梯度与优化显微镜 | [实验室 2 · #grad](https://he-yikang.github.io/homework/lab2.html#grad) | 在 loss 等高线上拖动初始点，并排看 SGD / Momentum / Adam 三条优化轨迹；采样逐层梯度范数；一键演示学习率过小停滞、合适收敛、过大发散 |
+| B | 课程知识地图 | [知识地图 · #map](https://he-yikang.github.io/homework/atlas.html#map) | 把「确定性算法 → 复杂度 → 数据 → 模型容量 → 梯度下降 → 泛化」串成可点击概念图，节点直接跳到对应实验室的具体控件 |
+| C | 跨页成就进度 | [首页 · #enh-achv](https://he-yikang.github.io/homework/#enh-achv) | 11 枚徽章与进度环，做实验自动解锁，进度存本机；把四个孤立页面绑成一个可探索的整体 |
+| D | 自动导览 | 任一页左下角 **▶ 带我看一遍** | 自动滚动、高亮当前模块、同步旁白字幕，按四栏顺序讲完整站并跨页续播，可随时跳过 |
+| E | 一键实验报告 | [实验室 2 · #report](https://he-yikang.github.io/homework/lab2.html#report) / [实验室 1 · #report](https://he-yikang.github.io/homework/lab1.html#report) | 把当前参数、曲线、决策边界与自动判读的结论排版成可打印的页面，或复制成 Markdown 贴进作业文档 |
+| F | 挑战链接 | [实验室 2 · #challenge](https://he-yikang.github.io/homework/lab2.html#challenge) | 把自画数据集、目标准确率与参数上限打包成一个链接发给同学，达标解锁徽章并记录最少参数 / 最少轮数 |
+| G | 3D 决策空间 | [实验室 2 · #space3d](https://he-yikang.github.io/homework/lab2.html#space3d) | 纯 Canvas 伪 3D：可拖动旋转、滚轮缩放的置信度曲面，直观看到网络如何把输入平面「折」开 |
+| H | 确定性 vs 学习 | [知识地图 · #timeline](https://he-yikang.github.io/homework/atlas.html#timeline) | 同一条可拖动时间轴并排播放幻方 / 筛法与神经网络收敛，标出共同点（迭代、收敛、误差）与分界（规则由人写 vs 规则从数据学） |
+
+**网站 ↔ README 双向关联**：每个扩展模块页脚都有「↗ README 对应说明」直达本节；本表的每个链接都指向线上具体锚点；五页 `Ctrl/⌘ + K` 站内搜索也收录了全部扩展条目。全部能力由单文件内的原生 JavaScript / Canvas 实现，**不依赖任何框架、外部库或服务器**，断网可用。
+
+> 结构与顺序仍是：作业 1 → 实验室 1 → 作业 2 → 实验室 2；第一次作业原文、README 原有章节与作业正文的静态截图均未改动。

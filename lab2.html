@@ -222,6 +222,81 @@ tr:hover td{background:rgba(168,85,247,.07);cursor:pointer}
     </div>
   </div>
 
+<!-- ENH:LAB2 -->
+<style>
+.enh-sec{margin:22px 0;padding:18px 20px;border:1px solid #2f2f46;border-radius:16px;background:linear-gradient(150deg,#1b1b28,#15151f);scroll-margin-top:88px}
+.enh-sec h2{font-size:19px;margin-bottom:8px;color:#e8e8f0;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.enh-sec .tag{font-size:11px;color:#2dd4bf;border:1px solid rgba(45,212,191,.4);padding:3px 9px;border-radius:99px;letter-spacing:.5px}
+.enh-sec p{font-size:13px;color:#9a9ab8;line-height:1.7;margin:6px 0 10px}
+.enh-sec canvas{display:block;background:#101018;border:1px solid #2a2a40;border-radius:12px;max-width:100%;cursor:crosshair}
+.enh-flex{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.enh-col{flex:1;min-width:280px}
+.enh-btn{display:inline-block;border:1px solid #3a3a55;background:rgba(168,85,247,.12);color:#e8e8f0;border-radius:9px;padding:7px 13px;font-size:12px;cursor:pointer;margin:4px 6px 4px 0;font-family:inherit}
+.enh-btn:hover{border-color:#2dd4bf;background:rgba(45,212,191,.14)}
+.enh-btn.on{border-color:#2dd4bf;color:#2dd4bf;background:rgba(45,212,191,.16)}
+.enh-out{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:#2dd4bf;background:#101018;border:1px solid #2a2a40;border-radius:10px;padding:12px;max-height:230px;overflow:auto;white-space:pre-wrap;margin-top:10px}
+.enh-in{background:#101018;border:1px solid #33334d;border-radius:8px;color:#e8e8f0;padding:6px 10px;font-size:12px;width:88px;font-family:inherit}
+.enh-note{font-size:12px;color:#6f6f90;margin-top:8px;line-height:1.6}
+#enh-ch-banner{display:none;margin-bottom:12px;padding:11px 14px;border:1px solid rgba(251,146,60,.5);background:rgba(251,146,60,.10);border-radius:10px;font-size:13px;color:#fb923c}
+</style>
+
+<div class="enh-sec" id="grad">
+  <h2>🔬 梯度与优化显微镜 <span class="tag">扩展能力 A · 看懂「为什么学得动」</span></h2>
+  <p>左边是一个非凸 loss 曲面（<code>f(x,y)=½x²+6y²+0.6·sin3x·sin3y</code>）——<b style="color:#e8e8f0">在图上按住拖动可以挪动初始点</b>。三条曲线是同一个起点、同一个学习率下 SGD / Momentum / Adam 的下降轨迹。右边是从<b>当前真实网络</b>采样出来的逐层梯度 L2 范数，梯度消失会直接体现为靠输入侧的短条。</p>
+  <div class="enh-flex">
+    <div class="enh-col">
+      <canvas id="enhGradC" width="420" height="320"></canvas>
+      <div class="enh-note">紫色=高 loss、青色=低 loss · 轨迹：<span style="color:#fb923c">■ SGD</span> <span style="color:#a855f7">■ Momentum</span> <span style="color:#2dd4bf">■ Adam</span> · 白圈=起点</div>
+    </div>
+    <div class="enh-col">
+      <canvas id="enhGradB" width="420" height="190"></canvas>
+      <div class="enh-note" id="enhGradNote">点「采样当前网络梯度」查看每一层的梯度强度。</div>
+    </div>
+  </div>
+  <div style="margin-top:10px">
+    <button class="enh-btn on" data-opt="sgd">SGD</button>
+    <button class="enh-btn on" data-opt="mom">Momentum</button>
+    <button class="enh-btn on" data-opt="adam">Adam</button>
+    <span style="color:#6f6f90;font-size:12px;margin-left:8px">学习率</span>
+    <button class="enh-btn" data-lr="0.004">过小 · 停滞</button>
+    <button class="enh-btn on" data-lr="0.12">合适 · 收敛</button>
+    <button class="enh-btn" data-lr="0.85">过大 · 发散</button>
+    <button class="enh-btn" id="enhGradSample">⤓ 采样当前网络梯度</button>
+  </div>
+  <div class="enh-note" id="enhLrNote">当前学习率 0.12：三种优化器都能稳定下降，Adam 因自适应步长在陡峭方向更稳。</div>
+</div>
+
+<div class="enh-sec" id="space3d">
+  <h2>🧊 3D 决策空间 <span class="tag">扩展能力 G · 纯 Canvas 伪 3D</span></h2>
+  <p>把二维决策边界立起来：曲面高度 = 网络对输入 <code>(x,y)</code> 的最大分类置信度，颜色 = 预测的类别。<b style="color:#e8e8f0">按住拖动旋转，滚轮缩放</b>；训练几轮后再点「同步当前网络」，可以看到曲面从平缓逐渐长出清晰的分界。</p>
+  <canvas id="enh3dC" width="460" height="340"></canvas>
+  <div style="margin-top:10px">
+    <button class="enh-btn" id="enh3dSync">⟳ 同步当前网络</button>
+    <button class="enh-btn" id="enh3dReset">重置视角</button>
+    <span class="enh-note" id="enh3dInfo" style="margin-left:8px">尚未采样，请先点「同步当前网络」。</span>
+  </div>
+</div>
+
+<div class="enh-sec" id="report">
+  <h2>📄 实验报告与挑战链接 <span class="tag">扩展能力 E + F</span></h2>
+  <p>把此刻的实验状态整理成一份可以交的记录：配置、训练曲线、决策边界截图与自动判读的结论。也可以把数据集与目标打包成挑战链接发给同学，看谁能用更少参数、更少轮数达标。</p>
+  <div id="enh-ch-banner"></div>
+  <div>
+    <button class="enh-btn" id="enhL2Report">生成实验报告</button>
+    <button class="enh-btn" id="enhL2Md">复制 Markdown</button>
+    <button class="enh-btn" id="enhL2Print">打印 / 存为 PDF</button>
+  </div>
+  <div class="enh-out" id="enhL2Out">点击「生成实验报告」即可预览并弹出可打印页面。</div>
+  <div id="challenge" style="margin-top:18px;padding-top:16px;border-top:1px solid #2c2c42;scroll-margin-top:88px">
+    <h2 style="font-size:16px;margin-bottom:6px">🎯 挑战链接 <span class="tag">扩展能力 F</span></h2>
+    <p style="margin-bottom:8px">目标准确率 <input class="enh-in" id="enhChT" type="number" value="95" min="50" max="100"> % ／ 参数上限 <input class="enh-in" id="enhChCap" type="number" value="2000" min="20"> 个</p>
+    <button class="enh-btn" id="enhChGen">生成并复制挑战链接</button>
+    <button class="enh-btn" id="enhChClear">清除当前挑战</button>
+    <div class="enh-out" id="enhChOut" style="max-height:120px">生成后把链接发给同学；打开链接会自动载入你的数据集与参数限制。</div>
+  </div>
+  <div class="enh-note">↗ 这些能力在 <a href="https://github.com/he-yikang/homework#enhance" target="_blank" rel="noopener" style="color:#2dd4bf">README · 扩展模块说明</a> 里也有对应条目。</div>
+</div>
+<!-- /ENH:LAB2 -->
   <div class="foot">
     纯 JavaScript 实现的全连接网络：Xavier/He 初始化 → 前向传播 → Softmax 交叉熵 → 反向传播 → 梯度裁剪 → Adam / SGD 更新。<br>
     与 <a href="homework2.html">作业 2 的 PyTorch 对比报告</a> 是同一套原理，这里把「看结果」换成了「自己动手跑」。<br>
@@ -715,6 +790,15 @@ function exportJSON(){
 
 // ---------------------------- 站内搜索 ----------------------------
 const CMD_ITEMS=[
+/* ENH:CMD */
+ {t:'🧭 知识地图 · 课程概念串联',u:'atlas.html#map',d:'扩展',k:'概念 知识图谱 地图 串联 梯度 泛化 复杂度 atlas'},
+ {t:'⏳ 确定性 vs 学习 · 对照时间轴',u:'atlas.html#timeline',d:'扩展',k:'时间轴 对照 幻方 筛法 收敛 叙事 timeline'},
+ {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
+ {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
+ {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
+ {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
+ {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
+/* /ENH:CMD */
   {t:'首页 · 课程作业导航',u:'index.html',k:'首页 home index 导航'},
   {t:'作业 1 · AI 编程工具作品展示',u:'homework1.html',k:'作业1 workbuddy deepseek trae 幻方 质数'},
   {t:'实验室 1 · 幻方与质数互动实验室',u:'lab1.html',k:'实验室1 幻方 质数 算法 动画'},
@@ -796,11 +880,499 @@ document.addEventListener('keydown',e=>{
   else if(e.key.toLowerCase()==='r'){resetAll();toast('网络已重置');}
 });
 
+// ENH:LAB2_BRIDGE
+window.__LAB2__={get cfg(){return cfg},get net(){return net},get data(){return data},
+ get history(){return history},get metrics(){return metrics},get custom(){return custom},
+ setCustom:function(c){custom=c;},
+ forward:forward,softmax:softmax,zeroGrads:zeroGrads,backward:backward,evaluate:evaluate,
+ fmt:fmt,toast:toast,$:$,resetAll:resetAll,syncUI:syncUI,drawBoundary:drawBoundary};
+// /ENH:LAB2_BRIDGE
 // 启动
 loadHash();
 resetAll();
 renderExps();
 syncUI();
 </script>
+<!-- ENH:COMMON -->
+<style>
+#enh-fab,#enh-tour-fab{position:fixed;left:18px;z-index:95;border:1px solid rgba(45,212,191,.45);background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(168,85,247,.16));color:#e8e8f0;border-radius:99px;padding:9px 14px;font-size:12px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 6px 20px rgba(0,0,0,.4);font-family:inherit}
+#enh-fab{bottom:20px}
+#enh-tour-fab{bottom:64px;border-color:rgba(168,85,247,.5)}
+#enh-fab:hover,#enh-tour-fab:hover{filter:brightness(1.28)}
+#enh-toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);z-index:260;background:#1c1c28;border:1px solid #2dd4bf;color:#e8e8f0;padding:11px 20px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.28s;box-shadow:0 12px 36px rgba(0,0,0,.6);max-width:88vw;text-align:center}
+#enh-toast.show{opacity:1;transform:translate(-50%,0)}
+#enh-panel{position:fixed;inset:0;background:rgba(5,5,10,.76);backdrop-filter:blur(7px);z-index:230;display:none;align-items:center;justify-content:center;padding:20px}
+#enh-panel.show{display:flex}
+#enh-panel .box{width:min(720px,94vw);max-height:86vh;overflow:auto;background:linear-gradient(160deg,#1c1c28,#14141e);border:1px solid #33334d;border-radius:18px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.7)}
+#enh-panel h3{margin:0 0 4px;font-size:20px;background:linear-gradient(90deg,#a855f7,#2dd4bf);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#enh-panel .sub{color:#9a9ab8;font-size:12px;margin-bottom:16px}
+#enh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+#enh-grid a{display:block;text-decoration:none;color:#e8e8f0;border:1px solid #2c2c42;background:rgba(255,255,255,.025);border-radius:12px;padding:12px 14px;transition:.2s}
+#enh-grid a:hover{border-color:#a855f7;background:rgba(168,85,247,.12);transform:translateY(-2px)}
+#enh-grid b{display:block;font-size:13px;margin-bottom:4px}
+#enh-grid small{color:#9a9ab8;font-size:11px;line-height:1.5}
+#enh-panel .close{float:right;background:none;border:1px solid #3a3a55;color:#c8c8dd;border-radius:8px;padding:4px 11px;cursor:pointer;font-size:12px}
+#enh-panel .readme{display:block;margin-top:16px;text-align:center;color:#2dd4bf;font-size:12px;text-decoration:none}
+#enh-tourbar{position:fixed;left:50%;bottom:22px;transform:translate(-50%,120%);z-index:240;width:min(620px,92vw);background:linear-gradient(135deg,#1d1d2c,#171722);border:1px solid #a855f7;border-radius:16px;padding:15px 18px;box-shadow:0 18px 50px rgba(0,0,0,.7);transition:.35s;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+#enh-tourbar.show{transform:translate(-50%,0)}
+#enh-tourbar .tx{flex:1;min-width:200px}
+#enh-tourbar b{display:block;font-size:14px;color:#e8e8f0;margin-bottom:3px}
+#enh-tourbar small{font-size:12px;color:#9a9ab8;line-height:1.5}
+#enh-tourbar .pg{font-size:11px;color:#2dd4bf;letter-spacing:1px;white-space:nowrap}
+#enh-tourbar button{border:1px solid #3a3a55;background:rgba(255,255,255,.04);color:#e8e8f0;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+#enh-tourbar button.pri{background:linear-gradient(120deg,#a855f7,#3b82f6);border:none;color:#fff}
+.enh-hl{outline:2px solid #2dd4bf;outline-offset:6px;border-radius:10px}
+#enh-achv{margin:26px 0 4px;padding:18px 20px;border:1px solid rgba(168,85,247,.3);border-radius:16px;background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(45,212,191,.06))}
+#enh-achv .hd{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+#enh-achv h3{font-size:16px;margin:0}
+#enh-achv .ring{flex:0 0 auto}
+#enh-achv .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#enh-achv .bd{font-size:11px;padding:5px 11px;border-radius:99px;border:1px solid #33334d;color:#6f6f90;background:rgba(255,255,255,.02)}
+#enh-achv .bd.on{color:#2dd4bf;border-color:rgba(45,212,191,.5);background:rgba(45,212,191,.1)}
+@media(max-width:640px){#enh-fab,#enh-tour-fab{left:10px;padding:8px 11px;font-size:11px}#enh-tourbar{bottom:10px}}
+</style>
+<button id="enh-fab" title="八项扩展能力">✦ 扩展能力</button>
+<button id="enh-tour-fab" title="自动导览">▶ 带我看一遍</button>
+<div id="enh-toast"></div>
+<div id="enh-panel"><div class="box">
+  <button class="close" id="enh-panel-close">关闭 ✕</button>
+  <h3>🧭 扩展能力 · 八项创新交互</h3>
+  <div class="sub">原有四栏结构保持不变，以下能力作为扩展层挂在各页；点任意一项直达。</div>
+  <div id="enh-grid">
+    <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
+    <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>11 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按四栏顺序讲完整站</small></a>
+    <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
+    <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
+    <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
+    <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>两次作业算法过程并排播放，标出共同点与分界</small></a>
+  </div>
+  <a class="readme" href="https://github.com/he-yikang/homework#enhance" target="_blank" rel="noopener">↗ 这些能力在 README 里也有完整说明与直达链接</a>
+</div></div>
+<div id="enh-tourbar"><span class="pg" id="enh-tour-pg"></span><div class="tx"><b id="enh-tour-t"></b><small id="enh-tour-d"></small></div><button id="enh-tour-skip">跳过</button><button id="enh-tour-next" class="pri">下一步 →</button></div>
+<script>
+(function(){
+'use strict';
+var KEY='hw_enh_v1', REPO='https://github.com/he-yikang/homework';
+var ACHV=[
+ {id:'magic1000',t:'百万格校验',d:'在实验室 1 跑完 1000 阶幻方极限校验'},
+ {id:'prime4',t:'四种筛法',d:'在实验室 1 完成四种质数算法竞赛'},
+ {id:'prime168',t:'168 个质数',d:'把质数上限设为 1000，找到原文那 168 个质数'},
+ {id:'spiral100',t:'螺旋全对',d:'在实验室 2 把三类螺旋数据训到 100%'},
+ {id:'custom90',t:'自己出题',d:'用自画数据集训到 90% 以上'},
+ {id:'sgdbeat',t:'SGD 也不错',d:'用 SGD 优化器把准确率训到 95% 以上'},
+ {id:'probe',t:'看见神经元',d:'点开隐藏层节点查看感受野'},
+ {id:'grad',t:'梯度显微镜',d:'采样一次逐层梯度范数'},
+ {id:'report',t:'能交的作业',d:'导出一份实验报告'},
+ {id:'challenge',t:'挑战达成',d:'完成一个分享给你的训练挑战'},
+ {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'}
+];
+var state={u:{},c:[]};
+try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function toast(msg){var t=document.getElementById('enh-toast');if(!t)return;t.textContent=msg;t.className='show';clearTimeout(t._t);t._t=setTimeout(function(){t.className='';},2500);}
+function unlock(id){
+  if(state.u[id])return false;
+  var a=null;for(var i=0;i<ACHV.length;i++)if(ACHV[i].id===id)a=ACHV[i];
+  if(!a)return false;
+  state.u[id]=Date.now();save();
+  toast('🏅 成就解锁 · '+a.t+'｜'+a.d);
+  var box=document.getElementById('enh-achv');if(box)renderAchv(box);
+  return true;
+}
+function done(){var n=0;for(var i=0;i<ACHV.length;i++)if(state.u[ACHV[i].id])n++;return n;}
+function renderAchv(box){
+  var n=done(),pct=n/ACHV.length,r=38,c=2*Math.PI*r;
+  var ring='<svg class="ring" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2c2c42" stroke-width="8"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+(c*pct).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="45" text-anchor="middle" fill="#e8e8f0" font-size="17" font-weight="700">'+n+'/'+ACHV.length+'</text><text x="48" y="62" text-anchor="middle" fill="#9a9ab8" font-size="9">已解锁</text></svg>';
+  var bd='';for(var j=0;j<ACHV.length;j++){var a=ACHV[j];bd+='<span class="bd'+(state.u[a.id]?' on':'')+'" title="'+a.d+'">'+(state.u[a.id]?'✓ ':'🔒 ')+a.t+'</span>';}
+  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部八项交互。</div></div></div><div class="badges">'+bd+'</div>';
+}
+window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO};
+var box=document.getElementById('enh-achv');if(box)renderAchv(box);
+
+/* 扩展能力面板 */
+var panel=document.getElementById('enh-panel');
+function openPanel(){panel.className='show';}
+function closePanel(){panel.className='';}
+document.getElementById('enh-fab').onclick=openPanel;
+document.getElementById('enh-panel-close').onclick=closePanel;
+panel.onclick=function(e){if(e.target===panel)closePanel();};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePanel();stopTour();}});
+
+/* 自动导览 */
+var TOUR={
+ 'index.html':{next:'homework1.html',steps:[
+  {t:'欢迎来到课程作业站点',d:'四张卡片对应四个栏目，顺序固定为 作业 1 → 实验室 1 → 作业 2 → 实验室 2。',s:'.grid'},
+  {t:'扩展层与探索进度',d:'左下角「✦ 扩展能力」随时打开八项交互；这里的进度环记录你做过的实验。',s:'#enh-achv'}]},
+ 'homework1.html':{next:'lab1.html',steps:[
+  {t:'作业 1 · AI 编程工具实践',d:'原文与三张过程截图完整保留，记录了 TRAE / DeepSeek Codex / WorkBuddy 的分工和踩坑。',s:null},
+  {t:'从作品延伸出实验室',d:'页面底部的引导卡片通往实验室 1，把当时的 Python 作品变成可以亲手调参的网页实验。',s:null}]},
+ 'lab1.html':{next:'homework2.html',steps:[
+  {t:'🔢 幻方实验室',d:'拖动阶数看三种构造算法逐格填数，实时校验幻和；「极限校验」真跑 1000 阶 100 万格。',s:'#magic'},
+  {t:'⚡ 质数实验室',d:'四种算法同场计时，逐轮播放筛法划掉倍数，默认上限 1000 正好得到原文那 168 个质数。',s:'#prime'}]},
+ 'homework2.html':{next:'lab2.html',steps:[
+  {t:'作业 2 · 训练过程回放',d:'首屏是 PyTorch 训练的逐帧回放，下面是架构对比与九张分析图。',s:'#lab'},
+  {t:'从回放走向现场训练',d:'报告里的 CTA 通往实验室 2 —— 那里不是看录像，而是在浏览器里真跑反向传播。',s:'#arch'}]},
+ 'lab2.html':{next:'atlas.html',steps:[
+  {t:'实时神经网络训练台',d:'画数据、改隐藏层、调学习率，决策边界与 loss 曲线每帧刷新。',s:'#boundary'},
+  {t:'梯度显微镜与 3D 决策空间',d:'看懂「为什么学得动」：优化轨迹、逐层梯度、可旋转的置信度曲面。',s:'#grad'},
+  {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
+ 'atlas.html':{next:null,steps:[
+  {t:'课程知识地图',d:'把两次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
+  {t:'确定性 vs 学习',d:'同一条时间轴并排看幻方 / 筛法与神经网络收敛，标出共同点与那道分界。',s:'#timeline'}]}
+};
+var bar=document.getElementById('enh-tourbar'),curPage=location.pathname.split('/').pop()||'index.html';
+if(curPage===''||curPage.indexOf('.html')<0)curPage='index.html';
+var ti=0,timer=null,active=false,hl=null;
+function clearHl(){if(hl){hl.classList.remove('enh-hl');hl=null;}}
+function showStep(){
+  var conf=TOUR[curPage];if(!conf)return;
+  var st=conf.steps[ti];
+  document.getElementById('enh-tour-pg').textContent=(ti+1)+' / '+conf.steps.length;
+  document.getElementById('enh-tour-t').textContent=st.t;
+  document.getElementById('enh-tour-d').textContent=st.d;
+  var nx=document.getElementById('enh-tour-next');
+  nx.textContent=(ti===conf.steps.length-1)?(conf.next?'下一站 →':'结束导览 ✓'):'下一步 →';
+  clearHl();
+  if(st.s){var el=null;try{el=document.querySelector(st.s);}catch(e){}if(el){el.scrollIntoView({behavior:'smooth',block:'center'});hl=el;hl.classList.add('enh-hl');}}
+  else window.scrollTo({top:0,behavior:'smooth'});
+  clearTimeout(timer);
+  if(ti<conf.steps.length-1)timer=setTimeout(nextStep,4600);
+}
+function nextStep(){
+  var conf=TOUR[curPage];if(!conf)return;
+  if(ti<conf.steps.length-1){ti++;showStep();return;}
+  if(conf.next){try{sessionStorage.setItem('hw_tour','1');}catch(e){}location.href=conf.next+'?tour=1';}
+  else{stopTour();window.ENH.unlock('atlas');window.ENH.toast('🎉 导览完成，感谢观看！');}
+}
+function startTour(){active=true;ti=0;bar.className='show';showStep();}
+function stopTour(){if(!active)return;active=false;clearTimeout(timer);clearHl();bar.className='';try{sessionStorage.removeItem('hw_tour');}catch(e){}}
+document.getElementById('enh-tour-fab').onclick=startTour;
+document.getElementById('enh-tour-link').onclick=function(e){e.preventDefault();closePanel();startTour();};
+document.getElementById('enh-tour-next').onclick=nextStep;
+document.getElementById('enh-tour-skip').onclick=stopTour;
+if(/[?&]tour=1/.test(location.search)){
+  setTimeout(function(){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}startTour();},700);
+}
+window.ENH.startTour=startTour;
+window.ENH.stopTour=stopTour;
+})();
+</script>
+<!-- /ENH:COMMON -->
+<!-- ENH:LAB2JS -->
+<script>
+(function(){
+'use strict';
+var B=window.__LAB2__;
+if(!B)return;
+var ENH=window.ENH||{};
+function toast(m){if(ENH.toast)ENH.toast(m);else B.toast(m);}
+function unlock(i){if(ENH.unlock)ENH.unlock(i);}
+function clamp(v,a,b){return v<a?a:(v>b?b:v);}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ================= A · 优化轨迹等高线 ================= */
+var gc=document.getElementById('enhGradC'),gx=gc.getContext('2d');
+var start={x:1.55,y:1.35},lr=0.12,show={sgd:true,mom:true,adam:true},drag=false;
+function f(x,y){return 0.5*x*x+6*y*y+0.6*Math.sin(3*x)*Math.sin(3*y);}
+function gr(x,y){return [x+1.8*Math.cos(3*x)*Math.sin(3*y),12*y+1.8*Math.sin(3*x)*Math.cos(3*y)];}
+function scOf(){return Math.min(gc.width,gc.height)/4.4;}
+function toPx(x,y){var s=scOf();return [gc.width/2+x*s,gc.height/2-y*s];}
+function toXY(px,py){var s=scOf();return [(px-gc.width/2)/s,(gc.height/2-py)/s];}
+function traj(kind){
+  var p=[start.x,start.y],v=[0,0],m=[0,0],q=[0,0],pts=[p.slice()];
+  for(var t=1;t<=150;t++){
+    var g=gr(p[0],p[1]);
+    if(kind==='sgd'){p[0]-=lr*g[0];p[1]-=lr*g[1];}
+    else if(kind==='mom'){v[0]=0.9*v[0]-lr*g[0];v[1]=0.9*v[1]-lr*g[1];p[0]+=v[0];p[1]+=v[1];}
+    else{
+      m[0]=0.9*m[0]+0.1*g[0];m[1]=0.9*m[1]+0.1*g[1];
+      q[0]=0.999*q[0]+0.001*g[0]*g[0];q[1]=0.999*q[1]+0.001*g[1]*g[1];
+      var c1=1-Math.pow(0.9,t),c2=1-Math.pow(0.999,t);
+      p[0]-=lr*(m[0]/c1)/(Math.sqrt(q[0]/c2)+1e-8);
+      p[1]-=lr*(m[1]/c1)/(Math.sqrt(q[1]/c2)+1e-8);
+    }
+    pts.push([p[0],p[1]]);
+    if(!isFinite(p[0])||!isFinite(p[1])||Math.abs(p[0])>9||Math.abs(p[1])>9)break;
+  }
+  return pts;
+}
+function drawGrad(){
+  var W=gc.width,H=gc.height;
+  gx.clearRect(0,0,W,H);
+  var step=5;
+  for(var py=0;py<H;py+=step)for(var px=0;px<W;px+=step){
+    var xy=toXY(px,py),v=clamp(f(xy[0],xy[1])/9,0,1);
+    var r=Math.round(20+90*v),g=Math.round(24+45*(1-v)),b=Math.round(48+155*(1-v));
+    gx.fillStyle='rgb('+r+','+g+','+b+')';gx.fillRect(px,py,step,step);
+  }
+  gx.strokeStyle='rgba(255,255,255,.07)';gx.lineWidth=1;
+  for(var k=-2;k<=2;k++){
+    var a=toPx(k,-2.2),bb=toPx(k,2.2);gx.beginPath();gx.moveTo(a[0],a[1]);gx.lineTo(bb[0],bb[1]);gx.stroke();
+    var c=toPx(-2.2,k),d=toPx(2.2,k);gx.beginPath();gx.moveTo(c[0],c[1]);gx.lineTo(d[0],d[1]);gx.stroke();
+  }
+  var kinds=[['sgd','#fb923c'],['mom','#a855f7'],['adam','#2dd4bf']];
+  for(var t2=0;t2<kinds.length;t2++){
+    if(!show[kinds[t2][0]])continue;
+    var pts=traj(kinds[t2][0]);
+    gx.strokeStyle=kinds[t2][1];gx.lineWidth=2;gx.beginPath();
+    for(var i=0;i<pts.length;i++){var q2=toPx(pts[i][0],pts[i][1]);if(i===0)gx.moveTo(q2[0],q2[1]);else gx.lineTo(q2[0],q2[1]);}
+    gx.stroke();
+    var last=toPx(pts[pts.length-1][0],pts[pts.length-1][1]);
+    gx.fillStyle=kinds[t2][1];gx.beginPath();gx.arc(last[0],last[1],4,0,6.283);gx.fill();
+  }
+  var o=toPx(start.x,start.y);
+  gx.strokeStyle='#fff';gx.lineWidth=2;gx.beginPath();gx.arc(o[0],o[1],8,0,6.283);gx.stroke();
+  gx.fillStyle='#fff';gx.font='11px monospace';gx.fillText('起点',o[0]+12,o[1]-10);
+}
+function pos(e){var r=gc.getBoundingClientRect();return [(e.clientX-r.left)*gc.width/r.width,(e.clientY-r.top)*gc.height/r.height];}
+gc.addEventListener('mousedown',function(e){drag=true;var p=pos(e),xy=toXY(p[0],p[1]);start.x=clamp(xy[0],-2.1,2.1);start.y=clamp(xy[1],-2.1,2.1);drawGrad();});
+window.addEventListener('mouseup',function(){drag=false;});
+gc.addEventListener('mousemove',function(e){if(!drag)return;var p=pos(e),xy=toXY(p[0],p[1]);start.x=clamp(xy[0],-2.1,2.1);start.y=clamp(xy[1],-2.1,2.1);drawGrad();});
+var optBtns=document.querySelectorAll('#grad [data-opt]');
+for(var oi=0;oi<optBtns.length;oi++)optBtns[oi].addEventListener('click',function(){
+  var k=this.getAttribute('data-opt');show[k]=!show[k];this.className='enh-btn'+(show[k]?' on':'');drawGrad();
+});
+var lrBtns=document.querySelectorAll('#grad [data-lr]');
+var lrNotes={'0.004':'学习率过小：150 步后仍在半山腰，几乎看不出移动 —— 慢不等于稳。','0.12':'当前学习率 0.12：三种优化器都能稳定下降，Adam 因自适应步长在陡峭方向更稳。','0.85':'学习率过大：轨迹在谷底两侧来回横跳甚至冲出画面，这就是训练时 loss 突然爆炸的样子。'};
+for(var li=0;li<lrBtns.length;li++)lrBtns[li].addEventListener('click',function(){
+  lr=parseFloat(this.getAttribute('data-lr'));
+  for(var j=0;j<lrBtns.length;j++)lrBtns[j].className='enh-btn';
+  this.className='enh-btn on';
+  document.getElementById('enhLrNote').textContent=lrNotes[String(lr)]||'';
+  drawGrad();
+});
+drawGrad();
+
+/* ================= A · 逐层梯度 ================= */
+var gb=document.getElementById('enhGradB'),gbx=gb.getContext('2d');
+function sampleGrad(){
+  var net=B.net,data=B.data;
+  if(!net||!data||!data.x||!data.x.length)return [];
+  var g=B.zeroGrads(net),n=Math.min(24,data.x.length),arr=[];
+  for(var k=0;k<n;k++){var cache={};B.forward(net,data.x[k],cache);B.backward(net,data.y[k],cache,g);}
+  for(var l=0;l<g.W.length;l++){var s=0;for(var i=0;i<g.W[l].length;i++)s+=g.W[l][i]*g.W[l][i];arr.push(Math.sqrt(s)/n);}
+  return arr;
+}
+function drawGradBar(){
+  var a=sampleGrad(),W=gb.width,H=gb.height;
+  gbx.clearRect(0,0,W,H);
+  gbx.fillStyle='#101018';gbx.fillRect(0,0,W,H);
+  if(!a.length){gbx.fillStyle='#6f6f90';gbx.font='12px sans-serif';gbx.fillText('暂无数据，先生成数据集',14,H/2);return;}
+  var mx=0;for(var i=0;i<a.length;i++)if(a[i]>mx)mx=a[i];if(mx<=0)mx=1;
+  var bh=Math.min(26,(H-30)/a.length);
+  for(var j=0;j<a.length;j++){
+    var y=16+j*(bh+6),w=(W-120)*Math.pow(a[j]/mx,0.6);
+    gbx.fillStyle='#26263a';gbx.fillRect(70,y,W-120,bh);
+    var grd=gbx.createLinearGradient(70,0,70+w,0);grd.addColorStop(0,'#a855f7');grd.addColorStop(1,'#2dd4bf');
+    gbx.fillStyle=grd;gbx.fillRect(70,y,Math.max(2,w),bh);
+    gbx.fillStyle='#c8c8dd';gbx.font='11px monospace';
+    gbx.fillText('L'+(j+1),14,y+bh/2+4);
+    gbx.fillStyle='#e8e8f0';gbx.fillText(a[j].toFixed(4),W-52,y+bh/2+4);
+  }
+  var note=document.getElementById('enhGradNote');
+  var near=a[0]/mx,far=a[a.length-1]/mx;
+  note.textContent='共 '+a.length+' 层权重；最靠近输入层的相对强度 '+(near*100).toFixed(1)+'%，输出层 '+(far*100).toFixed(1)+'%。'+(near<0.15?'靠输入侧明显变弱 → 梯度消失。':'各层梯度尚在正常范围。');
+}
+document.getElementById('enhGradSample').addEventListener('click',function(){drawGradBar();unlock('grad');toast('已采样逐层梯度范数');});
+drawGradBar();
+
+/* ================= G · 3D 决策空间 ================= */
+var c3=document.getElementById('enh3dC'),x3=c3.getContext('2d');
+var COL=['#a855f7','#2dd4bf','#fb923c'];
+var yaw=0.72,pitch=0.62,zoom=78,N=26,Z=null,rot=false,lastP=null;
+function proj(x,y,z){
+  var ca=Math.cos(yaw),sa=Math.sin(yaw),rx=x*ca-y*sa,ry=x*sa+y*ca;
+  return [c3.width/2+rx*zoom,c3.height/2+ry*zoom*Math.sin(pitch)-z*zoom*0.95*Math.cos(pitch),ry];
+}
+function recompute(){
+  var net=B.net;if(!net){Z=null;return;}
+  Z=[];
+  for(var i=0;i<=N;i++){
+    var row=[];
+    for(var j=0;j<=N;j++){
+      var xx=-1+2*i/N,yy=-1+2*j/N;
+      var p=B.softmax(B.forward(net,[xx,yy])),best=0;
+      for(var k=1;k<p.length;k++)if(p[k]>p[best])best=k;
+      row.push({z:p[best],c:best});
+    }
+    Z.push(row);
+  }
+  var info=document.getElementById('enh3dInfo');
+  info.textContent='已同步：'+((N+1)*(N+1))+' 个采样点 · 第 '+(net.epoch||0)+' 轮 · '+((net.params)||0)+' 参数';
+}
+function draw3d(){
+  var W=c3.width,H=c3.height;
+  x3.clearRect(0,0,W,H);
+  var bg=x3.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#151522');bg.addColorStop(1,'#0d0d16');
+  x3.fillStyle=bg;x3.fillRect(0,0,W,H);
+  if(!Z){x3.fillStyle='#6f6f90';x3.font='13px sans-serif';x3.fillText('点「同步当前网络」采样置信度曲面',24,H/2);return;}
+  var pts=[];
+  for(var i=0;i<=N;i++){var row=[];for(var j=0;j<=N;j++)row.push(proj(-1+2*i/N,-1+2*j/N,Z[i][j].z));pts.push(row);}
+  var cells=[];
+  for(var a=0;a<N;a++)for(var b=0;b<N;b++){
+    var p0=pts[a][b],p1=pts[a+1][b],p2=pts[a+1][b+1],p3=pts[a][b+1];
+    cells.push({p:[p0,p1,p2,p3],d:(p0[2]+p1[2]+p2[2]+p3[2])/4,c:Z[a][b].c,z:(Z[a][b].z+Z[a+1][b+1].z)/2});
+  }
+  cells.sort(function(u,v){return u.d-v.d;});
+  for(var t=0;t<cells.length;t++){
+    var q=cells[t];x3.beginPath();x3.moveTo(q.p[0][0],q.p[0][1]);
+    for(var m=1;m<4;m++)x3.lineTo(q.p[m][0],q.p[m][1]);x3.closePath();
+    x3.globalAlpha=0.30+0.62*clamp(q.z,0,1);
+    x3.fillStyle=COL[q.c%COL.length];x3.fill();
+  }
+  x3.globalAlpha=1;
+  x3.fillStyle='#9a9ab8';x3.font='11px sans-serif';
+  x3.fillText('拖动旋转 · 滚轮缩放 · 高度 = 最大分类置信度',12,H-12);
+}
+function p3(e){var r=c3.getBoundingClientRect();return [(e.clientX-r.left)*c3.width/r.width,(e.clientY-r.top)*c3.height/r.height,e.clientX,e.clientY];}
+c3.addEventListener('mousedown',function(e){rot=true;lastP=p3(e);});
+window.addEventListener('mouseup',function(){rot=false;lastP=null;});
+c3.addEventListener('mousemove',function(e){if(!rot||!lastP)return;var p=p3(e);yaw+=(p[2]-lastP[2])*0.012;pitch=clamp(pitch+(p[3]-lastP[3])*0.008,0.18,1.35);lastP=p;draw3d();});
+c3.addEventListener('wheel',function(e){e.preventDefault();zoom=clamp(zoom*(e.deltaY>0?0.92:1.08),34,140);draw3d();},{passive:false});
+document.getElementById('enh3dSync').addEventListener('click',function(){recompute();draw3d();toast('3D 曲面已同步当前网络');});
+document.getElementById('enh3dReset').addEventListener('click',function(){yaw=0.72;pitch=0.62;zoom=78;draw3d();});
+draw3d();
+
+/* ================= E · 实验报告 ================= */
+function collect(){
+  var cfg=B.cfg,net=B.net,data=B.data,hist=B.history,m=B.metrics||{loss:0,acc:0};
+  var first=hist.length?hist[0].loss:m.loss,last=m.loss;
+  var acc=(m.acc*100).toFixed(1);
+  var arch=(net&&net.sizes)?net.sizes.join(' → '):'—';
+  var params=(net&&net.params)||0;
+  var conclusion='训练 '+(net?net.epoch:0)+' 轮后，训练集准确率 '+acc+'%，loss 从 '+B.fmt(first,4)+' 降到 '+B.fmt(last,4)+'。'
+    +'当前网络 '+arch+' 共 '+params+' 个可学习参数。'
+    +(m.acc>=0.95?'深层网络的容量足以把非线性边界拟合出来，这也解释了作业 2 中玩具网络与原版 XOR 的差距。':'边界仍较粗糙，可尝试增加隐藏层宽度、换用 ReLU 或提高训练轮数。');
+  return {cfg:cfg,arch:arch,params:params,epoch:net?net.epoch:0,acc:acc,loss:B.fmt(last,4),
+    first:B.fmt(first,4),data:data?data.x.length:0,classes:data?data.classes:0,
+    conclusion:conclusion,hist:hist.slice(-40)};
+}
+function markdown(d){
+  return ['# 实验室 2 · MLP 训练实验记录','',
+    '> 生成时间：'+new Date().toLocaleString('zh-CN'),'',
+    '## 一、实验配置','',
+    '| 项目 | 值 |','|:--|:--|',
+    '| 数据集 | '+d.cfg.dataset+'（'+d.data+' 个样本 / '+d.classes+' 类，噪声 '+d.cfg.noise+'） |',
+    '| 网络结构 | '+d.arch+' |','| 可学习参数 | '+d.params+' |',
+    '| 激活函数 | '+d.cfg.act+' |','| 优化器 | '+d.cfg.opt+' |',
+    '| 学习率 | '+d.cfg.lr+' |','| L2 正则 | '+d.cfg.l2+' |',
+    '| 批大小 | '+d.cfg.bs+' |','| 已训练轮数 | '+d.epoch+' |','',
+    '## 二、训练结果','',
+    '- 训练集准确率：**'+d.acc+'%**','- 最终 loss：**'+d.loss+'**（起始 '+d.first+'）','',
+    '## 三、结论','',d.conclusion,'',
+    '> 决策边界与训练曲线截图见随附的可打印报告；本记录由 he-yikang.github.io/homework/lab2.html 现场生成。',''].join('\n');
+}
+function canvasImg(id){try{var c=B.$(id);return c?c.toDataURL('image/png'):'';}catch(e){return '';}}
+function htmlReport(d,md){
+  return '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 2 · 实验报告</title><style>'
+   +'body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:900px;margin:36px auto;padding:0 24px;line-height:1.8}'
+   +'h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #2c2c42;padding-bottom:6px;margin-top:28px}'
+   +'table{border-collapse:collapse;width:100%;font-size:13px}td,th{border:1px solid #2c2c42;padding:7px 11px;text-align:left}th{color:#9a9ab8}'
+   +'img{max-width:100%;border:1px solid #2c2c42;border-radius:12px;margin:8px 0}pre{white-space:pre-wrap;background:#16161f;border:1px solid #2c2c42;border-radius:12px;padding:16px;font-size:13px;color:#c8c8dd}'
+   +'.two{display:flex;gap:14px;flex-wrap:wrap}.two>div{flex:1;min-width:260px}'
+   +'@media print{body{background:#fff;color:#111}h1,h2{color:#222}td,th{border-color:#ccc;color:#111}pre{background:#f6f6f6;color:#111}}'
+   +'</style></head><body><h1>🧪 实验室 2 · MLP 训练实验报告</h1>'
+   +'<p style="color:#9a9ab8;font-size:12px">生成时间：'+esc(new Date().toLocaleString('zh-CN'))+' · 浏览器内现场训练</p>'
+   +'<h2>一、实验配置</h2><table><tr><th>数据集</th><td>'+esc(d.cfg.dataset)+' · '+d.data+' 样本 / '+d.classes+' 类</td></tr>'
+   +'<tr><th>网络结构</th><td>'+esc(d.arch)+'（'+d.params+' 参数）</td></tr>'
+   +'<tr><th>激活 / 优化器</th><td>'+esc(d.cfg.act)+' / '+esc(d.cfg.opt)+'</td></tr>'
+   +'<tr><th>学习率 / L2 / 批大小</th><td>'+d.cfg.lr+' / '+d.cfg.l2+' / '+d.cfg.bs+'</td></tr>'
+   +'<tr><th>已训练轮数</th><td>'+d.epoch+'</td></tr></table>'
+   +'<h2>二、训练结果</h2><pre>'+esc(md)+'</pre>'
+   +'<h2>三、可视化</h2><div class="two"><div><b>决策边界</b><br><img src="'+canvasImg('boundary')+'"></div>'
+   +'<div><b>loss / 准确率曲线</b><br><img src="'+canvasImg('curves')+'"></div></div>'
+   +'<h2>四、结论</h2><p>'+esc(d.conclusion)+'</p>'
+   +'<p style="color:#9a9ab8;font-size:12px;margin-top:26px">人工智能概论 · 课程作业 · README 扩展模块说明：https://github.com/he-yikang/homework#enhance</p>'
+   +'</body></html>';
+}
+var out=document.getElementById('enhL2Out');
+document.getElementById('enhL2Report').addEventListener('click',function(){
+  var d=collect(),md=markdown(d);out.textContent=md;
+  var w=window.open('','_blank');if(w){w.document.write(htmlReport(d,md));w.document.close();}else toast('弹窗被拦截，报告已在下方预览');
+  unlock('report');
+});
+document.getElementById('enhL2Md').addEventListener('click',function(){
+  var md=markdown(collect());out.textContent=md;
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(md).then(function(){toast('Markdown 已复制');},function(){toast('复制失败，请手动选中下方文本');});
+  else toast('请手动选中下方文本复制');
+  unlock('report');
+});
+document.getElementById('enhL2Print').addEventListener('click',function(){
+  var d=collect(),w=window.open('','_blank');
+  if(w){w.document.write(htmlReport(d,markdown(d)));w.document.close();setTimeout(function(){w.print();},400);}
+  else{out.textContent=markdown(d);window.print();}
+  unlock('report');
+});
+
+/* ================= F · 挑战链接 ================= */
+var challenge=null,banner=document.getElementById('enh-ch-banner'),chOut=document.getElementById('enhChOut');
+function enc(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function dec(s){return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}
+function showChallenge(){
+  if(!challenge){banner.style.display='none';return;}
+  banner.style.display='block';
+  banner.innerHTML='🎯 <b>挑战进行中</b>：目标准确率 '+challenge.t+'%，参数上限 '+challenge.cap+' 个。'
+    +'当前网络 '+(B.net?B.net.params:0)+' 参数 · 已训练 '+(B.net?B.net.epoch:0)+' 轮 · 准确率 '+((B.metrics.acc||0)*100).toFixed(1)+'%';
+}
+document.getElementById('enhChGen').addEventListener('click',function(){
+  var t=clamp(parseFloat(document.getElementById('enhChT').value)||95,50,100);
+  var cap=clamp(parseInt(document.getElementById('enhChCap').value,10)||2000,20,999999);
+  var cfg=B.cfg,payload={c:cfg,cu:(cfg.dataset==='custom'?B.custom:null),t:t,cap:cap};
+  var url=location.origin+location.pathname+'#ch='+enc(payload);
+  chOut.textContent=url;
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(function(){toast('挑战链接已复制');},function(){toast('链接已生成，请手动复制下方文本');});
+  else toast('链接已生成，请手动复制下方文本');
+});
+document.getElementById('enhChClear').addEventListener('click',function(){
+  challenge=null;showChallenge();chOut.textContent='已清除当前挑战。';
+  try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+  toast('已清除挑战');
+});
+var mh=location.hash.match(/[#&]ch=([A-Za-z0-9_\-]+)/);
+if(mh){try{var o=dec(mh[1]);Object.assign(B.cfg,o.c||{});if(o.cu&&o.cu.x){B.setCustom({x:o.cu.x,y:o.cu.y});}
+  challenge={t:o.t||95,cap:o.cap||2000};B.resetAll();B.syncUI();
+  chOut.textContent='已载入挑战：目标 '+challenge.t+'%，参数不超过 '+challenge.cap+' 个。开始训练吧！';
+  toast('🎯 挑战已载入');}catch(e){chOut.textContent='挑战链接解析失败：'+e.message;}}
+showChallenge();
+
+/* 知识地图预设：atlas.html 点击概念节点可直达具体控件 */
+var pm=location.search.match(/[?&]preset=([a-z]+)/);
+var PRESETS={
+ overfit:{layers:3,width:48,l2:0,lr:0.04,act:'relu',dataset:'spiral'},
+ capacity:{layers:1,width:2,l2:0.0005,lr:0.05,act:'sigmoid',dataset:'spiral'},
+ vanish:{layers:4,width:16,l2:0.0005,lr:0.02,act:'sigmoid',dataset:'spiral'},
+ lr:{layers:2,width:24,l2:0.0005,lr:0.8,act:'relu',dataset:'spiral'},
+ gd:{layers:2,width:24,l2:0.0005,lr:0.03,opt:'adam',dataset:'xor'},
+ generalize:{layers:2,width:24,l2:0.02,lr:0.03,act:'relu',dataset:'spiral'}
+};
+if(pm&&PRESETS[pm[1]]){
+  setTimeout(function(){Object.assign(B.cfg,PRESETS[pm[1]]);B.resetAll();B.syncUI();
+    toast('🧭 已从知识地图载入预设：'+pm[1]);
+    var g=document.getElementById('grad');if(g)g.scrollIntoView({behavior:'smooth',block:'start'});
+  },260);
+}
+
+/* ================= 成就自动判定 ================= */
+var topo=B.$('topo');if(topo)topo.addEventListener('click',function(){unlock('probe');});
+setInterval(function(){
+  try{
+    var cfg=B.cfg,m=B.metrics,net=B.net;
+    if(!m||!net)return;
+    if(cfg.dataset==='spiral'&&m.acc>=0.995)unlock('spiral100');
+    var cu=B.custom;if(cu&&cu.x&&cu.x.length>=4&&m.acc>=0.9)unlock('custom90');
+    if(cfg.opt==='sgd'&&m.acc>=0.95)unlock('sgdbeat');
+    if(challenge&&m.acc>=challenge.t/100&&net.params<=challenge.cap&&!challenge.done){
+      challenge.done=true;
+      if(ENH.state){ENH.state.c.push({t:challenge.t,cap:challenge.cap,epoch:net.epoch,params:net.params,at:Date.now()});if(ENH.save)ENH.save();}
+      unlock('challenge');toast('🎉 挑战达成！'+net.epoch+' 轮 / '+net.params+' 参数');
+    }
+    if(challenge)showChallenge();
+  }catch(e){}
+},800);
+})();
+</script>
+<!-- /ENH:LAB2JS -->
 </body>
 </html>
