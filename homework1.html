@@ -367,7 +367,7 @@
         <a href="homework2.html">作业 2</a>
         <a href="lab.html">实时实验室 ✦</a>
         <span class="spacer"></span>
-        <a href="#works">作品</a><a href="#code">代码</a><a href="#agent">思考</a><a href="#about">关于</a>
+        <a href="#works">作品</a><a href="#labs">互动实验室 ✦</a><a href="#code">代码</a><a href="#agent">思考</a><a href="#about">关于</a>
     </nav>
     <div class="layout">
         <nav class="toc">
@@ -378,6 +378,7 @@
             <a href="lab.html">实时实验室 ✦</a>
             <hr>
             <a href="#works">作品展示</a>
+            <a href="#labs">互动实验室 ✦</a>
             <a href="#code">代码示例</a>
             <a href="#agent">Agent 思考</a>
             <a href="#about">关于</a>
@@ -488,6 +489,506 @@
                 </div>
             </div>
         </div>
+
+<!-- ===== 作业 1 互动实验室（追加区块，原文一字未改） ===== -->
+<style>
+#labs{margin:38px 0 10px;scroll-margin-top:90px}
+.hw1-sec{background:linear-gradient(160deg,#1c1c28,#16161f);border:1px solid #26263a;border-radius:18px;padding:20px;margin-bottom:20px;box-shadow:0 10px 34px rgba(0,0,0,.35)}
+.hw1-sec h2{font-size:21px;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.hw1-sec h2 .hw1-badge{font-size:11px;font-weight:400;color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.08);padding:3px 10px;border-radius:99px;letter-spacing:.5px}
+.hw1-desc{color:#9a9ab8;font-size:13px;margin-bottom:16px;line-height:1.7}
+.hw1-body{display:grid;grid-template-columns:250px 1fr;gap:18px;align-items:start}
+@media(max-width:900px){.hw1-body{grid-template-columns:1fr}}
+.hw1-ctl{background:#101018;border:1px solid #26263a;border-radius:13px;padding:14px}
+.hw1-ctl h3{font-size:11px;color:#9a9ab8;letter-spacing:1px;text-transform:uppercase;margin:2px 0 12px}
+.hw1-row{margin-bottom:12px}
+.hw1-row label{display:flex;justify-content:space-between;font-size:12px;color:#9a9ab8;margin-bottom:5px}
+.hw1-row label b{color:#2dd4bf;font:12px Consolas,monospace;font-weight:400}
+.hw1-row input[type=range]{width:100%;accent-color:#a855f7;height:5px;cursor:pointer}
+.hw1-row select,.hw1-row input[type=number],.hw1-row input[type=text]{width:100%;background:#0b0b12;color:#e8e8f0;border:1px solid #26263a;border-radius:8px;padding:7px 9px;font-size:13px;outline:none;box-sizing:border-box}
+.hw1-row select:focus,.hw1-row input:focus{border-color:#a855f7}
+.hw1-btn{background:#101018;border:1px solid #26263a;color:#e8e8f0;border-radius:8px;padding:8px 10px;font-size:12px;cursor:pointer;transition:.18s;flex:1;white-space:nowrap}
+.hw1-btn:hover{border-color:#a855f7;background:rgba(168,85,247,.1)}
+.hw1-btn.pri{background:linear-gradient(120deg,#a855f7,#3b82f6);border:none;color:#fff;font-weight:600}
+.hw1-btn.pri:hover{filter:brightness(1.15)}
+.hw1-flex{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+.hw1-note{font-size:11px;color:#6f6f90;line-height:1.6;margin-top:9px}
+.hw1-note b{color:#a855f7;font-weight:400}
+.hw1-main{min-width:0}
+.hw1-grid{display:grid;gap:3px;background:#0b0b12;border:1px solid #26263a;border-radius:12px;padding:10px;max-height:460px;overflow:auto}
+.hw1-cell{display:flex;align-items:center;justify-content:center;border-radius:5px;font:12px Consolas,monospace;color:#fff;aspect-ratio:1;min-height:22px;transition:background .12s,transform .12s;border:1px solid transparent}
+.hw1-cell.on{transform:scale(1.12);border-color:#fff;box-shadow:0 0 14px rgba(168,85,247,.8);z-index:2}
+.hw1-cell.empty{background:#15151f;color:#4a4a60}
+.hw1-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(104px,1fr));gap:8px;margin-bottom:12px}
+.hw1-stat{background:#101018;border:1px solid #26263a;border-radius:10px;padding:9px 10px}
+.hw1-stat span{display:block;font-size:10px;color:#9a9ab8;letter-spacing:.5px}
+.hw1-stat b{display:block;font:17px Consolas,monospace;color:#2dd4bf;font-weight:500;margin-top:2px}
+.hw1-stat.p b{color:#a855f7}.hw1-stat.o b{color:#fb923c}
+.hw1-check{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.hw1-chip{font:11px Consolas,monospace;padding:5px 10px;border-radius:99px;border:1px solid #26263a;color:#9a9ab8;background:#101018}
+.hw1-chip.ok{color:#2dd4bf;border-color:rgba(45,212,191,.4);background:rgba(45,212,191,.08)}
+.hw1-chip.no{color:#fb7185;border-color:rgba(251,113,133,.4);background:rgba(251,113,133,.08)}
+.hw1-canvas-wrap{position:relative;border:1px solid #26263a;border-radius:12px;background:#0b0b12;overflow:auto;max-height:330px}
+.hw1-canvas-wrap canvas{display:block}
+.hw1-ov{position:sticky;top:0;left:0;display:inline-block;font:11px Consolas,monospace;color:#e8e8f0;background:rgba(10,10,15,.85);padding:4px 9px;border-radius:0 0 8px 0;pointer-events:none;white-space:nowrap}
+.hw1-bars{margin-top:10px}
+.hw1-bar{display:flex;align-items:center;gap:8px;font-size:11px;color:#9a9ab8;margin-bottom:6px}
+.hw1-bar .lb{width:88px}
+.hw1-bar .tr{flex:1;height:9px;background:#101018;border-radius:6px;overflow:hidden}
+.hw1-bar .fl{height:100%;background:linear-gradient(90deg,#a855f7,#3b82f6);border-radius:6px;transition:width .3s}
+.hw1-bar .vv{width:64px;text-align:right;font-family:Consolas,monospace;color:#e8e8f0}
+.hw1-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;max-height:96px;overflow:auto}
+.hw1-chips span{font:11px Consolas,monospace;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.3);color:#d8b4fe;padding:3px 8px;border-radius:6px;cursor:pointer}
+.hw1-chips span:hover{background:rgba(168,85,247,.3);color:#fff}
+.hw1-probe{background:#101018;border:1px solid #26263a;border-radius:10px;padding:11px;margin-top:12px;font-size:12px;color:#9a9ab8;line-height:1.7}
+.hw1-probe b{color:#2dd4bf;font-weight:500}
+.hw1-toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,18px);background:#20202e;border:1px solid #a855f7;color:#fff;padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:230}
+.hw1-toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+
+<div id="labs">
+  <div class="hw1-sec">
+    <h2>🔢 幻方实验室 <span class="hw1-badge">LIVE · 三种算法全覆盖</span></h2>
+    <p class="hw1-desc">把作品 1 从截图变成可以亲手跑的生成器：拖动阶数，选择奇数 / 双偶 / 单偶，看连续摆数法、双层对角交换法、斯特雷奇法一格一格把数字放进去，并实时校验每行、每列、两条对角线的和是否等于幻和 <b>n(n²+1)/2</b>。</p>
+    <div class="hw1-body">
+      <div class="hw1-ctl">
+        <h3>控制台</h3>
+        <div class="hw1-row"><label>阶数 n <b id="hw1n">5</b></label><input type="range" id="hw1nRange" min="3" max="25" step="1" value="5"></div>
+        <div class="hw1-row"><label>快捷阶数</label>
+          <select id="hw1nPreset"><option value="3">3 阶 · 奇数</option><option value="4">4 阶 · 双偶</option><option value="5" selected>5 阶 · 奇数</option><option value="6">6 阶 · 单偶（斯特雷奇）</option><option value="8">8 阶 · 双偶</option><option value="10">10 阶 · 单偶</option></select>
+        </div>
+        <div class="hw1-row"><label>每帧步数 <b id="hw1spd">12</b></label><input type="range" id="hw1spdRange" min="1" max="60" step="1" value="12"></div>
+        <div class="hw1-flex"><button class="hw1-btn pri" id="hw1mPlay">▶ 播放构造</button><button class="hw1-btn" id="hw1mStep">单步</button></div>
+        <div class="hw1-flex"><button class="hw1-btn" id="hw1mReset">重置</button><button class="hw1-btn" id="hw1mCopy">复制矩阵</button></div>
+        <div class="hw1-row" style="margin-top:14px"><label>构造进度 <b id="hw1mProg">0 / 0</b></label><input type="range" id="hw1mSeek" min="0" max="100" step="1" value="100"></div>
+        <div class="hw1-flex"><button class="hw1-btn" id="hw1mStress">⚡ 极限校验 3~200 / 301 / 499 / 1000 阶</button></div>
+        <p class="hw1-note" id="hw1mAlgo">算法：<b>连续摆数法</b>。当前格高亮，浅色为尚未填入。</p>
+        <p class="hw1-note">极限校验会真实生成并逐行逐列校验 200 多个幻方（含 1000 阶，共 100 万个格子），只算不画，通常 1 秒内完成。</p>
+      </div>
+      <div class="hw1-main">
+        <div class="hw1-stats">
+          <div class="hw1-stat"><span>幻和 MAGIC SUM</span><b id="hw1mMagic">65</b></div>
+          <div class="hw1-stat p"><span>当前算法</span><b id="hw1mKind" style="font-size:13px">奇数阶</b></div>
+          <div class="hw1-stat o"><span>已填格子</span><b id="hw1mFilled">0</b></div>
+        </div>
+        <div class="hw1-grid" id="hw1mGrid"></div>
+        <div class="hw1-check" id="hw1mCheck"></div>
+        <p class="hw1-note" id="hw1mStressOut">点击「极限校验」可复现作品里那句「3~200 阶以及 301/499/1000 阶 100% 校验通过」。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="hw1-sec">
+    <h2>⚡ 质数实验室 <span class="hw1-badge">LIVE · 筛法动画 + 算法竞赛</span></h2>
+    <p class="hw1-desc">作品 2 原本用试除法生成 1000 以内 168 个质数。这里可以调上限、换算法（试除 / 6k±1 / 埃氏筛 / 欧拉筛），逐轮观看筛法划掉倍数的过程，对比四种算法耗时，还能随便输入一个数让它判断并分解。</p>
+    <div class="hw1-body">
+      <div class="hw1-ctl">
+        <h3>控制台</h3>
+        <div class="hw1-row"><label>上限 N <b id="hw1N">1000</b></label><input type="range" id="hw1NRange" min="10" max="5000" step="10" value="1000"></div>
+        <div class="hw1-row"><label>手动输入上限</label><input type="number" id="hw1NInput" min="10" max="20000" step="1" value="1000"></div>
+        <div class="hw1-row"><label>生成算法</label>
+          <select id="hw1pAlgo"><option value="trial">试除法（作品原版）</option><option value="sixk">6k±1 优化</option><option value="erat">埃拉托斯特尼筛</option><option value="euler">欧拉线性筛</option></select>
+        </div>
+        <div class="hw1-row"><label>筛法动画速度 <b id="hw1pSpd">2</b></label><input type="range" id="hw1pSpdRange" min="1" max="12" step="1" value="2"></div>
+        <div class="hw1-flex"><button class="hw1-btn pri" id="hw1pPlay">▶ 播放筛法</button><button class="hw1-btn" id="hw1pStep">单轮</button></div>
+        <div class="hw1-flex"><button class="hw1-btn" id="hw1pReset">重算</button><button class="hw1-btn" id="hw1pRace">🏁 四算法计时</button></div>
+        <div class="hw1-row" style="margin-top:14px"><label>筛法轮次 <b id="hw1pProg">0 / 0</b></label><input type="range" id="hw1pSeek" min="0" max="100" step="1" value="100"></div>
+        <div class="hw1-row"><label>数字探针</label><input type="text" id="hw1pProbe" placeholder="输入一个整数，例如 1001 或 9973"></div>
+        <p class="hw1-note">网格里：<b>紫</b>=质数，<b>暗灰</b>=合数，<b>红</b>=本轮刚划掉的倍数，<b>白框</b>=当前质数。鼠标悬停可看数值。</p>
+      </div>
+      <div class="hw1-main">
+        <div class="hw1-stats">
+          <div class="hw1-stat"><span>质数个数 π(N)</span><b id="hw1pCount">168</b></div>
+          <div class="hw1-stat p"><span>最大质数</span><b id="hw1pMax">997</b></div>
+          <div class="hw1-stat o"><span>本次耗时</span><b id="hw1pMs">0ms</b></div>
+          <div class="hw1-stat"><span>孪生素数对</span><b id="hw1pTwin">0</b></div>
+          <div class="hw1-stat"><span>最大相邻间隔</span><b id="hw1pGap">0</b></div>
+        </div>
+        <div class="hw1-canvas-wrap"><div class="hw1-ov" id="hw1pOv">筛法网格 · 悬停查看数值</div><canvas id="hw1pCanvas" width="600" height="300"></canvas></div>
+        <div class="hw1-flex" style="margin-top:12px">
+          <div style="flex:1;min-width:220px"><div class="hw1-note" style="margin:0 0 4px">π(x) 累计质数曲线（紫）与 x/ln x 参考（青虚线）</div><div class="hw1-canvas-wrap" style="max-height:none"><canvas id="hw1pCurve" width="420" height="150"></canvas></div></div>
+          <div style="flex:1;min-width:220px"><div class="hw1-note" style="margin:0 0 4px">四种算法耗时对比（毫秒，越小越快）</div><div class="hw1-bars" id="hw1pBars"><div class="hw1-note">点「四算法计时」开始比一比。</div></div></div>
+        </div>
+        <div class="hw1-probe" id="hw1pProbeOut">数字探针：输入一个整数，会告诉你它是不是质数、最小因子与质因数分解。</div>
+        <div class="hw1-chips" id="hw1pChips"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hw1-toast" id="hw1Toast"></div>
+
+<script>
+(function(){
+'use strict';
+// ==================== HW1 CORE START ====================
+function siamese(n){
+  const g=new Int32Array(n*n);let r=0,c=(n-1)>>1;
+  for(let v=1;v<=n*n;v++){
+    g[r*n+c]=v;
+    const nr=(r-1+n)%n,nc=(c+1)%n;
+    if(g[nr*n+nc])r=(r+1)%n;else{r=nr;c=nc;}
+  }
+  return g;
+}
+function makeMagic(n){
+  const nn=n*n,g=new Int32Array(nn),steps=[];let kind,label,rule;
+  if(n%2===1){
+    kind='奇数阶';label='连续摆数法（Siamese）';rule='从第一行正中放 1，之后一律往右上走；出界就绕回，遇占格就改为向下移一格。';
+    let r=0,c=(n-1)>>1;
+    for(let v=1;v<=nn;v++){
+      const idx=r*n+c;g[idx]=v;
+      steps.push({items:[{idx,v}],note:v===1?'起点：第一行正中':'右上斜走'});
+      const nr=(r-1+n)%n,nc=(c+1)%n;
+      if(g[nr*n+nc]){r=(r+1)%n;steps.push({items:[],note:'右上已被占 → 改为向下移'});}
+      else{r=nr;c=nc;}
+    }
+  }else if(n%4===0){
+    kind='双偶阶';label='双层对角交换法（补数法）';rule='先按行顺序填入 1…n²，再把 4×4 小块两条对角线上的格子取补 n²+1−v。';
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+      const idx=r*n+c,v=idx+1;g[idx]=v;steps.push({items:[{idx,v}],note:'顺序填入 1…n²'});
+    }
+    for(let r=0;r<n;r++)for(let c=0;c<n;c++){
+      if(r%4===c%4||(r%4+c%4)%4===3){
+        const idx=r*n+c;g[idx]=nn+1-g[idx];
+        steps.push({items:[{idx,v:g[idx]}],note:'对角块取补 n²+1−v'});
+      }
+    }
+  }else{
+    kind='单偶阶';label='斯特雷奇法（Strachey）';rule='拆成 4 个奇数阶子方阵（偏移 0/1/2/3 倍 m²），再按规则交换上下对应列：普通行换左侧 k 列，中间行换 1…k 列，右侧统一换 k−1 列。';
+    const m=n/2,M=m*m,k=(n-2)/4,A=siamese(m);
+    for(let i=0;i<m;i++)for(let j=0;j<m;j++){
+      const a=A[i*m+j];
+      const items=[{idx:i*n+j,v:a},{idx:(i+m)*n+(j+m),v:a+M},{idx:i*n+(j+m),v:a+2*M},{idx:(i+m)*n+j,v:a+3*M}];
+      for(const it of items)g[it.idx]=it.v;
+      steps.push({items,note:'四象限按偏移填入'});
+    }
+    const sw=(r1,c1,r2,c2)=>{
+      const i1=r1*n+c1,i2=r2*n+c2,t=g[i1];g[i1]=g[i2];g[i2]=t;
+      steps.push({items:[{idx:i1,v:g[i1]},{idx:i2,v:g[i2]}],note:r1<m?'上下交换（调整行和）':'上下交换'});
+    };
+    for(let i=0;i<m;i++){
+      for(let j=0;j<k;j++)sw(i,i===k?j+1:j,i+m,i===k?j+1:j);
+      for(let j=0;j<k-1;j++)sw(i,n-1-j,i+m,n-1-j);
+    }
+  }
+  return {n,kind,label,rule,grid:g,steps,magic:n*(nn+1)/2};
+}
+function checkMagic(sq){
+  const n=sq.n,g=sq.grid,M=sq.magic,rows=[],cols=[];
+  for(let i=0;i<n;i++){
+    let s=0;for(let j=0;j<n;j++)s+=g[i*n+j];rows.push(s);
+    s=0;for(let j=0;j<n;j++)s+=g[j*n+i];cols.push(s);
+  }
+  let d1=0,d2=0;for(let i=0;i<n;i++){d1+=g[i*n+i];d2+=g[i*n+(n-1-i)];}
+  const seen=new Uint8Array(n*n+1);let distinct=true;
+  for(let i=0;i<g.length;i++){const v=g[i];if(v<1||v>n*n||seen[v]){distinct=false;break;}seen[v]=1;}
+  const ok=rows.every(v=>v===M)&&cols.every(v=>v===M)&&d1===M&&d2===M&&distinct;
+  return {rows,cols,d1,d2,distinct,ok,magic:M};
+}
+function primesTrial(N){
+  const out=[];
+  for(let p=2;p<=N;p++){
+    let ok=true;for(let d=2;d*d<=p;d++){if(p%d===0){ok=false;break;}}
+    if(ok)out.push(p);
+  }
+  return out;
+}
+function primesSixK(N){
+  const out=[];if(N>=2)out.push(2);if(N>=3)out.push(3);
+  for(let i=5;i<=N;i+=6){
+    for(const t of [i,i+2]){
+      if(t>N)break;let ok=true;
+      for(let d=5;d*d<=t;d+=6){if(t%d===0||t%(d+2)===0){ok=false;break;}}
+      if(ok)out.push(t);
+    }
+  }
+  return out;
+}
+function sieveErat(N){
+  const comp=new Uint8Array(N+1),primes=[],rounds=[];comp[0]=comp[1]=1;
+  for(let p=2;p<=N;p++){
+    if(!comp[p]){
+      primes.push(p);const mult=[];
+      for(let q=p*p;q<=N;q+=p)if(!comp[q]){comp[q]=1;mult.push(q);}
+      rounds.push({p,mult});
+    }
+  }
+  return {primes,comp,rounds};
+}
+function sieveEuler(N){
+  const comp=new Uint8Array(N+1),primes=[];
+  for(let i=2;i<=N;i++){
+    if(!comp[i])primes.push(i);
+    for(let k=0;k<primes.length;k++){
+      const p=primes[k];if(i*p>N)break;comp[i*p]=1;if(i%p===0)break;
+    }
+  }
+  return {primes,comp};
+}
+function factorize(x){
+  if(!Number.isInteger(x)||x<2)return null;
+  const f=[];let v=x;
+  for(let d=2;d*d<=v;d++){while(v%d===0){f.push(d);v/=d;}}
+  if(v>1)f.push(v);
+  return f;
+}
+function benchmark(fn,N,repeat){
+  let total=0,result=null;
+  for(let i=0;i<repeat;i++){const t=performance.now();result=fn(N);total+=performance.now()-t;}
+  return {ms:total/repeat,result};
+}
+// ===================== HW1 CORE END =====================
+
+const $=id=>document.getElementById(id);
+function toast(m){const t=$('hw1Toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1900);}
+function fmt(v,d){return (typeof v==='number'&&isFinite(v))?v.toFixed(d):'—';}
+
+// ---------------- 幻方 ----------------
+let M=null,mShown=null,mPos=0,mRunning=false,mRaf=null,mSpeed=12;
+function applyMagicSteps(upto){
+  mShown=new Int32Array(M.n*M.n);
+  for(let i=0;i<upto&&i<M.steps.length;i++)for(const it of M.steps[i].items)mShown[it.idx]=it.v;
+  mPos=upto;
+}
+function colorFor(v,n){
+  const t=v/(n*n),r=Math.round(60+108*(1-t)),g=Math.round(30+182*t),b=Math.round(110+81*t);
+  return 'rgb('+r+','+g+','+b+')';
+}
+function drawMagic(activeIdx){
+  const n=M.n,grid=$('hw1mGrid');
+  const cells=grid.children;
+  for(let i=0;i<n*n;i++){
+    const el=cells[i];if(!el)continue;
+    const v=mShown[i];
+    el.textContent=v?String(v):'';
+    el.style.background=v?colorFor(v,n):'';
+    el.className='hw1-cell'+(v?'':' empty')+(i===activeIdx?' on':'');
+  }
+  $('hw1mProg').textContent=mPos+' / '+M.steps.length;
+  $('hw1mSeek').value=M.steps.length?Math.round(mPos/M.steps.length*100):100;
+  $('hw1mFilled').textContent=mShown.reduce((a,b)=>a+(b?1:0),0);
+  const done=mPos>=M.steps.length,ck=done?checkMagic(M):checkMagic({n,grid:mShown,magic:M.magic});
+  const parts=[
+    {t:'行和 '+(ck.rows.every(v=>v===M.magic)?'✓':'…'),ok:ck.rows.every(v=>v===M.magic)},
+    {t:'列和 '+(ck.cols.every(v=>v===M.magic)?'✓':'…'),ok:ck.cols.every(v=>v===M.magic)},
+    {t:'主对角 '+(ck.d1===M.magic?'✓':'…'),ok:ck.d1===M.magic},
+    {t:'副对角 '+(ck.d2===M.magic?'✓':'…'),ok:ck.d2===M.magic},
+    {t:done?('数字不重复 '+(ck.distinct?'✓':'✗')):'数字不重复 …',ok:done&&ck.distinct},
+    {t:done?(ck.ok?'全部校验通过 🎉':'校验未通过'):'构造中…',ok:done&&ck.ok}
+  ];
+  $('hw1mCheck').innerHTML=parts.map(p=>'<span class="hw1-chip '+(p.ok?'ok':(p.t.indexOf('…')>=0?'':'no'))+'">'+p.t+'</span>').join('');
+}
+function buildMagicGrid(){
+  const n=M.n,grid=$('hw1mGrid');
+  grid.style.gridTemplateColumns='repeat('+n+',minmax(0,1fr))';
+  grid.innerHTML='';
+  const frag=document.createDocumentFragment();
+  for(let i=0;i<n*n;i++){const d=document.createElement('div');d.className='hw1-cell empty';d.style.fontSize=(n>16?'9px':n>10?'11px':'14px');frag.appendChild(d);}
+  grid.appendChild(frag);
+}
+function resetMagic(keepPos){
+  mRunning=false;cancelAnimationFrame(mRaf);
+  M=makeMagic(+$('hw1nRange').value);
+  buildMagicGrid();
+  $('hw1mMagic').textContent=M.magic;
+  $('hw1mKind').textContent=M.kind;
+  $('hw1n').textContent=M.n;
+  $('hw1nPreset').value=[3,4,5,6,8,10].indexOf(M.n)>=0?String(M.n):'';
+  $('hw1mAlgo').innerHTML='算法：<b>'+M.label+'</b>。'+M.rule;
+  $('hw1mPlay').textContent='▶ 播放构造';
+  applyMagicSteps(keepPos?M.steps.length:0);
+  drawMagic(-1);
+}
+function magicTick(){
+  if(!mRunning)return;
+  mPos=Math.min(M.steps.length,mPos+mSpeed);
+  applyMagicSteps(mPos);
+  const last=M.steps[Math.min(mPos,M.steps.length)-1];
+  drawMagic(last&&last.items.length?last.items[0].idx:-1);
+  if(mPos>=M.steps.length){mRunning=false;$('hw1mPlay').textContent='▶ 播放构造';return;}
+  mRaf=requestAnimationFrame(magicTick);
+}
+function toggleMagic(){
+  if(mPos>=M.steps.length)applyMagicSteps(0);
+  mRunning=!mRunning;
+  $('hw1mPlay').textContent=mRunning?'⏸ 暂停':'▶ 播放构造';
+  if(mRunning)mRaf=requestAnimationFrame(magicTick);else cancelAnimationFrame(mRaf);
+}
+function stressMagic(){
+  const t0=performance.now();let total=0,fail=[];
+  const list=[];for(let n=3;n<=200;n++)list.push(n);list.push(301,499,1000);
+  for(const n of list){const sq=makeMagic(n);if(!checkMagic(sq).ok)fail.push(n);total++;}
+  const ms=performance.now()-t0;
+  const out=$('hw1mStressOut');
+  out.innerHTML='⚡ 真实生成并校验 <b>'+total+'</b> 个幻方（含 1000 阶 / 100 万格），耗时 <b>'+ms.toFixed(0)+' ms</b>：'+
+    (fail.length?'<span style="color:#fb7185">失败 '+fail.join(', ')+'</span>':'<span style="color:#2dd4bf">全部行 / 列 / 双对角线校验通过 ✓</span>');
+  toast(fail.length?'校验发现异常':'全部 '+total+' 个幻方校验通过');
+}
+function copyMagic(){
+  const n=M.n,lines=[];
+  for(let i=0;i<n;i++){const row=[];for(let j=0;j<n;j++)row.push(M.grid[i*n+j]);lines.push(row.join('\t'));}
+  const text=lines.join('\n');
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(()=>toast('矩阵已复制为制表符文本'),()=>toast('复制失败，请手动选择'));
+  else toast('当前环境不支持剪贴板');
+}
+
+// ---------------- 质数 ----------------
+let P=null,pShown=null,pRound=0,pRunning=false,pRaf=null,pSpeed=2,pLastMs=0;
+function runPrime(){
+  const N=Math.max(10,Math.min(20000,Math.round(+$('hw1NInput').value)||1000));
+  const algo=$('hw1pAlgo').value;
+  const t0=performance.now();
+  let primes;
+  if(algo==='trial')primes=primesTrial(N);
+  else if(algo==='sixk')primes=primesSixK(N);
+  else if(algo==='erat')primes=sieveErat(N).primes;
+  else primes=sieveEuler(N).primes;
+  pLastMs=performance.now()-t0;
+  const s=sieveErat(N);
+  P={N,primes,s,algo};
+  $('hw1N').textContent=N;$('hw1NRange').value=Math.min(5000,N);
+  $('hw1pCount').textContent=primes.length;
+  $('hw1pMax').textContent=primes[primes.length-1]||'—';
+  $('hw1pMs').textContent=pLastMs<1?pLastMs.toFixed(2)+'ms':pLastMs.toFixed(1)+'ms';
+  let twin=0,gap=0;
+  for(let i=1;i<primes.length;i++){if(primes[i]-primes[i-1]===2)twin++;gap=Math.max(gap,primes[i]-primes[i-1]);}
+  $('hw1pTwin').textContent=twin;$('hw1pGap').textContent=gap;
+  renderChips();renderProbe();drawCurve();
+  applyPrimeRounds(s.rounds.length);drawPrime(-1);
+}
+function applyPrimeRounds(upto){
+  const N=P.N,s=P.s;
+  pShown=new Uint8Array(N+1);pShown[0]=pShown[1]=1;
+  for(let r=0;r<upto&&r<s.rounds.length;r++)for(const q of s.rounds[r].mult)pShown[q]=1;
+  pRound=Math.min(upto,s.rounds.length);
+  $('hw1pProg').textContent=pRound+' / '+s.rounds.length;
+  $('hw1pSeek').value=s.rounds.length?Math.round(pRound/s.rounds.length*100):100;
+}
+function primeLayout(){
+  const N=P.N,cols=Math.max(20,Math.ceil(Math.sqrt(N*2))),cell=Math.max(6,Math.min(16,Math.floor(600/cols)));
+  return {cols,cell,rows:Math.ceil((N+1)/cols),w:cols*cell};
+}
+function drawPrime(hoverIdx){
+  const N=P.N,L=primeLayout(),cv=$('hw1pCanvas'),ctx=cv.getContext('2d');
+  cv.width=L.w;cv.height=Math.max(40,L.rows*L.cell);
+  ctx.fillStyle='#0b0b12';ctx.fillRect(0,0,cv.width,cv.height);
+  const cur=pRound<P.s.rounds.length?P.s.rounds[pRound].p:-1;
+  const fresh=new Uint8Array(N+1);
+  if(pRound>0&&pRound<=P.s.rounds.length)for(const q of P.s.rounds[pRound-1].mult)fresh[q]=1;
+  for(let v=2;v<=N;v++){
+    const i=v-2,x=(i%L.cols)*L.cell,y=Math.floor(i/L.cols)*L.cell;
+    const isP=!P.s.comp[v];
+    let col=isP?'#a855f7':(pShown[v]?'#2a2a38':'#161622');
+    if(fresh[v])col='#fb7185';
+    if(v===cur)col='#fff';
+    ctx.fillStyle=col;ctx.fillRect(x+1,y+1,L.cell-2,L.cell-2);
+    if(v===hoverIdx){ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.strokeRect(x+1,y+1,L.cell-2,L.cell-2);}
+  }
+  $('hw1pOv').textContent=pRound>=P.s.rounds.length?'筛法完成 · 紫色为质数 · 共 '+P.primes.length+' 个':'当前质数 p = '+(cur>0?cur:'—')+' · 划掉 '+P.s.rounds[pRound-1]?.mult.length+' 个倍数';
+}
+function drawCurve(){
+  const cv=$('hw1pCurve'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height,N=P.N;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#0b0b12';ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=1;
+  for(let i=1;i<4;i++){const y=i*H/4;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const maxY=Math.max(1,P.primes.length*1.25),px=x=>x/N*W,py=v=>H-6-v/maxY*(H-14);
+  let acc=0,idx=0;
+  ctx.strokeStyle='#a855f7';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,py(0));
+  for(let x=2;x<=N;x++){
+    while(idx<P.primes.length&&P.primes[idx]<=x){acc++;idx++;}
+    ctx.lineTo(px(x),py(acc));
+  }
+  ctx.stroke();
+  ctx.strokeStyle='rgba(45,212,191,.85)';ctx.lineWidth=1.5;ctx.setLineDash([5,4]);ctx.beginPath();
+  for(let x=2;x<=N;x++){const v=x/Math.log(x);x===2?ctx.moveTo(px(x),py(v)):ctx.lineTo(px(x),py(v));}
+  ctx.stroke();ctx.setLineDash([]);
+  ctx.fillStyle='#9a9ab8';ctx.font='10px Consolas,monospace';ctx.fillText('π('+N+') = '+P.primes.length,6,12);
+}
+function renderChips(){
+  $('hw1pChips').innerHTML=P.primes.slice(0,60).map(p=>'<span data-p="'+p+'">'+p+'</span>').join('');
+  const nodes=$('hw1pChips').querySelectorAll('span');
+  for(let i=0;i<nodes.length;i++)nodes[i].onclick=function(){
+    const p=+this.dataset.p,idx=P.primes.indexOf(p),prev=idx>0?P.primes[idx-1]:null,next=P.primes[idx+1];
+    toast('质数 '+p+' 是第 '+(idx+1)+' 个 · 与前一个间隔 '+(prev!==null?p-prev:'—')+' · 下一个 '+next);
+  };
+}
+function renderProbe(){
+  const raw=$('hw1pProbe').value.trim(),x=Number(raw),out=$('hw1pProbeOut');
+  if(!raw||!Number.isInteger(x)||x<2){out.innerHTML='数字探针：输入一个整数，会告诉你它是不是质数、最小因子与质因数分解。';return;}
+  const f=factorize(x),isP=f.length===1;
+  out.innerHTML='<b>'+x+'</b> '+(isP?'是质数 ✓':'是合数')+' · 最小因子 <b>'+f[0]+'</b> · 分解 <b>'+f.join(' × ')+'</b>'+
+    (isP?'':(' · 共 '+f.length+' 个质因子'));
+}
+function primeTick(){
+  if(!pRunning)return;
+  pRound=Math.min(P.s.rounds.length,pRound+pSpeed);
+  applyPrimeRounds(pRound);drawPrime(-1);
+  if(pRound>=P.s.rounds.length){pRunning=false;$('hw1pPlay').textContent='▶ 播放筛法';return;}
+  pRaf=requestAnimationFrame(primeTick);
+}
+function togglePrime(){
+  if(pRound>=P.s.rounds.length)applyPrimeRounds(0);
+  pRunning=!pRunning;
+  $('hw1pPlay').textContent=pRunning?'⏸ 暂停':'▶ 播放筛法';
+  if(pRunning)pRaf=requestAnimationFrame(primeTick);else cancelAnimationFrame(pRaf);
+}
+function racePrime(){
+  const N=Math.max(10,Math.min(20000,Math.round(+$('hw1NInput').value)||1000));
+  const algos=[['试除法',primesTrial],['6k±1 优化',primesSixK],['埃氏筛',x=>sieveErat(x).primes],['欧拉线性筛',x=>sieveEuler(x).primes]];
+  const res=algos.map(([name,fn])=>({name,...benchmark(fn,N,3),count:0}));
+  for(const r of res)r.count=r.result.length;
+  const good=res.every(r=>r.count===res[0].count);
+  const max=Math.max(...res.map(r=>r.ms),0.001);
+  $('hw1pBars').innerHTML=res.map(r=>'<div class="hw1-bar"><span class="lb">'+r.name+'</span><span class="tr"><span class="fl" style="width:'+Math.max(2,r.ms/max*100).toFixed(1)+'%"></span></span><span class="vv">'+r.ms.toFixed(2)+'ms</span></div>').join('')+
+    '<div class="hw1-note">N = '+N+' · 各跑 3 次取平均 · '+(good?'四种算法结果一致（'+res[0].count+' 个质数）✓':'<span style="color:#fb7185">结果不一致，请检查</span>')+'</div>';
+  toast('四算法计时完成');
+}
+
+// ---------------- 事件 ----------------
+$('hw1nRange').addEventListener('input',()=>{$('hw1n').textContent=$('hw1nRange').value;});
+$('hw1nRange').addEventListener('change',()=>{resetMagic(false);});
+$('hw1nPreset').addEventListener('change',e=>{if(e.target.value){$('hw1nRange').value=e.target.value;resetMagic(false);}});
+$('hw1spdRange').addEventListener('input',e=>{mSpeed=+e.target.value;$('hw1spd').textContent=mSpeed;});
+$('hw1mPlay').onclick=toggleMagic;
+$('hw1mStep').onclick=()=>{mRunning=false;cancelAnimationFrame(mRaf);if(mPos>=M.steps.length)applyMagicSteps(0);const s=M.steps[mPos];applyMagicSteps(mPos+1);drawMagic(s&&s.items.length?s.items[0].idx:-1);$('hw1mPlay').textContent='▶ 播放构造';};
+$('hw1mReset').onclick=()=>{resetMagic(false);toast('幻方已重置');};
+$('hw1mCopy').onclick=copyMagic;
+$('hw1mStress').onclick=stressMagic;
+$('hw1mSeek').addEventListener('input',e=>{mRunning=false;cancelAnimationFrame(mRaf);applyMagicSteps(Math.round(+e.target.value/100*M.steps.length));drawMagic(-1);$('hw1mPlay').textContent='▶ 播放构造';});
+$('hw1NRange').addEventListener('input',e=>{$('hw1N').textContent=e.target.value;$('hw1NInput').value=e.target.value;});
+$('hw1NRange').addEventListener('change',runPrime);
+$('hw1NInput').addEventListener('change',runPrime);
+$('hw1pAlgo').addEventListener('change',runPrime);
+$('hw1pSpdRange').addEventListener('input',e=>{pSpeed=+e.target.value;$('hw1pSpd').textContent=pSpeed;});
+$('hw1pPlay').onclick=togglePrime;
+$('hw1pStep').onclick=()=>{pRunning=false;cancelAnimationFrame(pRaf);applyPrimeRounds(Math.min(P.s.rounds.length,pRound+1));drawPrime(-1);$('hw1pPlay').textContent='▶ 播放筛法';};
+$('hw1pReset').onclick=()=>{runPrime();toast('已按当前配置重算');};
+$('hw1pRace').onclick=racePrime;
+$('hw1pSeek').addEventListener('input',e=>{pRunning=false;cancelAnimationFrame(pRaf);applyPrimeRounds(Math.round(+e.target.value/100*P.s.rounds.length));drawPrime(-1);$('hw1pPlay').textContent='▶ 播放筛法';});
+$('hw1pProbe').addEventListener('input',renderProbe);
+$('hw1pCanvas').addEventListener('mousemove',e=>{
+  const cv=$('hw1pCanvas'),r=cv.getBoundingClientRect(),L=primeLayout();
+  const gx=Math.floor((e.clientX-r.left)/r.width*cv.width/L.cell),gy=Math.floor((e.clientY-r.top)/r.height*cv.height/L.cell);
+  const v=gy*L.cols+gx+2;
+  if(v<2||v>P.N)return;
+  const idx=P.primes.indexOf(v);
+  $('hw1pOv').textContent=v+(idx>=0?' · 质数 #'+(idx+1):' · 合数')+' · 最小因子 '+(factorize(v)||[v])[0];
+  drawPrime(v);
+});
+$('hw1pCanvas').addEventListener('mouseleave',()=>drawPrime(-1));
+
+// 启动
+resetMagic(true);
+runPrime();
+renderProbe();
+
+// 暴露给自动化测试（浏览器中无副作用）
+globalThis.__HW1LAB__={makeMagic,checkMagic,primesTrial,primesSixK,sieveErat,sieveEuler,factorize,benchmark,
+  resetMagic,runPrime,stressMagic,racePrime,toggleMagic,togglePrime,copyMagic,drawPrime,drawCurve,
+  magicTick,primeTick,applyMagicSteps,applyPrimeRounds,
+  getM:()=>M,getP:()=>P,getPos:()=>mPos,getRound:()=>pRound};
+})();
+</script>
 
         <!-- 代码展示 -->
         <div class="code-section" id="code">
@@ -630,6 +1131,8 @@ var ITEMS=[
  {t:'作业 2 · 动态训练实验室（逐帧回放）',u:'homework2.html#lab',d:'章节',k:'时间轴 帧 回放 权重分布'},
  {t:'作业 2 · 架构与训练配置对比',u:'homework2.html#arch',d:'章节',k:'架构 超参数 表格'},
  {t:'作业 2 · 多维度可视化分析',u:'homework2.html#viz',d:'章节',k:'PCA 混淆矩阵 雷达 拓扑 图表'},
+ {t:'作业 1 · 幻方实验室',u:'homework1.html#labs',d:'互动',k:'幻方 矩阵 校验 斯特雷奇 连续摆数法'},
+ {t:'作业 1 · 质数实验室',u:'homework1.html#labs',d:'互动',k:'质数 筛法 试除 埃氏 欧拉 算法竞赛'},
  {t:'作业 1 · Agent 思考',u:'homework1.html#agent',d:'章节',k:'思考 反思'}
 ];
 var ov=document.getElementById('hwcmd-ov'),inp=document.getElementById('hwcmd-in'),list=document.getElementById('hwcmd-list'),sel=0,shown=[];
