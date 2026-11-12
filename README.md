@@ -102,17 +102,17 @@
 - 创建了本仓库，上传了三张 AI 编程作品的截图
 
 <div align="center">
-<img src="06548be0-b719-4ff5-b755-e80633d22d00.png" width="80%" alt="Python生成N阶幻方 - WorkBuddy">
+<img src="06548be0-b719-4ff5-b755-e80633d22d00.gif" width="80%" alt="Python生成N阶幻方 - WorkBuddy">
 <p><i>作品一：WorkBuddy 生成 N 阶幻方程序</i></p>
 </div>
 
 <div align="center">
-<img src="2480c9c1d343a7bb8d057bb967a9db6a.png" width="80%" alt="1000以内质数生成器 - DeepSeek Codex">
+<img src="2480c9c1d343a7bb8d057bb967a9db6a.gif" width="80%" alt="1000以内质数生成器 - DeepSeek Codex">
 <p><i>作品二：DeepSeek Codex 生成质数程序</i></p>
 </div>
 
 <div align="center">
-<img src="675f3edf-5fd1-4e8e-81bc-6f9f31e01587.png" width="80%" alt="GitHub环境配置完成 - TRAE">
+<img src="675f3edf-5fd1-4e8e-81bc-6f9f31e01587.gif" width="80%" alt="GitHub环境配置完成 - TRAE">
 <p><i>作品三：TRAE 完成 GitHub 全流程配置</i></p>
 </div>
 

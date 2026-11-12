@@ -82,6 +82,10 @@
             font-size: 12px;
         }
 
+        /* 动态封面：SVG 自带 CSS / SMIL 动画，这里只做外框光晕呼吸 */
+        .hero-banner { display: block; width: min(100%, 1000px); margin: 30px auto 4px; border: 1px solid var(--border); border-radius: 16px; animation: hwHero 6s ease-in-out infinite; }
+        @keyframes hwHero { 0%,100% { box-shadow: 0 10px 36px rgba(168,85,247,.16); } 50% { box-shadow: 0 10px 52px rgba(59,130,246,.32); } }
+
         /* ===== 站内导航（与作业2统一） ===== */
         html { scroll-behavior: smooth; }
         .topnav { position: sticky; top: 0; z-index: 50; align-self: stretch; display: flex; align-items: center; gap: 16px; padding: 14px 28px; background: rgba(10,10,15,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
@@ -113,6 +117,7 @@
         <a href="homework1.html">第 1 次作业</a>
         <a href="homework2.html">第 2 次作业</a>
     </nav>
+    <img class="hero-banner" src="banner.svg" alt="人工智能概论 · 课程作业集（动态封面）">
     <h1>我的课程作业</h1>
     <div class="subtitle">点击卡片查看渲染后的作业网页（不是源代码）</div>
 

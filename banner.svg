@@ -1,4 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 360" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="hw-banner" viewBox="0 0 1280 360" font-family="'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif">
+  <title>人工智能概论 · 课程作业集（动态封面）</title>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#0a0a0f"/>
@@ -12,52 +13,103 @@
       <stop offset="0" stop-color="#3b82f6" stop-opacity="0.26"/>
       <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="ttl" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="ttl" x1="0" y1="0" x2="1" y2="0" spreadMethod="reflect">
       <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.28" stop-color="#e9d5ff"/>
       <stop offset="0.55" stop-color="#c084fc"/>
-      <stop offset="1" stop-color="#60a5fa"/>
+      <stop offset="0.8" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#ffffff"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="-0.9 0;0.9 0;-0.9 0" dur="9s" repeatCount="indefinite"/>
     </linearGradient>
+    <linearGradient id="scan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a855f7" stop-opacity="0"/>
+      <stop offset="0.45" stop-color="#c084fc" stop-opacity="0.34"/>
+      <stop offset="0.72" stop-color="#22d3ee" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="rail" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a855f7" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#22d3ee" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#3b82f6" stop-opacity="0"/>
+    </linearGradient>
+
+    <g id="edges" stroke="#8b5cf6" stroke-opacity="0.16" stroke-width="1">
+      <line x1="800" y1="120" x2="920" y2="90"/>
+      <line x1="800" y1="120" x2="920" y2="180"/>
+      <line x1="800" y1="120" x2="920" y2="270"/>
+      <line x1="800" y1="240" x2="920" y2="90"/>
+      <line x1="800" y1="240" x2="920" y2="180"/>
+      <line x1="800" y1="240" x2="920" y2="270"/>
+      <line x1="920" y1="90" x2="1040" y2="90"/>
+      <line x1="920" y1="90" x2="1040" y2="180"/>
+      <line x1="920" y1="90" x2="1040" y2="270"/>
+      <line x1="920" y1="180" x2="1040" y2="90"/>
+      <line x1="920" y1="180" x2="1040" y2="180"/>
+      <line x1="920" y1="180" x2="1040" y2="270"/>
+      <line x1="920" y1="270" x2="1040" y2="90"/>
+      <line x1="920" y1="270" x2="1040" y2="180"/>
+      <line x1="920" y1="270" x2="1040" y2="270"/>
+      <line x1="1040" y1="90" x2="1160" y2="150"/>
+      <line x1="1040" y1="90" x2="1160" y2="240"/>
+      <line x1="1040" y1="180" x2="1160" y2="150"/>
+      <line x1="1040" y1="180" x2="1160" y2="240"/>
+      <line x1="1040" y1="270" x2="1160" y2="150"/>
+      <line x1="1040" y1="270" x2="1160" y2="240"/>
+    </g>
   </defs>
 
-  <rect width="1280" height="360" fill="url(#bg)"/>
-  <rect width="1280" height="360" fill="url(#gP)"/>
-  <rect width="1280" height="360" fill="url(#gB)"/>
+  <style>
+    #hw-banner .glowA { animation: hwBreathA 7s ease-in-out infinite; }
+    #hw-banner .glowB { animation: hwBreathB 7s ease-in-out infinite; }
+    #hw-banner #edges line { stroke-dasharray: 13 7; animation: hwFlow 2.6s linear infinite; }
+    #hw-banner .halo { animation: hwPulse 2.8s ease-in-out infinite; }
+    #hw-banner .n2 { animation-delay: -0.9s; }
+    #hw-banner .n3 { animation-delay: -1.8s; }
+    #hw-banner .chip1 { animation: hwFloat 3.6s ease-in-out infinite; }
+    #hw-banner .chip2 { animation: hwFloat 3.6s ease-in-out -1.2s infinite; }
+    #hw-banner .chip3 { animation: hwFloat 3.6s ease-in-out -2.4s infinite; }
+    @keyframes hwBreathA { 0%,100% { opacity:.42 } 50% { opacity:1 } }
+    @keyframes hwBreathB { 0%,100% { opacity:1 } 50% { opacity:.40 } }
+    @keyframes hwFlow { from { stroke-dashoffset:0 } to { stroke-dashoffset:-40 } }
+    @keyframes hwPulse { 0%,100% { opacity:.18; } 50% { opacity:.85; } }
+    @keyframes hwFloat { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-5px) } }
+  </style>
 
-  <!-- 神经网络剪影（输入 2 -> 隐藏 -> 输出 3） -->
-  <g stroke="#8b5cf6" stroke-opacity="0.16" stroke-width="1">
-    <line x1="800" y1="120" x2="920" y2="90"/>
-    <line x1="800" y1="120" x2="920" y2="180"/>
-    <line x1="800" y1="120" x2="920" y2="270"/>
-    <line x1="800" y1="240" x2="920" y2="90"/>
-    <line x1="800" y1="240" x2="920" y2="180"/>
-    <line x1="800" y1="240" x2="920" y2="270"/>
-    <line x1="920" y1="90" x2="1040" y2="90"/>
-    <line x1="920" y1="90" x2="1040" y2="180"/>
-    <line x1="920" y1="90" x2="1040" y2="270"/>
-    <line x1="920" y1="180" x2="1040" y2="90"/>
-    <line x1="920" y1="180" x2="1040" y2="180"/>
-    <line x1="920" y1="180" x2="1040" y2="270"/>
-    <line x1="920" y1="270" x2="1040" y2="90"/>
-    <line x1="920" y1="270" x2="1040" y2="180"/>
-    <line x1="920" y1="270" x2="1040" y2="270"/>
-    <line x1="1040" y1="90" x2="1160" y2="150"/>
-    <line x1="1040" y1="90" x2="1160" y2="240"/>
-    <line x1="1040" y1="180" x2="1160" y2="150"/>
-    <line x1="1040" y1="180" x2="1160" y2="240"/>
-    <line x1="1040" y1="270" x2="1160" y2="150"/>
-    <line x1="1040" y1="270" x2="1160" y2="240"/>
-  </g>
+  <rect width="1280" height="360" fill="url(#bg)"/>
+  <rect class="glowA" width="1280" height="360" fill="url(#gP)"/>
+  <rect class="glowB" width="1280" height="360" fill="url(#gB)"/>
+
+  <!-- 数据流：连线以虚线流动，模拟参数在网络中传递 -->
+  <use xlink:href="#edges" href="#edges"/>
+
+  <!-- 沿连接路径流动的信号光点 -->
   <g>
-    <circle cx="800" cy="120" r="11" fill="#a855f7" fill-opacity="0.10"/><circle cx="800" cy="120" r="5" fill="#a855f7" fill-opacity="0.55"/>
-    <circle cx="800" cy="240" r="11" fill="#a855f7" fill-opacity="0.10"/><circle cx="800" cy="240" r="5" fill="#a855f7" fill-opacity="0.55"/>
-    <circle cx="920" cy="90" r="11" fill="#8b5cf6" fill-opacity="0.10"/><circle cx="920" cy="90" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
-    <circle cx="920" cy="180" r="11" fill="#8b5cf6" fill-opacity="0.10"/><circle cx="920" cy="180" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
-    <circle cx="920" cy="270" r="11" fill="#8b5cf6" fill-opacity="0.10"/><circle cx="920" cy="270" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
-    <circle cx="1040" cy="90" r="11" fill="#3b82f6" fill-opacity="0.10"/><circle cx="1040" cy="90" r="5" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="1040" cy="180" r="11" fill="#3b82f6" fill-opacity="0.10"/><circle cx="1040" cy="180" r="5" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="1040" cy="270" r="11" fill="#3b82f6" fill-opacity="0.10"/><circle cx="1040" cy="270" r="5" fill="#3b82f6" fill-opacity="0.55"/>
-    <circle cx="1160" cy="150" r="11" fill="#22d3ee" fill-opacity="0.10"/><circle cx="1160" cy="150" r="5" fill="#22d3ee" fill-opacity="0.6"/>
-    <circle cx="1160" cy="240" r="11" fill="#22d3ee" fill-opacity="0.10"/><circle cx="1160" cy="240" r="5" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle r="3.4" fill="#e9d5ff" opacity="0.9">
+      <animateMotion dur="4.6s" repeatCount="indefinite" path="M800 120 L920 90 L1040 180 L1160 240"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="4.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="3" fill="#93c5fd" opacity="0.9">
+      <animateMotion dur="5.2s" begin="-1.7s" repeatCount="indefinite" path="M800 240 L920 270 L1040 90 L1160 150"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="5.2s" begin="-1.7s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="2.6" fill="#67e8f9" opacity="0.9">
+      <animateMotion dur="4.1s" begin="-2.6s" repeatCount="indefinite" path="M800 120 L920 180 L1040 270 L1160 150"/>
+      <animate attributeName="opacity" values="0;1;1;0" dur="4.1s" begin="-2.6s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- 神经元节点（呼吸脉冲） -->
+  <g id="nodes">
+    <circle class="halo n1" cx="800" cy="120" r="11" fill="#a855f7"/><circle cx="800" cy="120" r="5" fill="#a855f7" fill-opacity="0.55"/>
+    <circle class="halo n2" cx="800" cy="240" r="11" fill="#a855f7"/><circle cx="800" cy="240" r="5" fill="#a855f7" fill-opacity="0.55"/>
+    <circle class="halo n3" cx="920" cy="90" r="11" fill="#8b5cf6"/><circle cx="920" cy="90" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
+    <circle class="halo n1" cx="920" cy="180" r="11" fill="#8b5cf6"/><circle cx="920" cy="180" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
+    <circle class="halo n2" cx="920" cy="270" r="11" fill="#8b5cf6"/><circle cx="920" cy="270" r="5" fill="#8b5cf6" fill-opacity="0.55"/>
+    <circle class="halo n3" cx="1040" cy="90" r="11" fill="#3b82f6"/><circle cx="1040" cy="90" r="5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle class="halo n1" cx="1040" cy="180" r="11" fill="#3b82f6"/><circle cx="1040" cy="180" r="5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle class="halo n2" cx="1040" cy="270" r="11" fill="#3b82f6"/><circle cx="1040" cy="270" r="5" fill="#3b82f6" fill-opacity="0.55"/>
+    <circle class="halo n3" cx="1160" cy="150" r="11" fill="#22d3ee"/><circle cx="1160" cy="150" r="5" fill="#22d3ee" fill-opacity="0.6"/>
+    <circle class="halo n1" cx="1160" cy="240" r="11" fill="#22d3ee"/><circle cx="1160" cy="240" r="5" fill="#22d3ee" fill-opacity="0.6"/>
   </g>
 
   <!-- 文字 -->
@@ -66,11 +118,30 @@
   <text x="74" y="232" font-size="22" fill="#e8e8f0">课程作业集 — AI 编程实践 × 深度学习可视化</text>
 
   <g font-size="15" font-weight="600">
-    <rect x="74" y="262" width="96" height="34" rx="17" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-opacity="0.5"/>
-    <text x="122" y="284" fill="#e9d5ff" text-anchor="middle">作业 1</text>
-    <rect x="184" y="262" width="96" height="34" rx="17" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-opacity="0.5"/>
-    <text x="232" y="284" fill="#bfdbfe" text-anchor="middle">作业 2</text>
-    <rect x="294" y="262" width="150" height="34" rx="17" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-opacity="0.5"/>
-    <text x="369" y="284" fill="#bbf7d0" text-anchor="middle">GitHub Pages</text>
+    <g class="chip1">
+      <rect x="74" y="262" width="96" height="34" rx="17" fill="#a855f7" fill-opacity="0.18" stroke="#a855f7" stroke-opacity="0.5"/>
+      <text x="122" y="284" fill="#e9d5ff" text-anchor="middle">作业 1</text>
+    </g>
+    <g class="chip2">
+      <rect x="184" y="262" width="96" height="34" rx="17" fill="#3b82f6" fill-opacity="0.18" stroke="#3b82f6" stroke-opacity="0.5"/>
+      <text x="232" y="284" fill="#bfdbfe" text-anchor="middle">作业 2</text>
+    </g>
+    <g class="chip3">
+      <rect x="294" y="262" width="150" height="34" rx="17" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-opacity="0.5"/>
+      <text x="369" y="284" fill="#bbf7d0" text-anchor="middle">GitHub Pages</text>
+    </g>
+  </g>
+
+  <!-- 底部流光进度条 -->
+  <rect x="74" y="322" width="370" height="2" rx="1" fill="#a855f7" fill-opacity="0.18"/>
+  <rect x="74" y="322" width="120" height="2" rx="1" fill="url(#rail)">
+    <animate attributeName="x" values="74;324;74" dur="5.4s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- 斜向扫描光带 -->
+  <g transform="skewX(-10)">
+    <rect x="-320" y="0" width="300" height="360" fill="url(#scan)" opacity="0.75">
+      <animate attributeName="x" from="-320" to="1320" dur="6.8s" repeatCount="indefinite"/>
+    </rect>
   </g>
 </svg>

@@ -353,6 +353,12 @@
         .think-section .summary { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--border); color: var(--text); font-size: 0.96rem; line-height: 1.9; }
         @media (max-width: 820px) { .think-grid { grid-template-columns: 1fr; } }
         @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } .toc { position: static; top: auto; } }
+
+        /* 动态封面与作品动图 */
+        .page-banner { display: block; width: 100%; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 32px; animation: bannerGlow 6s ease-in-out infinite; }
+        @keyframes bannerGlow { 0%,100% { box-shadow: 0 8px 30px rgba(168,85,247,.14); } 50% { box-shadow: 0 8px 46px rgba(59,130,246,.30); } }
+        .card-img-wrap img { animation: shotFloat 7s ease-in-out infinite; }
+        @keyframes shotFloat { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.06); } }
     </style>
 </head>
 <body>
@@ -383,6 +389,8 @@
     </div>
 
     <div class="container">
+        <!-- 动态封面（SVG 内含流动光点与扫描光带） -->
+        <img class="page-banner" src="banner.svg" alt="人工智能概论 · 课程作业集（动态封面）">
         <!-- Hero -->
         <div class="hero">
             <div class="hero-badge">
@@ -415,7 +423,7 @@
             <div class="card">
                 <div class="card-img-wrap">
                     <span class="card-tag tag-purple">WorkBuddy · DeepSeek-V4.1-Flash</span>
-                    <img src="06548be0-b719-4ff5-b755-e80633d22d00.png" alt="Python生成n阶幻方">
+                    <img src="06548be0-b719-4ff5-b755-e80633d22d00.gif" alt="Python生成n阶幻方">
                     <div class="card-overlay"></div>
                 </div>
                 <div class="card-body">
@@ -438,7 +446,7 @@
             <div class="card">
                 <div class="card-img-wrap">
                     <span class="card-tag tag-blue">DeepSeek Codex · V4-Pro</span>
-                    <img src="2480c9c1d343a7bb8d057bb967a9db6a.png" alt="1000以内质数生成">
+                    <img src="2480c9c1d343a7bb8d057bb967a9db6a.gif" alt="1000以内质数生成">
                     <div class="card-overlay"></div>
                 </div>
                 <div class="card-body">
@@ -461,7 +469,7 @@
             <div class="card">
                 <div class="card-img-wrap">
                     <span class="card-tag tag-green">TRAE · AI 编程助手</span>
-                    <img src="675f3edf-5fd1-4e8e-81bc-6f9f31e01587.png" alt="GitHub下载与注册完成">
+                    <img src="675f3edf-5fd1-4e8e-81bc-6f9f31e01587.gif" alt="GitHub下载与注册完成">
                     <div class="card-overlay"></div>
                 </div>
                 <div class="card-body">
