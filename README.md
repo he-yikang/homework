@@ -65,7 +65,7 @@
 
 📗<br><br>
 <b>第 2 次作业</b><br>
-<span>深层 MLP 对比可视化</span><br><br>
+<span>MLP 学习参数的实现和可视化</span><br><br>
 <a href="https://he-yikang.github.io/homework/homework2.html"><b>打开作业 2 →</b></a>
 
 </td>
@@ -147,7 +147,7 @@ AI 帮我省了很多查教程、敲命令的时间，但账号注册的人机�
 
 <a id="hw2"></a>
 
-## 第 2 次作业：用 PyTorch 搭建深层 MLP 并做原版 / 新版对比可视化
+## 第 2 次作业：MLP 学习参数的实现和可视化
 
 ### 1. 任务
 
