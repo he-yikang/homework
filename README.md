@@ -82,6 +82,7 @@
 - [🧪 实验室 1 · 幻方与质数互动实验室](#lab1)
 - [🧪 实验室 2 · 实时神经网络训练台](#lab2)
 - [🧭 扩展模块 · 八项创新交互](#enhance)
+- [📖 课程教材与 20 章对照](#course)
 
 ---
 
@@ -264,7 +265,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 |:--|:--|:--|:--|
 | A | 梯度与优化显微镜 | [实验室 2 · #grad](https://he-yikang.github.io/homework/lab2.html#grad) | 在 loss 等高线上拖动初始点，并排看 SGD / Momentum / Adam 三条优化轨迹；采样逐层梯度范数；一键演示学习率过小停滞、合适收敛、过大发散 |
 | B | 课程知识地图 | [知识地图 · #map](https://he-yikang.github.io/homework/atlas.html#map) | 把「确定性算法 → 复杂度 → 数据 → 模型容量 → 梯度下降 → 泛化」串成可点击概念图，节点直接跳到对应实验室的具体控件 |
-| C | 跨页成就进度 | [首页 · #enh-achv](https://he-yikang.github.io/homework/#enh-achv) | 11 枚徽章与进度环，做实验自动解锁，进度存本机；把四个孤立页面绑成一个可探索的整体 |
+| C | 跨页成就进度 | [首页 · #enh-achv](https://he-yikang.github.io/homework/#enh-achv) | 12 枚徽章与进度环，做实验自动解锁，进度存本机；把四个孤立页面绑成一个可探索的整体 |
 | D | 自动导览 | 任一页左下角 **▶ 带我看一遍** | 自动滚动、高亮当前模块、同步旁白字幕，按四栏顺序讲完整站并跨页续播，可随时跳过 |
 | E | 一键实验报告 | [实验室 2 · #report](https://he-yikang.github.io/homework/lab2.html#report) / [实验室 1 · #report](https://he-yikang.github.io/homework/lab1.html#report) | 把当前参数、曲线、决策边界与自动判读的结论排版成可打印的页面，或复制成 Markdown 贴进作业文档 |
 | F | 挑战链接 | [实验室 2 · #challenge](https://he-yikang.github.io/homework/lab2.html#challenge) | 把自画数据集、目标准确率与参数上限打包成一个链接发给同学，达标解锁徽章并记录最少参数 / 最少轮数 |
@@ -274,3 +275,42 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 **网站 ↔ README 双向关联**：每个扩展模块页脚都有「↗ README 对应说明」直达本节；本表的每个链接都指向线上具体锚点；五页 `Ctrl/⌘ + K` 站内搜索也收录了全部扩展条目。全部能力由单文件内的原生 JavaScript / Canvas 实现，**不依赖任何框架、外部库或服务器**，断网可用。
 
 > 结构与顺序仍是：作业 1 → 实验室 1 → 作业 2 → 实验室 2；第一次作业原文、README 原有章节与作业正文的静态截图均未改动。
+
+---
+
+<a id="course"></a>
+
+## 📖 课程教材与 20 章对照 · 课程坐标系
+
+[在 GitHub Pages 上打开交互式章节地图 →](https://he-yikang.github.io/homework/atlas.html#course) · [↗ 打开课程讲义原站（Lecture V8）](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/)
+
+**课程**：人工智能概论　|　**教材**：《人工智能通识》 王东、马少平 著，清华大学出版社，2025 年 1 月，ISBN 9787302680147　|　**课程讲义**：Lecture V8 · 第一、二篇 人工智能概述与基础（授课教师 朱梦尧 教授）
+
+本站此前是四件并列的作业作品；这一节把课程教材的章节体系接进来，给每一章标出「本站哪里能动手」，让作业从孤立作品变成挂在课程脉络上的实践。灰色章表示属于课程概述 / 历史部分，本站没有对应实验，只提供讲义原文入口——不做牵强附会。
+
+| 章 | 章节 | 本站对应实践 | 讲义原文 |
+|:--|:--|:--|:--|
+| 1 | 什么是人工智能 | [作业 1 · AI 编程工具实践](https://he-yikang.github.io/homework/homework1.html) | [↗ 第 1 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-1) |
+| 2 | 人类智能 | 课程概述，本站无对应实验 | [↗ 第 2 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-2) |
+| 3 | 人类的智能是如何产生的 | 课程概述，本站无对应实验 | [↗ 第 3 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-3) |
+| 4 | 人工智能的起源 | 课程概述，本站无对应实验 | [↗ 第 4 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-4) |
+| 5 | 图灵：人工智能之父 | 课程概述，本站无对应实验 | [↗ 第 5 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-5) |
+| 6 | 达特茅斯会议 | 课程概述，本站无对应实验 | [↗ 第 6 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-6) |
+| 7 | 人工智能的发展历程 | 课程概述，本站无对应实验 | [↗ 第 7 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-7) |
+| 8 | 让人惊讶的 AI | [作业 1 · 与 Agent 协作的体会](https://he-yikang.github.io/homework/homework1.html) | [↗ 第 8 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-8) |
+| 9 | 人工智能风险 | 课程概述，本站无对应实验 | [↗ 第 9 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-9) |
+| 10 | 基于知识的人工智能 | [实验室 1 · 幻方构造](https://he-yikang.github.io/homework/lab1.html#magic) · [质数筛法](https://he-yikang.github.io/homework/lab1.html#prime) | [↗ 第 10 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-10) |
+| 11 | 基于学习的人工智能 | [作业 2 · MLP 学习参数的实现和可视化](https://he-yikang.github.io/homework/homework2.html) · [实验室 2](https://he-yikang.github.io/homework/lab2.html) | [↗ 第 11 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-11) |
+| 12 | 机器学习基本流程 | [实验室 2 · 数据 → 训练 → 验证](https://he-yikang.github.io/homework/lab2.html#boundary) | [↗ 第 12 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-12) |
+| 13 | 学习方法 | [梯度显微镜 · SGD / Momentum / Adam](https://he-yikang.github.io/homework/lab2.html#grad) | [↗ 第 13 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-13) |
+| 14 | 学习策略 | [学习率三态 · 过大发散 / 过小停滞](https://he-yikang.github.io/homework/lab2.html#grad) | [↗ 第 14 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-14) |
+| 15 | 人工神经元网络 | [神经元探针与网络拓扑](https://he-yikang.github.io/homework/lab2.html#boundary) · [作业 2 架构对比](https://he-yikang.github.io/homework/homework2.html#arch) | [↗ 第 15 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-15) |
+| 16 | 典型网络结构 | [作业 2 · 2→2 玩具网络 vs 深层 MLP](https://he-yikang.github.io/homework/homework2.html#arch) | [↗ 第 16 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-16) |
+| 17 | 深度学习 | [作业 2 · 训练过程回放](https://he-yikang.github.io/homework/homework2.html#lab) | [↗ 第 17 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-17) |
+| 18 | 深度学习前沿 | [3D 决策空间 · 可视化延伸](https://he-yikang.github.io/homework/lab2.html#space3d) | [↗ 第 18 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-18) |
+| 19 | 深度学习面临的挑战 | [梯度消失 / 发散 / 过拟合](https://he-yikang.github.io/homework/lab2.html#grad) | [↗ 第 19 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-19) |
+| 20 | 大模型时代 | [作业 1 · 对 Agent 的思考](https://he-yikang.github.io/homework/homework1.html) | [↗ 第 20 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-20) |
+
+> 第 18 章那一行是**本站的可视化延伸**，不是教材内容，因此「讲义原文」列指向课程讲义第 18 章，站内链接指向 3D 决策空间。
+
+**README ↔ 网站双向关联**：[交互式章节地图](https://he-yikang.github.io/homework/atlas.html#course) 支持搜索、按篇章筛选、只看有实验的章节、展开查看双链、勾选「已读」记录进度（存本机），并把教材章节标注在[知识地图](https://he-yikang.github.io/homework/atlas.html#map)的概念节点上；五页 `Ctrl/⌘ + K` 站内搜索、左下角 **✦ 扩展能力** 面板与自动导览也都收录了课程坐标系入口。课程讲义原文全部留在原站，本站只做链接与对照，不搬运教材内容。

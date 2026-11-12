@@ -62,7 +62,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
   <a href="lab2.html">实验室 2</a>
   <span class="spacer"></span>
   <span class="cur">附属页 · 不改变四栏结构</span>
-  <a href="#map">知识地图</a><a href="#timeline">对照时间轴</a>
+  <a href="#map">知识地图</a><a href="#course">教材脉络</a><a href="#timeline">对照时间轴</a>
   <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
 <div class="wrap">
@@ -74,7 +74,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 
   <div class="sec" id="map">
     <h2>🧭 课程知识地图 <span class="tg">扩展能力 B</span></h2>
-    <p class="lead">从「规则由人写」走到「规则从数据学」。每个节点都可以点：会打开对应实验室，并自动把相关控件设成能 illustrate 这个概念的状态。悬停看概念卡，拖动画布平移。</p>
+    <p class="lead">从「规则由人写」走到「规则从数据学」。每个节点都可以点：会打开对应实验室，并自动把相关控件设成能 illustrate 这个概念的状态。悬停看概念卡（已标注《人工智能通识》对应章节，完整对照见下方 📖 课程教材脉络），拖动画布平移。</p>
     <div class="maptools">
       <button class="mbtn" id="mapZoomIn">＋ 放大</button>
       <button class="mbtn" id="mapZoomOut">－ 缩小</button>
@@ -96,6 +96,164 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
     <div id="mapTip"></div>
     <p class="lead" style="margin:12px 0 0">🌱 这条链回答了课程最核心的一问：作业 1 的算法<b style="color:#e8e8f0">不需要数据、结果可复现</b>，作业 2 的算法<b style="color:#e8e8f0">没有数据就什么都不是</b>——但两者都在做迭代、都在逼近一个目标。</p>
   </div>
+
+<!-- ENH:COURSE -->
+<style>
+#course .cinfo{display:flex;gap:14px;flex-wrap:wrap;align-items:center;padding:14px 16px;border:1px solid rgba(168,85,247,.35);border-radius:14px;background:linear-gradient(120deg,rgba(168,85,247,.10),rgba(45,212,191,.06));margin-bottom:14px}
+#course .cinfo .bk{font-size:16px;font-weight:700;color:#e8e8f0}
+#course .cinfo .mt{font-size:12px;color:#9a9ab8;line-height:1.7}
+#course .cinfo a{color:#2dd4bf;text-decoration:none;font-size:12px;border:1px solid rgba(45,212,191,.4);padding:6px 12px;border-radius:9px;white-space:nowrap}
+#course .cinfo a:hover{background:rgba(45,212,191,.12)}
+#course .ctools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+#course .ctools input[type=text]{flex:1;min-width:190px;background:#101018;border:1px solid #33334d;color:#e8e8f0;border-radius:9px;padding:8px 12px;font-size:12px;font-family:inherit;outline:none}
+#course .ctools input[type=text]:focus{border-color:#a855f7}
+#course .ctools button{border:1px solid #3a3a55;background:rgba(168,85,247,.12);color:#e8e8f0;border-radius:9px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+#course .ctools button.on{border-color:#2dd4bf;background:rgba(45,212,191,.16);color:#2dd4bf}
+#course .ctools label{font-size:12px;color:#9a9ab8;display:flex;gap:6px;align-items:center;cursor:pointer}
+#course .cstat{font-size:12px;color:#2dd4bf;white-space:nowrap}
+#course .clist{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:10px}
+#course .ccard{border:1px solid #2c2c42;border-radius:13px;background:rgba(255,255,255,.022);padding:11px 13px;cursor:pointer;transition:.2s}
+#course .ccard:hover{border-color:#a855f7;background:rgba(168,85,247,.09)}
+#course .ccard.exp{border-color:#a855f7}
+#course .ccard.has{border-left:3px solid #2dd4bf}
+#course .chd{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+#course .cnum{font:700 12px ui-monospace,Consolas,monospace;color:#a855f7;min-width:24px}
+#course .chd b{font-size:13px;color:#e8e8f0}
+#course .ctag{font-size:10px;color:#9a9ab8;border:1px solid #3a3a55;padding:2px 8px;border-radius:99px}
+#course .ctag.no{color:#6f6f90;border-color:#2c2c42}
+#course .crd{margin-left:auto;font-size:11px;color:#6f6f90;white-space:nowrap}
+#course .crd input{accent-color:#2dd4bf;vertical-align:-1px}
+#course .cbody{margin-top:10px;padding-top:10px;border-top:1px dashed #33334d;font-size:12px;color:#9a9ab8;line-height:1.75}
+#course .cbody p{margin-bottom:9px}
+#course .clinks{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+#course .clinks a{font-size:11px;text-decoration:none;border-radius:8px;padding:5px 10px;border:1px solid rgba(45,212,191,.4);color:#2dd4bf;background:rgba(45,212,191,.07)}
+#course .clinks a.out{border-color:rgba(168,85,247,.45);color:#c4a4f8;background:rgba(168,85,247,.08)}
+#course .clinks a:hover{filter:brightness(1.35)}
+#course .cprog{margin-top:14px;padding:12px 14px;border:1px solid #2c2c42;border-radius:12px;background:#101018;font-size:12px;color:#9a9ab8}
+#course .cbar{height:7px;border-radius:99px;background:#25253a;overflow:hidden;margin-top:8px}
+#course .cbar i{display:block;height:100%;background:linear-gradient(90deg,#a855f7,#2dd4bf);transition:width .3s}
+@media(max-width:640px){#course .clist{grid-template-columns:1fr}}
+</style>
+<div class="sec" id="course">
+  <h2>📖 课程教材脉络 · 20 章 ↔ 本站实践 <span class="tg">课程坐标系</span></h2>
+  <p class="lead">把课程教材的章节体系接进作业站点：每一章都标出「本站哪里能动手」，也能一键回到讲义原文。点章卡展开说明与双链，勾选「已读」记录自己的课程进度；青色左边框表示这一章在本站有对应实验，灰色章属于课程概述 / 历史部分，本站不做牵强附会。</p>
+  <div class="cinfo">
+    <div style="flex:1;min-width:220px">
+      <div class="bk">《人工智能通识》· 人工智能概论课程教材</div>
+      <div class="mt">王东、马少平 著 · 清华大学出版社 · 2025 年 1 月 · ISBN 9787302680147<br>课程讲义 Lecture V8 · 第一、二篇 人工智能概述与基础 · 授课教师 朱梦尧 教授</div>
+    </div>
+    <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/" target="_blank" rel="noopener">↗ 打开课程讲义原站</a>
+  </div>
+  <div class="ctools">
+    <input type="text" id="cSearch" placeholder="搜索章节 / 概念 / 本站实验…">
+    <button id="cPartAll" class="on">全部 20 章</button>
+    <button id="cPart1">第一篇 · 概述</button>
+    <button id="cPart2">第二篇 · 基础</button>
+    <label><input type="checkbox" id="cOnly"> 只看有实验</label>
+    <button id="cExpand">展开全部</button>
+    <span class="cstat" id="cStat"></span>
+  </div>
+  <div class="clist" id="cList"></div>
+  <div class="cprog" id="cProg"></div>
+</div>
+<script>
+(function(){
+'use strict';
+var SITE='https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-';
+var CH=[
+ {n:1,p:1,t:'什么是人工智能',tag:'Agent 实践',note:'作业 1 记录了用 TRAE / DeepSeek Codex / WorkBuddy 完成作品的分工与踩坑，是「让机器协助完成智能任务」最贴近课程的一次亲身实践。',links:[['作业 1 · AI 编程工具实践','homework1.html']]},
+ {n:2,p:1,t:'人类智能',tag:'课程概述',note:'教材从解决问题的能力、多维智力与 IQ / EQ 讲起。本站没有对应实验；知识地图把「人写规则」与「机器从数据学规则」并列，可作为这一章的延伸阅读。',links:[]},
+ {n:3,p:1,t:'人类的智能是如何产生的',tag:'课程概述',note:'演化、脑、语言与文字的知识积累。本站没有对应实验，见讲义原文。',links:[]},
+ {n:4,p:1,t:'人工智能的起源',tag:'课程概述',note:'形式逻辑、数理逻辑到图灵机与数字电路。本站没有对应实验；作业 1 中关于「工具如何延伸人的能力」的思考可作为旁注。',links:[]},
+ {n:5,p:1,t:'图灵：人工智能之父',tag:'课程概述',note:'判定问题与图灵机。本站没有对应实验，见讲义原文。',links:[]},
+ {n:6,p:1,t:'达特茅斯会议',tag:'课程概述',note:'学科诞生的历史节点。本站没有对应实验，见讲义原文。',links:[]},
+ {n:7,p:1,t:'人工智能的发展历程',tag:'课程概述',note:'从符号主义到连接主义的几次起伏。本站没有对应实验；作业 2 的「原版 XOR vs 深层 MLP」对比可视为一小段技术演进的缩影。',links:[]},
+ {n:8,p:1,t:'让人惊讶的 AI',tag:'Agent 实践',note:'让人惊讶的能力往往来自工具与人的协作方式。作业 1 记录了第一次与 Agent 分工协作完成幻方、质数作品时的真实体会。',links:[['作业 1 · 与 Agent 协作','homework1.html']]},
+ {n:9,p:1,t:'人工智能风险',tag:'课程概述',note:'风险、伦理与边界。本站没有专门实验；README 与知识地图里对「结果可复现 / 依赖数据」的讨论可作为技术侧的注脚。',links:[]},
+ {n:10,p:2,t:'基于知识的人工智能',tag:'确定性算法',note:'规则由人写死、结果可复现——正是实验室 1 的两件作品：三种幻方构造算法按固定规则逐格填数，四种质数算法逐步排除不可能的数，都不需要数据。',links:[['🔢 幻方实验室','lab1.html#magic'],['⚡ 质数实验室','lab1.html#prime'],['⏳ 对照时间轴','atlas.html#timeline']]},
+ {n:11,p:2,t:'基于学习的人工智能',tag:'学习算法',note:'从「写规则」转向「从数据里学规则」的分界线。作业 2 用 PyTorch 训练深层 MLP，实验室 2 更把整个过程搬进浏览器现场训练。',links:[['作业 2 · MLP 学习参数','homework2.html'],['🧠 实验室 2 现场训练','lab2.html'],['🧭 知识地图','atlas.html#map']]},
+ {n:12,p:2,t:'机器学习基本流程',tag:'训练流程',note:'数据 → 模型 → 训练 → 验证。实验室 2 全流程可动手：选数据集或自己画点、调批大小、看 loss / 训练准确率 / 验证准确率曲线逐轮变化。',links:[['实验室 2 · 决策边界与曲线','lab2.html#boundary'],['📄 一键实验报告','lab2.html#report']]},
+ {n:13,p:2,t:'学习方法',tag:'优化器',note:'不同学习方法的差别，在梯度显微镜里变成可以并排看的三条轨迹：SGD 稳步但慢、Momentum 带惯性、Adam 自适应步长。还能采样真实网络的逐层梯度范数。',links:[['🔬 梯度显微镜','lab2.html#grad'],['🧊 3D 决策空间','lab2.html#space3d']]},
+ {n:14,p:2,t:'学习策略',tag:'学习率 / 正则',note:'学习率过小停滞、合适收敛、过大发散，三种状态一键演示；L2 与噪声用来观察过拟合。挑战链接则把「在给定参数上限内达标」变成一道可分享的题。',links:[['学习率三态演示','lab2.html#grad'],['🎯 挑战链接','lab2.html#challenge']]},
+ {n:15,p:2,t:'人工神经元网络',tag:'神经网络',note:'实验室 2 的拓扑图把权重画成连线（紫=正、青=负、粗细=绝对值），点任一隐藏层节点还能看它在整个输入空间的感受野；作业 2 则从 2→2 玩具网络一路扩展到 2→128→64→32→3。',links:[['神经元探针与拓扑','lab2.html#boundary'],['作业 2 · 架构对比','homework2.html#arch']]},
+ {n:16,p:2,t:'典型网络结构',tag:'网络结构',note:'作业 2 把原版 XOR 的 2→2→1 与新版深层 MLP 并排比较，参数量、激活函数、优化器与训练曲线的差别都有图表；实验室 2 可实时改隐藏层数与宽度。',links:[['作业 2 · 架构与配置','homework2.html#arch'],['实验室 2 · 调网络结构','lab2.html#boundary']]},
+ {n:17,p:2,t:'深度学习',tag:'深度学习',note:'作业 2 首屏是 PyTorch 训练的逐帧回放，下面有决策边界演化、隐藏层 PCA、混淆矩阵与权重分布；参数演化图里能看到分层漂移、更新幅度、梯度范数与 StepLR 台阶。',links:[['作业 2 · 训练回放','homework2.html#lab'],['🧠 现场训练','lab2.html']]},
+ {n:18,p:2,t:'深度学习前沿',tag:'可视化延伸',note:'本站没有复现前沿模型。这一章对应的是**可视化方法上的延伸**：3D 置信度曲面、可拖动优化轨迹、神经元感受野热力图，用来把高维概念变成立起来看得见的东西。',links:[['🧊 3D 决策空间','lab2.html#space3d'],['🔬 梯度显微镜','lab2.html#grad']]},
+ {n:19,p:2,t:'深度学习面临的挑战',tag:'梯度 / 泛化',note:'梯度消失、发散、过拟合都能在本站现场制造出来：采样逐层梯度看输入侧几乎不动，切到大学习率看 loss 爆炸，载入过拟合预设看训练集 100% 但验证集掉下去。',links:[['逐层梯度与学习率三态','lab2.html#grad'],['过拟合预设','lab2.html?preset=overfit']]},
+ {n:20,p:2,t:'大模型时代',tag:'Agent 实践',note:'大模型与 Agent 如何改变写程序的方式，正是作业 1 的主题：原文里对 Agent 的思考、多次迭代与工具分工的记录，是本站与这一章最直接的连接。',links:[['作业 1 · 对 Agent 的思考','homework1.html'],['🧭 确定性 vs 学习','atlas.html#timeline']]}
+];
+var KEY='hw_course_v1',read={},open={},part=0,only=false,q='',allOpen=false;
+try{var r=JSON.parse(localStorage.getItem(KEY)||'{}');if(r&&typeof r==='object')read=r;}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(read));}catch(e){}}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function countRead(){var n=0;for(var i=0;i<CH.length;i++)if(read[CH[i].n])n++;return n;}
+function visible(){
+  return CH.filter(function(c){
+    if(part&&c.p!==part)return false;
+    if(only&&!c.links.length)return false;
+    if(q){var hay=(c.n+' '+c.t+' '+c.tag+' '+c.note+' '+c.links.map(function(l){return l[0];}).join(' ')).toLowerCase();
+      if(hay.indexOf(q.toLowerCase())<0)return false;}
+    return true;
+  });
+}
+function render(){
+  var list=visible(),html='';
+  list.forEach(function(c){
+    var exp=c.links.length>0, op=allOpen||open[c.n];
+    html+='<div class="ccard'+(exp?' has':'')+(op?' exp':'')+'" id="cCard'+c.n+'">'
+      +'<div class="chd"><span class="cnum">'+String(c.n).padStart(2,'0')+'</span><b>'+esc(c.t)+'</b>'
+      +'<span class="ctag'+(exp?'':' no')+'">'+esc(exp?c.tag:'无对应实验')+'</span>'
+      +'<span class="crd"><input type="checkbox" data-n="'+c.n+'"'+(read[c.n]?' checked':'')+'> 已读</span></div>';
+    if(op){
+      html+='<div class="cbody"><p>'+esc(c.note)+'</p><div class="clinks">';
+      c.links.forEach(function(l){html+='<a href="'+l[1]+'">→ '+esc(l[0])+'</a>';});
+      html+='<a class="out" href="'+SITE+c.n+'" target="_blank" rel="noopener">↗ 读讲义第 '+c.n+' 章</a></div></div>';
+    }
+    html+='</div>';
+  });
+  if(!list.length)html='<div style="color:#6f6f90;font-size:12px;padding:16px">没有匹配的章节，换个关键词试试。</div>';
+  document.getElementById('cList').innerHTML=html;
+  list.forEach(function(c){
+    var el=document.getElementById('cCard'+c.n);
+    if(el)el.onclick=function(e){
+      if(e&&e.target&&(e.target.tagName==='A'||e.target.tagName==='INPUT'))return;
+      open[c.n]=!open[c.n];render();
+    };
+  });
+  var withExp=list.filter(function(c){return c.links.length;}).length;
+  document.getElementById('cStat').textContent='显示 '+list.length+' / 20 章 · 其中 '+withExp+' 章有本站实验';
+  var n=countRead(),pct=Math.round(n/CH.length*100);
+  document.getElementById('cProg').innerHTML='📖 我的课程进度：<b style="color:#2dd4bf">'+n+' / 20 章</b> 已读 · '+pct+'% '
+    +(n>=5?'· 🏅 课程坐标系徽章已解锁':'· 标记 5 章即可解锁「课程坐标系」徽章')
+    +'<div class="cbar"><i style="width:'+pct+'%"></i></div>';
+  var bs=['cPartAll','cPart1','cPart2'];
+  for(var i=0;i<bs.length;i++){var b=document.getElementById(bs[i]);if(b)b.className=(part===(i===0?0:i))?'on':'';}
+  globalThis.__COURSE__={CH:CH,render:render,visible:visible,toggleRead:toggleRead,countRead:countRead,state:function(){return {part:part,only:only,q:q,read:read};}};
+}
+function toggleRead(n){
+  if(read[n])delete read[n];else read[n]=1;
+  save();render();
+  var c=countRead();
+  if(c>=5&&typeof window!=='undefined'&&window.ENH&&window.ENH.unlock)window.ENH.unlock('course');
+}
+var list=document.getElementById('cList');
+list.addEventListener('change',function(e){
+  var t=e.target;
+  if(t&&t.type==='checkbox'&&t.getAttribute&&t.getAttribute('data-n'))toggleRead(Number(t.getAttribute('data-n')));
+  else if(t&&t.dataset&&t.dataset.n)toggleRead(Number(t.dataset.n));
+});
+document.getElementById('cSearch').addEventListener('input',function(){q=this.value;render();});
+function setPart(v){part=v;render();}
+document.getElementById('cPartAll').onclick=function(){setPart(0);};
+document.getElementById('cPart1').onclick=function(){setPart(1);};
+document.getElementById('cPart2').onclick=function(){setPart(2);};
+document.getElementById('cOnly').onclick=function(){only=!!this.checked;render();};
+document.getElementById('cExpand').onclick=function(){allOpen=!allOpen;open={};this.textContent=allOpen?'收起全部':'展开全部';render();};
+render();
+})();
+</script>
+<!-- /ENH:COURSE -->
+
 
   <div class="sec" id="timeline">
     <h2>⏳ 确定性 vs 学习 · 对照时间轴 <span class="tg">扩展能力 H</span></h2>
@@ -162,9 +320,10 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 <div id="enh-toast"></div>
 <div id="enh-panel"><div class="box">
   <button class="close" id="enh-panel-close">关闭 ✕</button>
-  <h3>🧭 扩展能力 · 八项创新交互</h3>
+  <h3>🧭 扩展能力 · 八项创新交互 + 课程坐标系</h3>
   <div class="sub">原有四栏结构保持不变，以下能力作为扩展层挂在各页；点任意一项直达。</div>
   <div id="enh-grid">
+    <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 20 章</b><small>《人工智能通识》20 章逐章对照本站实践，可搜索、筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
     <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>11 枚徽章、进度环，记录你探索过的每一个实验</small></a>
@@ -192,7 +351,8 @@ var ACHV=[
  {id:'grad',t:'梯度显微镜',d:'采样一次逐层梯度范数'},
  {id:'report',t:'能交的作业',d:'导出一份实验报告'},
  {id:'challenge',t:'挑战达成',d:'完成一个分享给你的训练挑战'},
- {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'}
+ {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
+ {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'}
 ];
 var state={u:{},c:[]};
 try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
@@ -246,6 +406,7 @@ var TOUR={
   {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
  'atlas.html':{next:null,steps:[
   {t:'课程知识地图',d:'把两次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
+  {t:'📖 课程教材脉络',d:'《人工智能通识》20 章逐章对照：哪几章在本站有实验、点一下就能回讲义原文。',s:'#course'},
   {t:'确定性 vs 学习',d:'同一条时间轴并排看幻方 / 筛法与神经网络收敛，标出共同点与那道分界。',s:'#timeline'}]}
 };
 var bar=document.getElementById('enh-tourbar'),curPage=location.pathname.split('/').pop()||'index.html';
@@ -308,6 +469,8 @@ window.ENH.stopTour=stopTour;
 (function(){
 var ITEMS=[
 /* ENH:CMD */
+ {t:'📖 课程教材 · 20 章脉络与本站实践对照',u:'atlas.html#course',d:'课程',k:'教材 人工智能通识 章节 大纲 第一篇 第二篇 王东 马少平 朱梦尧 课程坐标系 course'},
+ {t:'↗ 课程讲义原站 · Lecture V8',u:'https://zhumy.github.io/Introduction_to_Artificial_Intelligence/',d:'外链',k:'课程 讲义 教材 章节 原站 lecture 人工智能概论'},
  {t:'🧭 知识地图 · 课程概念串联',u:'atlas.html#map',d:'扩展',k:'概念 知识图谱 地图 串联 梯度 泛化 复杂度 atlas'},
  {t:'⏳ 确定性 vs 学习 · 对照时间轴',u:'atlas.html#timeline',d:'扩展',k:'时间轴 对照 幻方 筛法 收敛 叙事 timeline'},
  {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
@@ -364,14 +527,14 @@ window.addEventListener('scroll',function(){
 function unlock(i){if(window.ENH&&window.ENH.unlock)window.ENH.unlock(i);}
 /* ============ B · 知识地图 ============ */
 var NODES=[
- {x:110,y:92,t:'确定性算法',s:'幻方构造',kind:0,h:'lab1.html#magic',d:'连续摆数法 / 双层对角交换法 / 斯特雷奇法：规则完全由人写死，同一阶数永远得到同一个矩阵，不需要任何样本。',go:'去实验室 1 亲手拖阶数 →'},
- {x:110,y:268,t:'复杂度与筛法',s:'质数生成',kind:0,h:'lab1.html#prime',d:'试除法 → 6k±1 → 埃氏筛 → 欧拉线性筛：同一个答案，四种代价。这是作业 1 里第一次认真比较「算法效率」。',go:'去实验室 1 跑算法竞赛 →'},
- {x:300,y:170,t:'数据',s:'分布 / 噪声 / 类别',kind:1,h:'lab2.html?preset=gd',d:'从这里开始不一样了：学习算法必须先有样本。螺旋、双月、同心环、XOR 以及你自己画的点，决定了网络能学到什么。',go:'去实验室 2 换数据集 →'},
- {x:470,y:92,t:'模型容量',s:'层数与宽度',kind:1,h:'lab2.html?preset=capacity',d:'2→2 的玩具网络解不了 XOR，深层网络可以。参数量决定了假设空间的大小，这是作业 2 最直观的一组对比。',go:'去实验室 2 看容量差距 →'},
- {x:470,y:268,t:'前向 / 反向传播',s:'梯度如何流动',kind:1,h:'lab2.html#grad',d:'前向算出预测，反向把误差逐层拆回每个权重。梯度太小时靠输入侧的层几乎不动 —— 梯度消失。',go:'去梯度显微镜采样逐层梯度 →'},
- {x:650,y:92,t:'梯度下降与优化器',s:'SGD / Momentum / Adam',kind:1,h:'lab2.html#grad',d:'同一条 loss 曲面，不同优化器走出的路径完全不同。拖动起点可以直观看到自适应步长怎么避开震荡。',go:'去实验室 2 对比三条轨迹 →'},
- {x:650,y:268,t:'学习率',s:'步长与稳定性',kind:1,h:'lab2.html?preset=lr',d:'过小停滞、合适收敛、过大发散。一个标量就能决定训练是成功还是爆炸，是调参时最先该试的旋钮。',go:'去实验室 2 载入大学习率预设 →'},
- {x:820,y:170,t:'泛化与决策边界',s:'过拟合 / L2 / 曲面',kind:1,h:'lab2.html?preset=overfit',d:'训练集 100% 不等于学会了。L2 正则、噪声与验证集用来判断边界是「记住」还是「概括」；3D 视图能把这张边界立起来看。',go:'去实验室 2 载入过拟合预设 →'}
+ {x:110,y:92,t:'确定性算法',s:'幻方构造',kind:0,h:'lab1.html#magic',ch:'第 10 章 · 基于知识的人工智能',d:'连续摆数法 / 双层对角交换法 / 斯特雷奇法：规则完全由人写死，同一阶数永远得到同一个矩阵，不需要任何样本。',go:'去实验室 1 亲手拖阶数 →'},
+ {x:110,y:268,t:'复杂度与筛法',s:'质数生成',kind:0,h:'lab1.html#prime',ch:'第 10 章 · 基于知识的人工智能',d:'试除法 → 6k±1 → 埃氏筛 → 欧拉线性筛：同一个答案，四种代价。这是作业 1 里第一次认真比较「算法效率」。',go:'去实验室 1 跑算法竞赛 →'},
+ {x:300,y:170,t:'数据',s:'分布 / 噪声 / 类别',kind:1,h:'lab2.html?preset=gd',ch:'第 12 章 · 机器学习基本流程',d:'从这里开始不一样了：学习算法必须先有样本。螺旋、双月、同心环、XOR 以及你自己画的点，决定了网络能学到什么。',go:'去实验室 2 换数据集 →'},
+ {x:470,y:92,t:'模型容量',s:'层数与宽度',kind:1,h:'lab2.html?preset=capacity',ch:'第 16 章 · 典型网络结构',d:'2→2 的玩具网络解不了 XOR，深层网络可以。参数量决定了假设空间的大小，这是作业 2 最直观的一组对比。',go:'去实验室 2 看容量差距 →'},
+ {x:470,y:268,t:'前向 / 反向传播',s:'梯度如何流动',kind:1,h:'lab2.html#grad',ch:'第 15 章 · 人工神经元网络',d:'前向算出预测，反向把误差逐层拆回每个权重。梯度太小时靠输入侧的层几乎不动 —— 梯度消失。',go:'去梯度显微镜采样逐层梯度 →'},
+ {x:650,y:92,t:'梯度下降与优化器',s:'SGD / Momentum / Adam',kind:1,h:'lab2.html#grad',ch:'第 13 章 · 学习方法',d:'同一条 loss 曲面，不同优化器走出的路径完全不同。拖动起点可以直观看到自适应步长怎么避开震荡。',go:'去实验室 2 对比三条轨迹 →'},
+ {x:650,y:268,t:'学习率',s:'步长与稳定性',kind:1,h:'lab2.html?preset=lr',ch:'第 14 章 · 学习策略',d:'过小停滞、合适收敛、过大发散。一个标量就能决定训练是成功还是爆炸，是调参时最先该试的旋钮。',go:'去实验室 2 载入大学习率预设 →'},
+ {x:820,y:170,t:'泛化与决策边界',s:'过拟合 / L2 / 曲面',kind:1,h:'lab2.html?preset=overfit',ch:'第 19 章 · 深度学习面临的挑战',d:'训练集 100% 不等于学会了。L2 正则、噪声与验证集用来判断边界是「记住」还是「概括」；3D 视图能把这张边界立起来看。',go:'去实验室 2 载入过拟合预设 →'}
 ];
 var layer=document.getElementById('mapLayer'),svg=document.getElementById('mapSvg'),tip=document.getElementById('mapTip');
 var NS='http://www.w3.org/2000/svg';
@@ -385,7 +548,7 @@ NODES.forEach(function(n){
   g.appendChild(r);
   var t=document.createElementNS(NS,'text');t.setAttribute('x',n.x);t.setAttribute('y',n.y-4);t.textContent=n.t;g.appendChild(t);
   var s=document.createElementNS(NS,'text');s.setAttribute('class','sub');s.setAttribute('x',n.x);s.setAttribute('y',n.y+14);s.textContent=n.s;g.appendChild(s);
-  g.addEventListener('mouseenter',function(e){tip.innerHTML='<b>'+n.t+' · '+n.s+'</b>'+n.d+'<br><small>'+n.go+'</small>';tip.style.display='block';});
+  g.addEventListener('mouseenter',function(e){tip.innerHTML='<b>'+n.t+' · '+n.s+'</b>'+n.d+'<br><small>📖 教材对应：'+n.ch+'（见下方课程坐标系）</small><br><small>'+n.go+'</small>';tip.style.display='block';});
   g.addEventListener('mousemove',function(e){tip.style.left=Math.min(window.innerWidth-300,e.clientX+16)+'px';tip.style.top=(e.clientY+16)+'px';});
   g.addEventListener('mouseleave',function(){tip.style.display='none';});
   g.addEventListener('click',function(){location.href=n.h;});
