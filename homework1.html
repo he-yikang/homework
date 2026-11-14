@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 编程工具作品展示</title>
     <style>
+@media print{*{box-shadow:none!important;text-shadow:none!important;background:transparent!important}body{background:#fff!important;color:#000!important}.topnav,.toc,.totop,.skip-link,#hwcmd-ov,#hwcmd-fab,.footer,.enh-tourbar,#enh-panel,.enh-note{display:none!important}a{color:#000!important;text-decoration:underline}.card,.banner{border:1px solid #ccc!important;break-inside:avoid}main,section,.wrap,.grid{max-width:100%!important}}
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:300;background:#a855f7;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px}
+.skip-link:focus{left:12px}
+
         :root {
             --bg: #0a0a0f;
             --bg-card: #12121a;
@@ -326,7 +330,7 @@
 
         /* ===== 站内导航（与作业2统一） ===== */
         html { scroll-behavior: smooth; }
-        .topnav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 16px; padding: 14px 28px; background: rgba(10,10,15,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+        .topnav { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 16px; padding: 14px 28px; background: rgba(10,10,15,.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); ;flex-wrap:wrap}
         .topnav .logo { font-weight: 700; font-size: 17px; background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap; }
         .topnav a { color: var(--text-dim); text-decoration: none; font-size: 14px; padding: 6px 12px; border-radius: 8px; transition: .2s; }
         .topnav a:hover { color: #fff; background: rgba(168,85,247,.15); }
@@ -358,9 +362,15 @@
         .page-banner { display: block; width: 100%; border: 1px solid var(--border); border-radius: 16px; margin-bottom: 32px; animation: bannerGlow 6s ease-in-out infinite; }
         @keyframes bannerGlow { 0%,100% { box-shadow: 0 8px 30px rgba(168,85,247,.14); } 50% { box-shadow: 0 8px 46px rgba(59,130,246,.30); } }
     </style>
+<meta property="og:type" content="website">
+<meta property="og:title" content="AI 编程工具作品展示">
+<meta property="og:description" content="人工智能概论课程作业站点：作业与可交互实验室，从作品到原理的深度学习实践。">
+<meta property="og:site_name" content="课程作业站点">
+<meta name="twitter:card" content="summary">
 </head>
 <body>
-    <nav class="topnav">
+<a class="skip-link" href="#main-content">跳到正文</a>
+    <nav class="topnav" aria-label="主导航">
         <span class="logo">AI 编程作品展示</span>
         <a href="index.html">首页</a>
         <a href="atlas.html">🧭 知识地图</a>
@@ -373,7 +383,7 @@
         <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
     <div class="layout">
-        <nav class="toc">
+        <nav class="toc" aria-label="站内导航">
             <h3>站内导航</h3>
             <a href="index.html">返回首页</a>
             <a href="atlas.html">🧭 知识地图</a>
@@ -389,7 +399,7 @@
             <a href="#about">关于</a>
         <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener">↗ GitHub 仓库（源码）</a>
 </nav>
-        <main>
+        <main id="main-content" tabindex="-1">
     <div class="bg-glow">
         <div class="glow-1"></div>
         <div class="glow-2"></div>
@@ -779,13 +789,16 @@ function unlock(id){
   return true;
 }
 function done(){var n=0;for(var i=0;i<ACHV.length;i++)if(state.u[ACHV[i].id])n++;return n;}
+var ACHV_BTN='<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button style="border:1px solid #3a3a55;background:rgba(168,85,247,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="window.ENH.exportAchv()">⬇ 导出进度</button><button style="border:1px solid #3a3a55;background:rgba(45,212,191,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="document.getElementById(\'enh-imp\').click()">⬆ 导入进度</button><input id="enh-imp" type="file" accept="application/json" style="display:none" onchange="if(this.files[0])window.ENH.importAchv(this.files[0])"></div>';
+function exportAchv(){try{var data=JSON.stringify({v:1,state:state},null,2);var blob=new Blob([data],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='homework-achievements.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);toast('已导出探索进度');}catch(e){toast('导出失败');}}
+function importAchv(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(d&&d.state){state.u=d.state.u||{};state.c=d.state.c||[];save();var box=document.getElementById('enh-achv');if(box)renderAchv(box);toast('已导入探索进度 · 解锁 '+done()+'/'+ACHV.length);}else{toast('文件格式不对');}}catch(e){toast('导入失败：格式错误');}};r.readAsText(file);}
 function renderAchv(box){
   var n=done(),pct=n/ACHV.length,r=38,c=2*Math.PI*r;
   var ring='<svg class="ring" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2c2c42" stroke-width="8"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+(c*pct).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="45" text-anchor="middle" fill="#e8e8f0" font-size="17" font-weight="700">'+n+'/'+ACHV.length+'</text><text x="48" y="62" text-anchor="middle" fill="#9a9ab8" font-size="9">已解锁</text></svg>';
   var bd='';for(var j=0;j<ACHV.length;j++){var a=ACHV[j];bd+='<span class="bd'+(state.u[a.id]?' on':'')+'" title="'+a.d+'">'+(state.u[a.id]?'✓ ':'🔒 ')+a.t+'</span>';}
-  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部八项交互。</div></div></div><div class="badges">'+bd+'</div>';
+  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机；可导出 / 导入，换设备也不丢。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部交互。</div></div>'+ACHV_BTN+'</div><div class="badges">'+bd+'</div>';
 }
-window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO};
+window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO,exportAchv:exportAchv,importAchv:importAchv};
 var box=document.getElementById('enh-achv');if(box)renderAchv(box);
 
 /* 扩展能力面板 */

@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>实验室 1 · 幻方与质数互动实验室 · 人工智能概论课程作业</title>
 <style>
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:300;background:#a855f7;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px}
+.skip-link:focus{left:12px}
+
 :root{--bg:#0a0a0f;--card:#16161f;--card2:#1c1c28;--border:#26263a;--text:#e8e8f0;--dim:#9a9ab8;--purple:#a855f7;--blue:#3b82f6;--teal:#2dd4bf}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -27,11 +30,17 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 .jump a:hover{color:#fff;border-color:var(--purple);background:rgba(168,85,247,.14)}
 .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 8px;padding-top:18px;border-top:1px solid var(--border);color:#6f6f90;font-size:12px}
 .foot a{color:var(--teal);text-decoration:none}
-@media(max-width:820px){.topnav{gap:4px;padding:10px 12px}.topnav .logo{width:100%}.wrap{padding:14px}}
+@media(max-width:820px){.topnav{gap:4px;padding:10px 12px;flex-wrap:wrap}.topnav .logo{width:100%}.wrap{padding:14px}}
 </style>
+<meta property="og:type" content="website">
+<meta property="og:title" content="实验室 1 · 幻方与质数互动实验室 · 人工智能概论课程作业">
+<meta property="og:description" content="人工智能概论课程作业站点：作业与可交互实验室，从作品到原理的深度学习实践。">
+<meta property="og:site_name" content="课程作业站点">
+<meta name="twitter:card" content="summary">
 </head>
 <body>
-<nav class="topnav">
+<a class="skip-link" href="#main-content">跳到正文</a>
+<nav class="topnav" aria-label="主导航">
   <span class="logo">实验室 1 · 幻方与质数</span>
   <a href="index.html">首页</a>
   <a href="atlas.html">🧭 知识地图</a>
@@ -43,7 +52,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
   <a href="#magic">幻方</a><a href="#prime">质数</a>
   <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
-<div class="wrap">
+<div class="wrap" id="main-content" tabindex="-1">
   <div class="hero">
     <div class="badge"><span class="dot"></span>实验室 1 · 纯浏览器算法实验 · 零依赖</div>
     <h1>幻方与质数互动实验室</h1>
