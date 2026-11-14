@@ -81,7 +81,7 @@
 - [📎 关于本仓库](#about)
 - [🧪 实验室 1 · 幻方与质数互动实验室](#lab1)
 - [🧪 实验室 2 · 实时神经网络训练台](#lab2)
-- [🧭 扩展模块 · 八项创新交互](#enhance)
+- [🧭 扩展模块 · 创新交互](#enhance)
 - [📖 课程教材与 20 章对照](#course)
 
 ---
@@ -255,7 +255,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 <a id="enhance"></a>
 
-## 🧭 扩展模块 · 八项创新交互
+## 🧭 扩展模块 · 创新交互
 
 [在 GitHub Pages 上打开知识地图 →](https://he-yikang.github.io/homework/atlas.html)
 
