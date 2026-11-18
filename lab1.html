@@ -184,6 +184,10 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
           <div style="flex:1;min-width:220px"><div class="hw1-note" style="margin:0 0 4px">π(x) 累计质数曲线（紫）与 x/ln x 参考（青虚线）</div><div class="hw1-canvas-wrap" style="max-height:none"><canvas id="hw1pCurve" width="420" height="150"></canvas></div></div>
           <div style="flex:1;min-width:220px"><div class="hw1-note" style="margin:0 0 4px">四种算法耗时对比（毫秒，越小越快）</div><div class="hw1-bars" id="hw1pBars"><div class="hw1-note">点「四算法计时」开始比一比。</div></div></div>
         </div>
+        <div class="hw1-flex" style="margin-top:12px">
+          <div style="flex:1;min-width:260px"><div class="hw1-note" style="margin:0 0 4px">四种算法用时随 N 变化（双对数：横轴 N、纵轴毫秒）· 试除/6k±1 随 N 明显爬升，两种筛法近乎贴底</div><div class="hw1-canvas-wrap" style="max-height:none"><canvas id="hw1pGrowth" width="420" height="190"></canvas></div></div>
+          <div style="flex:0 0 150px;display:flex;align-items:flex-end;padding-bottom:6px"><button class="hw1-btn" id="hw1pGrowthBtn">📈 生成曲线</button></div>
+        </div>
         <div class="hw1-probe" id="hw1pProbeOut">数字探针：输入一个整数，会告诉你它是不是质数、最小因子与质因数分解。</div>
         <div class="hw1-chips" id="hw1pChips"></div>
       </div>
@@ -479,6 +483,37 @@ function drawCurve(){
   ctx.stroke();ctx.setLineDash([]);
   ctx.fillStyle='#9a9ab8';ctx.font='10px Consolas,monospace';ctx.fillText('π('+N+') = '+P.primes.length,6,12);
 }
+function drawGrowth(){
+  const cv=$('hw1pGrowth');if(!cv)return null;
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#0b0b12';ctx.fillRect(0,0,W,H);
+  const NS=[100,250,500,1000,2000,4000,8000];
+  const algos=[['试除法',primesTrial,'#a855f7'],['6k±1',primesSixK,'#3b82f6'],['埃氏筛',x=>sieveErat(x).primes,'#2dd4bf'],['欧拉筛',x=>sieveEuler(x).primes,'#ec4899']];
+  const series=algos.map(([name,fn,color])=>({name,color,pts:NS.map(N=>({N,ms:benchmark(fn,N,2).ms}))}));
+  const pad={l:42,r:12,t:16,b:24},gw=W-pad.l-pad.r,gh=H-pad.t-pad.b;
+  const lg=v=>Math.log10(Math.max(0.01,v));
+  const x0=lg(NS[0]),x1=lg(NS[NS.length-1]);
+  const allMs=series.reduce((a,s)=>a.concat(s.pts.map(p=>p.ms)),[]);
+  const y0=Math.floor(Math.min.apply(null,allMs.map(lg))),y1=Math.ceil(Math.max.apply(null,allMs.map(lg)));
+  const px=N=>pad.l+(lg(N)-x0)/(x1-x0)*gw;
+  const py=ms=>pad.t+gh-(lg(ms)-y0)/(y1-y0)*gh;
+  ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=1;
+  for(let e=y0;e<=y1;e++){const y=pad.t+gh-(e-y0)/(y1-y0)*gh;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+    ctx.fillStyle='#6f6f90';ctx.font='9px Consolas,monospace';ctx.fillText(e+'ms',4,y+3);}
+  ctx.fillStyle='#6f6f90';ctx.font='9px Consolas,monospace';
+  NS.forEach((N,i)=>{ctx.fillText(String(N),px(N)-9,H-8);});
+  series.forEach(s=>{
+    ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();
+    s.pts.forEach((p,i)=>{i===0?ctx.moveTo(px(p.N),py(p.ms)):ctx.lineTo(px(p.N),py(p.ms));});
+    ctx.stroke();
+    const last=s.pts[s.pts.length-1];
+    ctx.fillStyle=s.color;ctx.font='10px Consolas,monospace';
+    ctx.fillText(last.ms<1?last.ms.toFixed(2)+'ms':last.ms.toFixed(1)+'ms',Math.min(px(last.N)-24,W-pad.r-42),Math.max(py(last.ms)-5,10));
+  });
+  const lx=pad.l+4;
+  series.forEach((s,i)=>{ctx.fillStyle=s.color;ctx.fillRect(lx+i*82,8,8,8);ctx.fillStyle='#9a9ab8';ctx.fillText(s.name,lx+i*82+11,15);});
+  return series;
+}
 function renderChips(){
   $('hw1pChips').innerHTML=P.primes.slice(0,60).map(p=>'<span data-p="'+p+'">'+p+'</span>').join('');
   const nodes=$('hw1pChips').querySelectorAll('span');
@@ -545,6 +580,7 @@ $('hw1pPlay').onclick=togglePrime;
 $('hw1pStep').onclick=()=>{pRunning=false;cancelAnimationFrame(pRaf);applyPrimeRounds(Math.min(P.s.rounds.length,pRound+1));drawPrime(-1);$('hw1pPlay').textContent='▶ 播放筛法';};
 $('hw1pReset').onclick=()=>{runPrime();toast('已按当前配置重算');};
 $('hw1pRace').onclick=racePrime;
+$('hw1pGrowthBtn').onclick=()=>{drawGrowth();toast('四算法用时曲线已生成（双对数轴）');};
 $('hw1pSeek').addEventListener('input',e=>{pRunning=false;cancelAnimationFrame(pRaf);applyPrimeRounds(Math.round(+e.target.value/100*P.s.rounds.length));drawPrime(-1);$('hw1pPlay').textContent='▶ 播放筛法';});
 $('hw1pProbe').addEventListener('input',renderProbe);
 $('hw1pCanvas').addEventListener('mousemove',e=>{
@@ -565,7 +601,7 @@ renderProbe();
 
 // 暴露给自动化测试（浏览器中无副作用）
 globalThis.__HW1LAB__={makeMagic,checkMagic,primesTrial,primesSixK,sieveErat,sieveEuler,factorize,benchmark,
-  resetMagic,runPrime,stressMagic,racePrime,toggleMagic,togglePrime,copyMagic,drawPrime,drawCurve,
+  resetMagic,runPrime,stressMagic,racePrime,toggleMagic,togglePrime,copyMagic,drawPrime,drawCurve,drawGrowth,
   magicTick,primeTick,applyMagicSteps,applyPrimeRounds,
   getM:()=>M,getP:()=>P,getPos:()=>mPos,getRound:()=>pRound};
 })();
