@@ -118,12 +118,12 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
   <div class="lab-bar">
     <button class="lab-btn" id="labPlay">播放训练</button>
     <button class="lab-btn" id="labReset">回到开头</button>
-    <input class="lab-range" type="range" id="labSlider" min="0" max="11" value="0" step="1">
+    <input class="lab-range" type="range" id="labSlider" min="0" max="200" value="0" step="0.1">
     <span class="lab-epoch" id="labEpoch">epoch 1 / 4000</span>
     <select class="lab-sel" id="labSpeed">
-      <option value="450">0.5x</option>
-      <option value="200" selected>1x</option>
-      <option value="90">2x</option>
+      <option value="50">0.5x</option>
+      <option value="20" selected>1x</option>
+      <option value="8">2x</option>
     </select>
   </div>
   <div class="lab-metrics">
@@ -162,8 +162,8 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     '<text x="'+(W-P)+'" y="'+(H-8)+'" fill="#9a9ab8" font-size="11" text-anchor="end">epoch '+C.emax+'</text>'+
     '<line id="labCursor" x1="'+P+'" y1="18" x2="'+P+'" y2="'+(H-P)+'" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3"/>'+
     '<circle id="labDot" cx="'+P+'" cy="'+(H-P)+'" r="5" fill="#f59e0b"/>';
-  var idx=0, playing=false, timer=null;
-  // 双层交叉淡入淡出：新帧淡入、旧帧淡出同时进行，视觉上连续过渡（不再硬切）
+  var M=C.e.length, pos=0, playing=false, raf=null, lastTs=0, showFrame=-1;
+  // 双层交叉淡入淡出：仅在跨越图片帧区间时切换（决策边界/权重图只有 12 张真实快照）
   function makeStack(idA,idB){
     var a=document.getElementById(idA), b=document.getElementById(idB), front=a, back=b;
     return {
@@ -178,47 +178,58 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     };
   }
   var stackB=makeStack('labImgB1','labImgB2'), stackW=makeStack('labImgW1','labImgW2');
-  // 预加载全部帧，切换时无需等待下载，保证每个点都流畅播过
   F.forEach(function(f){var ib=new Image();ib.src=f.b;var iw=new Image();iw.src=f.w;});
-  function setFade(iv){
-    var d=Math.max(60,Math.round(iv*0.85))+'ms';
-    Array.prototype.forEach.call(document.querySelectorAll('.lab-frame'),function(el){el.style.transitionDuration=d;});
+  function frameFor(e){                       // 当前 epoch 落在哪张真实快照的区间
+    var i=0; while(i<N-1 && F[i+1].e<=e) i++; return i;
   }
-  function render(i,instant){
-    i=(i%N+N)%N; idx=i;
-    var f=F[i];
-    stackB.show(f.b,instant);
-    stackW.show(f.w,instant);
-    document.getElementById('labEpoch').textContent='epoch '+f.e+' / '+C.emax;
-    document.getElementById('labLoss').textContent=f.loss.toFixed(4);
-    document.getElementById('labTa').textContent=(f.ta*100).toFixed(1)+'%';
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function render(p,instant){                 // p 为浮点曲线索引，游标/数值连续插值
+    p=Math.max(0,Math.min(M-1,p)); pos=p;
+    var i=Math.floor(p), j=Math.min(i+1,M-1), t=p-i;
+    var e=lerp(C.e[i],C.e[j],t), loss=lerp(C.l[i],C.l[j],t), acc=lerp(C.a[i],C.a[j],t);
+    var fi=frameFor(e), f=F[fi];
+    if(fi!==showFrame || instant){stackB.show(f.b,instant||showFrame<0);stackW.show(f.w,instant||showFrame<0);showFrame=fi;}
+    document.getElementById('labEpoch').textContent='epoch '+Math.round(e)+' / '+C.emax;
+    document.getElementById('labLoss').textContent=loss.toFixed(4);
+    document.getElementById('labTa').textContent=(acc*100).toFixed(1)+'%';
     document.getElementById('labVa').textContent=(f.va*100).toFixed(1)+'%';
     document.getElementById('labLr').textContent=f.lr.toFixed(5);
-    var x=xOf(f.e);
+    var x=xOf(e);
     var cur=document.getElementById('labCursor');
     cur.setAttribute('x1',x); cur.setAttribute('x2',x);
     var dot=document.getElementById('labDot');
-    dot.setAttribute('cx',x); dot.setAttribute('cy',yLoss(f.loss));
-    document.getElementById('labSlider').value=i;
+    dot.setAttribute('cx',x); dot.setAttribute('cy',yLoss(loss));
+    document.getElementById('labSlider').value=p;
   }
   function play(){
+    if(pos>=M-1){render(0,true);}              // 播完后再点则从头开始
     playing=true;
     document.getElementById('labPlay').textContent='暂停';
-    clearInterval(timer);
+    if(raf)cancelAnimationFrame(raf);
+    lastTs=0;
+    raf=requestAnimationFrame(tick);
+  }
+  function tick(ts){
+    if(!playing)return;
+    if(!lastTs)lastTs=ts;
+    var dt=ts-lastTs; lastTs=ts;
     var iv=+document.getElementById('labSpeed').value;
-    setFade(iv);
-    timer=setInterval(function(){render(idx+1,false);},iv);
+    // 每个采样点停留 iv 毫秒，飞快流过全部 4000 epoch（约 250 个点）
+    var d=Math.max(60,Math.round(iv*0.5))+'ms';
+    Array.prototype.forEach.call(document.querySelectorAll('.lab-frame'),function(el){el.style.transitionDuration=d;});
+    render(pos+dt/iv,false);                   // dt/iv = 本帧推进的采样点数
+    if(pos>=M-1){pause();return;}
+    raf=requestAnimationFrame(tick);
   }
   function pause(){
     playing=false;
     document.getElementById('labPlay').textContent='播放训练';
-    clearInterval(timer); timer=null;
+    if(raf)cancelAnimationFrame(raf); raf=null;
   }
   document.getElementById('labPlay').onclick=function(){playing?pause():play();};
   document.getElementById('labReset').onclick=function(){pause();render(0,true);};
   document.getElementById('labSlider').oninput=function(){pause();render(+this.value,true);};
-  document.getElementById('labSpeed').onchange=function(){if(playing)play();};
-  setFade(+document.getElementById('labSpeed').value);
+  document.getElementById('labSpeed').onchange=function(){};   // 速度在 tick 内实时读取
   render(0,true);
 })();
 </script>
