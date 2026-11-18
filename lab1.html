@@ -164,7 +164,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
         <div class="hw1-row"><label>生成算法</label>
           <select id="hw1pAlgo"><option value="trial">试除法（作品原版）</option><option value="sixk">6k±1 优化</option><option value="erat">埃拉托斯特尼筛</option><option value="euler">欧拉线性筛</option></select>
         </div>
-        <div class="hw1-row"><label>筛法动画速度 <b id="hw1pSpd">2</b></label><input type="range" id="hw1pSpdRange" min="1" max="12" step="1" value="2"></div>
+        <div class="hw1-row"><label>筛法动画速度 <b id="hw1pSpd">2</b><span style="color:var(--text-dim);font-size:11px;margin-left:8px">数值越大越快，默认约每步 0.2 秒</span></label><input type="range" id="hw1pSpdRange" min="1" max="12" step="1" value="2"></div>
         <div class="hw1-flex"><button class="hw1-btn pri" id="hw1pPlay">▶ 播放筛法</button><button class="hw1-btn" id="hw1pStep">单轮</button></div>
         <div class="hw1-flex"><button class="hw1-btn" id="hw1pReset">重算</button><button class="hw1-btn" id="hw1pRace">🏁 四算法计时</button></div>
         <div class="hw1-row" style="margin-top:14px"><label>筛法轮次 <b id="hw1pProg">0 / 0</b></label><input type="range" id="hw1pSeek" min="0" max="100" step="1" value="100"></div>
@@ -408,7 +408,7 @@ function copyMagic(){
 }
 
 // ---------------- 质数 ----------------
-let P=null,pShown=null,pRound=0,pRunning=false,pRaf=null,pSpeed=2,pLastMs=0;
+let P=null,pShown=null,pRound=0,pRunning=false,pRaf=null,pSpeed=2,pLastMs=0,pAnimLast=0;
 function runPrime(){
   const N=Math.max(10,Math.min(20000,Math.round(+$('hw1NInput').value)||1000));
   const algo=$('hw1pAlgo').value;
@@ -494,16 +494,22 @@ function renderProbe(){
   out.innerHTML='<b>'+x+'</b> '+(isP?'是质数 ✓':'是合数')+' · 最小因子 <b>'+f[0]+'</b> · 分解 <b>'+f.join(' × ')+'</b>'+
     (isP?'':(' · 共 '+f.length+' 个质因子'));
 }
+function primeStepInterval(){return Math.max(30,Math.round(420/pSpeed));}
 function primeTick(){
   if(!pRunning)return;
-  pRound=Math.min(P.s.rounds.length,pRound+pSpeed);
-  applyPrimeRounds(pRound);drawPrime(-1);
-  if(pRound>=P.s.rounds.length){pRunning=false;$('hw1pPlay').textContent='▶ 播放筛法';return;}
+  var now=performance.now();
+  if(pAnimLast===0||now-pAnimLast>=primeStepInterval()){
+    pAnimLast=now;
+    pRound=Math.min(P.s.rounds.length,pRound+1);
+    applyPrimeRounds(pRound);drawPrime(-1);
+    if(pRound>=P.s.rounds.length){pRunning=false;pAnimLast=0;$('hw1pPlay').textContent='▶ 播放筛法';return;}
+  }
   pRaf=requestAnimationFrame(primeTick);
 }
 function togglePrime(){
   if(pRound>=P.s.rounds.length)applyPrimeRounds(0);
   pRunning=!pRunning;
+  pAnimLast=0;
   $('hw1pPlay').textContent=pRunning?'⏸ 暂停':'▶ 播放筛法';
   if(pRunning)pRaf=requestAnimationFrame(primeTick);else cancelAnimationFrame(pRaf);
 }
@@ -814,13 +820,16 @@ function unlock(id){
   return true;
 }
 function done(){var n=0;for(var i=0;i<ACHV.length;i++)if(state.u[ACHV[i].id])n++;return n;}
+var ACHV_BTN='<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button style="border:1px solid #3a3a55;background:rgba(168,85,247,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="window.ENH.exportAchv()">⬇ 导出进度</button><button style="border:1px solid #3a3a55;background:rgba(45,212,191,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="document.getElementById(\'enh-imp\').click()">⬆ 导入进度</button><input id="enh-imp" type="file" accept="application/json" style="display:none" onchange="if(this.files[0])window.ENH.importAchv(this.files[0])"></div>';
+function exportAchv(){try{var data=JSON.stringify({v:1,state:state},null,2);var blob=new Blob([data],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='homework-achievements.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);toast('已导出探索进度');}catch(e){toast('导出失败');}}
+function importAchv(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(d&&d.state){state.u=d.state.u||{};state.c=d.state.c||[];save();var box=document.getElementById('enh-achv');if(box)renderAchv(box);toast('已导入探索进度 · 解锁 '+done()+'/'+ACHV.length);}else{toast('文件格式不对');}}catch(e){toast('导入失败：格式错误');}};r.readAsText(file);}
 function renderAchv(box){
   var n=done(),pct=n/ACHV.length,r=38,c=2*Math.PI*r;
   var ring='<svg class="ring" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2c2c42" stroke-width="8"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+(c*pct).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="45" text-anchor="middle" fill="#e8e8f0" font-size="17" font-weight="700">'+n+'/'+ACHV.length+'</text><text x="48" y="62" text-anchor="middle" fill="#9a9ab8" font-size="9">已解锁</text></svg>';
   var bd='';for(var j=0;j<ACHV.length;j++){var a=ACHV[j];bd+='<span class="bd'+(state.u[a.id]?' on':'')+'" title="'+a.d+'">'+(state.u[a.id]?'✓ ':'🔒 ')+a.t+'</span>';}
-  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部八项交互。</div></div></div><div class="badges">'+bd+'</div>';
+  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机；可导出 / 导入，换设备也不丢。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部交互。</div></div>'+ACHV_BTN+'</div><div class="badges">'+bd+'</div>';
 }
-window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO};
+window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO,exportAchv:exportAchv,importAchv:importAchv};
 var box=document.getElementById('enh-achv');if(box)renderAchv(box);
 
 /* 扩展能力面板 */
