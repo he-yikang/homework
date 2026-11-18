@@ -185,7 +185,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
           <div style="flex:1;min-width:220px"><div class="hw1-note" style="margin:0 0 4px">四种算法耗时对比（毫秒，越小越快）</div><div class="hw1-bars" id="hw1pBars"><div class="hw1-note">点「四算法计时」开始比一比。</div></div></div>
         </div>
         <div class="hw1-flex" style="margin-top:12px">
-          <div style="flex:1;min-width:260px"><div class="hw1-note" style="margin:0 0 4px">四种算法用时随 N 变化（双对数：横轴 N、纵轴毫秒）· 试除/6k±1 随 N 明显爬升，两种筛法近乎贴底</div><div class="hw1-canvas-wrap" style="max-height:none"><canvas id="hw1pGrowth" width="420" height="190"></canvas></div></div>
+          <div style="flex:1;min-width:260px"><div class="hw1-note" style="margin:0 0 4px">四种算法用时随 N 变化（双对数：横轴 N、纵轴毫秒）· 平滑曲线穿过每个采样点 · 试除/6k±1 随 N 明显爬升，两种筛法近乎贴底</div><div class="hw1-canvas-wrap" style="max-height:none"><canvas id="hw1pGrowth" width="420" height="190"></canvas></div></div>
           <div style="flex:0 0 150px;display:flex;align-items:flex-end;padding-bottom:6px"><button class="hw1-btn" id="hw1pGrowthBtn">📈 生成曲线</button></div>
         </div>
         <div class="hw1-probe" id="hw1pProbeOut">数字探针：输入一个整数，会告诉你它是不是质数、最小因子与质因数分解。</div>
@@ -502,10 +502,27 @@ function drawGrowth(){
     ctx.fillStyle='#6f6f90';ctx.font='9px Consolas,monospace';ctx.fillText(e+'ms',4,y+3);}
   ctx.fillStyle='#6f6f90';ctx.font='9px Consolas,monospace';
   NS.forEach((N,i)=>{ctx.fillText(String(N),px(N)-9,H-8);});
+  // Catmull-Rom 样条：曲线严格穿过每个数据点，段间平滑过渡（非折线）
+  const smoothPath=pts=>{
+    if(pts.length<2)return;
+    ctx.moveTo(pts[0].x,pts[0].y);
+    for(let i=0;i<pts.length-1;i++){
+      const p0=pts[i-1]||{x:pts[i].x-(pts[i+1].x-pts[i].x),y:pts[i].y-(pts[i+1].y-pts[i].y)};
+      const p1=pts[i],p2=pts[i+1];
+      const p3=pts[i+2]||{x:p2.x+(p2.x-p1.x),y:p2.y+(p2.y-p1.y)};
+      ctx.bezierCurveTo(
+        p1.x+(p2.x-p0.x)/6,p1.y+(p2.y-p0.y)/6,
+        p2.x-(p3.x-p1.x)/6,p2.y-(p3.y-p1.y)/6,
+        p2.x,p2.y);
+    }
+  };
   series.forEach(s=>{
+    const xy=s.pts.map(p=>({x:px(p.N),y:py(p.ms)}));
     ctx.strokeStyle=s.color;ctx.lineWidth=2;ctx.beginPath();
-    s.pts.forEach((p,i)=>{i===0?ctx.moveTo(px(p.N),py(p.ms)):ctx.lineTo(px(p.N),py(p.ms));});
+    smoothPath(xy);
     ctx.stroke();
+    ctx.fillStyle=s.color;
+    xy.forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,2.4,0,Math.PI*2);ctx.fill();});
     const last=s.pts[s.pts.length-1];
     ctx.fillStyle=s.color;ctx.font='10px Consolas,monospace';
     ctx.fillText(last.ms<1?last.ms.toFixed(2)+'ms':last.ms.toFixed(1)+'ms',Math.min(px(last.N)-24,W-pad.r-42),Math.max(py(last.ms)-5,10));
