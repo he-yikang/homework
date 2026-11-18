@@ -561,52 +561,76 @@ result = <span class="fn">primes_below</span>(<span class="num">1000</span>)
 
         <!-- Agent 思考 -->
         <div class="think-section" id="agent">
-            <h2>对 Agent 的思考</h2>
+            <h2>对 Agent 的思考 · 对照教材第一篇</h2>
             <p class="lead">
                 这次作业让我第一次系统性地把几个 AI 编程 Agent 用在真实的编码任务上。它们已经不只是
                 "帮你补全一行代码"的编辑器插件，而是能理解意图、自己规划步骤、调用工具、跑代码验证的
-                "编程搭档"。在动手的过程中，我对 Agent 到底是什么、能做什么、边界在哪里，有了一些切身体会。
+                "编程搭档"。下面四点，是我把这些切身体会回头对照教材第一篇第 1 章「什么是人工智能」与
+                第 8 章「让人惊讶的 AI」之后写下的——只谈这两章能承接的内容，不外推到还没学到的部分。
             </p>
+            <style>
+            .think-card .bk-tag{display:inline-block;font:600 11px ui-monospace,Consolas,monospace;color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.08);padding:3px 10px;border-radius:99px;margin-bottom:10px}
+            .think-card .bk-lnk{display:inline-block;font-size:12px;text-decoration:none;color:#2dd4bf;border:1px solid rgba(45,212,191,.4);border-radius:8px;padding:5px 11px;margin-top:12px;transition:background .2s}
+            .think-card .bk-lnk:hover{background:rgba(45,212,191,.14)}
+            .think-card .bk-lnk.alt{color:#c084fc;border-color:rgba(168,85,247,.45)}
+            .think-card .bk-lnk.alt:hover{background:rgba(168,85,247,.14)}
+            </style>
             <div class="think-grid">
                 <div class="think-card">
+                    <span class="bk-tag">教材 第 1 章 · 什么是人工智能</span>
                     <h3>从补全到 Agent：工具形态的跃迁</h3>
                     <p>
                         过去我们用的是补全式 AI：你写一半，它猜下一行。而这一次的 Agent 不一样——
                         你用自然语言描述目标（"帮我生成一个能校验的 N 阶幻方"），它会拆任务、写代码、
-                        运行、看报错、再修，直到跑通。它把"写代码"升级成了"完成一件事"。
+                        运行、看报错、再修，直到跑通。它把"写代码"升级成了"完成一件事"。教材第 1 章
+                        问"什么是人工智能"，这次我第一次体会到：当工具能理解意图、自己规划并动手完成，
+                        "智能"就不再是一个抽象名词，而是眼前跑通的那段程序。
                     </p>
+                    <a class="bk-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-1" target="_blank" rel="noopener">↗ 读讲义第 1 章 · 什么是人工智能</a>
                 </div>
                 <div class="think-card">
+                    <span class="bk-tag">教材 第 8 章 · 让人惊讶的 AI</span>
                     <h3>三个 Agent 的不同"性格"</h3>
                     <p>
                         WorkBuddy 像一个全能管家，能管环境、跑命令、出网页还能画图，一站式；
                         DeepSeek Codex 在算法题上特别稳，幻方、质数这类经典问题几乎一次写对，
                         还会自己写校验程序；TRAE 更偏工程化，帮我从零把 Git/GitHub 环境搭起来并推送上线。
-                        没有一个"最好"，只有"适合哪类任务"。
+                        没有一个"最好"，只有"适合哪类任务"。教材第 8 章说 AI 让人惊讶，而让我惊讶的
+                        正是这种"各有所长"——同一个目标，不同 Agent 给出的路径完全不同。
                     </p>
+                    <a class="bk-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-8" target="_blank" rel="noopener">↗ 读讲义第 8 章 · 让人惊讶的 AI</a>
                 </div>
                 <div class="think-card">
+                    <span class="bk-tag">教材 第 1 章 · 什么是人工智能</span>
                     <h3>Agent 的工作闭环</h3>
                     <p>
                         观察下来，成熟的 Agent 都在跑同一个闭环：理解意图 → 规划步骤 → 执行
                         （写 / 改代码）→ 运行验证 → 根据结果修正。最让我惊喜的是"验证"这一环——
                         它不只是生成，还会自己跑一遍看对不对，这恰恰是人和很多补全工具都容易偷懒的地方。
+                        回头看第 1 章对"智能"的描述，这个"能感知结果并自我修正"的闭环，让我对机器也能
+                        完成有目标、有反馈的任务有了具体印象。
                     </p>
+                    <a class="bk-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-1" target="_blank" rel="noopener">↗ 读讲义第 1 章</a>
                 </div>
                 <div class="think-card">
+                    <span class="bk-tag">教材 第 8 章 · 让人惊讶的 AI</span>
                     <h3>理性看待 Agent 的边界</h3>
                     <p>
                         Agent 不是万能的。它会"幻觉"——自信地写出看似合理但跑不通或错的代码；
                         它不懂我的真实业务背景，给的方案有时需要我二次判断；环境、权限、依赖这类"脏活"
-                        它也会卡住。结论：Agent 是放大器，放大你的能力，也放大你的判断——必须保持"人把关"。
+                        它也会卡住。第 8 章讲的是 AI 让人惊讶的能力，但这次实践也提醒我：惊讶之外要清醒——
+                        Agent 是放大器，放大你的能力，也放大你的判断，必须保持"人把关"。
                     </p>
+                    <a class="bk-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-8" target="_blank" rel="noopener">↗ 读讲义第 8 章</a>
+                    <a class="bk-lnk alt" href="atlas.html#course" target="_blank" rel="noopener">📖 课程坐标系</a>
                 </div>
             </div>
             <p class="summary">
                 一句话总结这次的体会：AI 编程 Agent 不是来"替代程序员"的，而是来"重新定义程序员怎么工作"的。
                 把重复的、机械的、查文档式的劳动交给它，把问题定义、结果校验、价值判断留给自己。
-                这次作业里我学到的不只是几个工具，更是一种"人机协作"的新习惯——
-                先让 Agent 出初稿，我再读、改、验证。这大概就是未来几年里最值得练的本领。
+                对照教材第一篇第 1 章与第 8 章，这次作业让我学到的不只是几个工具，更是一种"人机协作"的新习惯——
+                先让 Agent 出初稿，我再读、改、验证。教材原文留在原站，本站只做链接与对照；
+                想逐章看脉络，去 <a href="atlas.html#course" style="color:#2dd4bf">课程坐标系</a>。
             </p>
         </div>
 
