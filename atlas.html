@@ -218,7 +218,7 @@ function render(){
     if(op){
       html+='<div class="cbody"><p>'+esc(c.note)+'</p><div class="clinks">';
       c.links.forEach(function(l){html+='<a href="'+l[1]+'">→ '+esc(l[0])+'</a>';});
-      html+='<a class="out" href="'+SITE+c.n+'" target="_blank" rel="noopener">↗ 读讲义第 '+c.n+' 章</a></div></div>';
+      html+='<a class="out" href="'+SITE+c.n+'" target="_blank" rel="noopener" data-read-n="'+c.n+'" title="打开讲义即自动标记本章已读">↗ 读讲义第 '+c.n+' 章</a></div></div>';
     }
     html+='</div>';
   });
@@ -239,19 +239,30 @@ function render(){
     +'<div class="cbar"><i style="width:'+pct+'%"></i></div>';
   var bs=['cPartAll','cPart1','cPart2'];
   for(var i=0;i<bs.length;i++){var b=document.getElementById(bs[i]);if(b)b.className=(part===(i===0?0:i))?'on':'';}
-  globalThis.__COURSE__={CH:CH,render:render,visible:visible,toggleRead:toggleRead,countRead:countRead,state:function(){return {part:part,only:only,q:q,read:read};}};
+  globalThis.__COURSE__={CH:CH,render:render,visible:visible,toggleRead:toggleRead,markRead:markRead,countRead:countRead,state:function(){return {part:part,only:only,q:q,read:read};}};
+}
+function afterReadChange(){
+  var c=countRead();
+  if(c>=5&&typeof window!=='undefined'&&window.ENH&&window.ENH.unlock)window.ENH.unlock('course');
 }
 function toggleRead(n){
   if(read[n])delete read[n];else read[n]=1;
-  save();render();
-  var c=countRead();
-  if(c>=5&&typeof window!=='undefined'&&window.ENH&&window.ENH.unlock)window.ENH.unlock('course');
+  save();render();afterReadChange();
+}
+function markRead(n){
+  if(read[n])return;
+  read[n]=1;
+  save();render();afterReadChange();
 }
 var list=document.getElementById('cList');
 list.addEventListener('change',function(e){
   var t=e.target;
   if(t&&t.type==='checkbox'&&t.getAttribute&&t.getAttribute('data-n'))toggleRead(Number(t.getAttribute('data-n')));
   else if(t&&t.dataset&&t.dataset.n)toggleRead(Number(t.dataset.n));
+});
+list.addEventListener('click',function(e){
+  var a=e.target&&e.target.closest?e.target.closest('a[data-read-n]'):null;
+  if(a)markRead(Number(a.getAttribute('data-read-n')));
 });
 document.getElementById('cSearch').addEventListener('input',function(){q=this.value;render();});
 function setPart(v){part=v;render();}
