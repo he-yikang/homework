@@ -57,7 +57,7 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
   <a href="homework2.html" class="active">作业 2</a>
   <a href="lab2.html">实验室 2</a>
   <span class="spacer"></span>
-  <a href="#lab">回放</a><a href="#arch">架构</a><a href="#viz">可视化</a>
+  <a href="#lab">回放</a><a href="#arch">架构</a><a href="#viz">可视化</a><a href="#think">思考</a>
   <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
 <div class="layout">
@@ -73,6 +73,7 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     <a href="#lab">一、动态训练实验室</a>
     <a href="#arch">二、架构配置对比</a>
     <a href="#viz">三、可视化分析</a>
+    <a href="#think">四、我的思考</a>
   <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener">↗ GitHub 仓库（源码）</a>
 </nav>
   <main id="main-content" tabindex="-1">
@@ -215,6 +216,71 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
 
     <h2 id="viz">三、多维度可视化分析</h2>
     <div class="card"><h3>训练对比（原版 vs 新版）</h3><figure><img src="comparison/cmp_fig_00.png" /> /><figcaption>cmp_architecture.png</figcaption></figure><figure><img src="comparison/cmp_fig_01.png" /> /><figcaption>cmp_loss.png</figcaption></figure><figure><img src="comparison/cmp_fig_02.png" /> /><figcaption>cmp_boundary.png</figcaption></figure><figure><img src="comparison/cmp_fig_03.png" /> /><figcaption>cmp_radar.png</figcaption></figure><h3>MLP 网络结构与隐藏层表示</h3><figure><img src="comparison/cmp_fig_04.png" /> /><figcaption>network_topology.png</figcaption></figure><figure><img src="comparison/cmp_fig_05.png" /> /><figcaption>embedding_pca.png</figcaption></figure><h3>训练过程动态：决策边界演化</h3><figure><img src="comparison/cmp_fig_06.gif" /> /><figcaption>boundary_evolution.gif</figcaption></figure><h3>参数学习过程量化</h3><figure><img src="comparison/cmp_fig_07.png" /> /><figcaption>param_evolution.png</figcaption></figure><h3>评估与参数分布</h3><figure><img src="comparison/cmp_fig_08.png" /> /><figcaption>confusion_matrix.png</figcaption></figure><figure><img src="comparison/cmp_fig_09.png" /> /><figcaption>params_distribution.png</figcaption></figure></div>
+
+    <h2 id="think">四、我的思考：把教材第二篇「做」出来之后</h2>
+    <div class="note">这一节不是实验记录，而是我把上面两组网络训练完、逐张看完曲线与可视化之后，回头对照《人工智能通识》第二篇（第 10–19 章）写下的体会。教材给的是概念，我做的是验证——把自己踩过的坑和书上的句子对上号，才算真的读懂。每张卡的右上角标了对应章节，点「读讲义第 N 章」可回到朱教授讲义原文。</div>
+    <style>
+    #think .th-lead{color:#c9c9e6;font-size:14px;margin:6px 0 18px}
+    #think .th-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
+    #think .th{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;transition:border-color .2s,transform .2s}
+    #think .th:hover{border-color:rgba(168,85,247,.6);transform:translateY(-2px)}
+    #think .th .th-tag{display:inline-block;font:600 11px ui-monospace,Consolas,monospace;color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.08);padding:3px 10px;border-radius:99px;margin-bottom:10px}
+    #think .th h3{color:#e8e8f0;font-size:16px;margin:0 0 10px}
+    #think .th p{color:#9a9ab8;font-size:13.5px;line-height:1.85;margin:0 0 12px}
+    #think .th p b{color:#c4a4f8;font-weight:600}
+    #think .th .th-lnk{display:inline-block;font-size:12px;text-decoration:none;color:#2dd4bf;border:1px solid rgba(45,212,191,.4);border-radius:8px;padding:5px 11px;margin:3px 6px 0 0;transition:background .2s}
+    #think .th .th-lnk:hover{background:rgba(45,212,191,.14)}
+    #think .th .th-lnk.alt{color:#c4a4f8;border-color:rgba(168,85,247,.45)}
+    #think .th .th-lnk.alt:hover{background:rgba(168,85,247,.14)}
+    #think .th-end{margin-top:18px;padding:14px 18px;border-left:4px solid var(--teal);background:rgba(45,212,191,.06);border-radius:0 10px 10px 0;color:#cfeee9;font-size:13.5px;line-height:1.8}
+    #think .th-end a{color:#2dd4bf;text-decoration:none}
+    @media(max-width:640px){#think .th-grid{grid-template-columns:1fr}}
+    </style>
+    <p class="th-lead">下面五点，都是我把教材的概念一条条对着自己训练出来的曲线和图验证后的体会，尽量不说空话。</p>
+    <div class="th-grid">
+
+      <div class="th">
+        <span class="th-tag">教材 第 10 · 11 章</span>
+        <h3>从「人写规则」到「从数据学规则」</h3>
+        <p>做对比之前，我以为用了神经网络就等于「智能」。把原版 2-2-1 XOR 网络和新版深层 MLP 摆在一起，我才真正理解教材第 10 章<b>基于知识的人工智能</b>与第 11 章<b>基于学习的人工智能</b>的分界：原版的拓扑、神经元个数、连 sigmoid 激活都是我手写死的，它只是把一条我早已知道的异或规则编码进去；新版只给定结构和超参，那 2→128→64→32→3 的权重全是<b>从样本里一次次更新</b>出来的。前者是把答案写进网络，后者才是让网络自己找答案——这正是教材说的那条分水岭。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-10" target="_blank" rel="noopener">↗ 读讲义第 10 章 · 基于知识</a>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-11" target="_blank" rel="noopener">↗ 读讲义第 11 章 · 基于学习</a>
+      </div>
+
+      <div class="th">
+        <span class="th-tag">教材 第 15 · 16 章</span>
+        <h3>深度到底换来了什么</h3>
+        <p>教材第 15 章讲<b>人工神经元网络</b>、第 16 章讲<b>典型网络结构</b>。参数量对比表给了我一次直观冲击：一个只有个位数参数的玩具网络，和一个上万参数的深层 MLP，解决的却都是分类。我以前觉得「层数越多越好」是句口号，做完才明白深层的意义是<b>逐层抽象</b>——隐藏层 PCA 图里，输入点在前几层还纠缠成一团，到后面逐渐被拉开。当然表达能力有代价：参数越多越依赖数据与正则，这也解释了新版为什么要加 Dropout 和学习率调度，而不是一味堆深。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-15" target="_blank" rel="noopener">↗ 读讲义第 15 章 · 人工神经元网络</a>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-16" target="_blank" rel="noopener">↗ 读讲义第 16 章 · 典型网络结构</a>
+      </div>
+
+      <div class="th">
+        <span class="th-tag">教材 第 12 · 13 章</span>
+        <h3>训练不是「跑起来」就行</h3>
+        <p>教材第 12 章把机器学习流程拆成<b>数据 → 模型 → 训练 → 验证</b>，第 13 章专门讲<b>学习方法</b>。我自己的 loss 曲线最能说明问题：光把网络搭起来远远不够，Adam 和朴素 SGD 的下降速度差了一个量级；StepLR 在特定步把学习率砍下去，曲线上立刻出现一个台阶，随后收敛更稳。更关键的是训练准确率与验证准确率必须分开看——当两条线开始分叉，就是教材里说的<b>过拟合</b>苗头。这一步让我真切体会到：「学会」和「记住」在数字上是能区分的。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-12" target="_blank" rel="noopener">↗ 读讲义第 12 章 · 基本流程</a>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-13" target="_blank" rel="noopener">↗ 读讲义第 13 章 · 学习方法</a>
+      </div>
+
+      <div class="th">
+        <span class="th-tag">教材 第 14 · 19 章</span>
+        <h3>把「梯度消失」看成了一条曲线</h3>
+        <p>教材第 19 章列出的挑战里，<b>梯度消失</b>是我一直没能建立直觉的概念。拖动回放滑块去看逐层梯度范数时，它突然具体了：输入侧的梯度几乎贴着横轴不动，而输出侧还在大幅震荡——这就是教材描述的「浅层学不动」。再配合学习率三态演示，过大直接发散、过小卡在原地，才理解第 14 章为什么把学习率和正则称作<b>学习策略</b>：它们不是调参玄学，而是在控制这条下降路径的形状，让每一层都真正参与学习。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-14" target="_blank" rel="noopener">↗ 读讲义第 14 章 · 学习策略</a>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-19" target="_blank" rel="noopener">↗ 读讲义第 19 章 · 面临的挑战</a>
+      </div>
+
+      <div class="th" style="grid-column:1/-1">
+        <span class="th-tag">教材 第 17 章</span>
+        <h3>可视化是打开黑箱的窗口，但不是答案本身</h3>
+        <p>教材第 17 章讲<b>深度学习</b>，也谈到它的「黑箱」性质。决策边界、权重分布、隐藏层 PCA、混淆矩阵，我一开始是把它们当「好看的图」来收集的。做完整个作业才改了看法：这些图其实是在给黑箱<b>装窗口</b>——我能看到边界怎样从混乱变得清晰、某一层权重如何分化，但也发现「看见」不等于「解释」：图能告诉我网络学到了什么形状，却很难说清它为什么这样学。这大概正是教材把深度学习同时写成一种「方法」和一个「挑战」的原因，也是我这次最大的收获。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-17" target="_blank" rel="noopener">↗ 读讲义第 17 章 · 深度学习</a>
+        <a class="th-lnk alt" href="atlas.html#course" target="_blank" rel="noopener">📖 课程坐标系 · 20 章逐章对照</a>
+      </div>
+
+    </div>
+    <div class="th-end">以上五点，是我把教材第二篇（第 11–20 章）的概念，一条条对着自己训练出的曲线与图验证后的体会。教材原文全部留在原站，本站只做链接与对照；想逐章看脉络，去 <a href="atlas.html#course">课程坐标系</a>。</div>
   </main>
 </div>
 <button class="totop" id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
