@@ -104,7 +104,10 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
 .lab-panes{display:grid;grid-template-columns:1fr 1.7fr;gap:14px}
 .lab-pane{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px;min-width:0}
 .lab-pane h4,.lab-chart h4{color:var(--teal);font-size:13px;margin-bottom:10px}
-.lab-pane img{width:100%;border-radius:8px;display:block}
+.lab-stack{position:relative;width:100%}
+.lab-frame{width:100%;border-radius:8px;display:block;transition:opacity .15s linear}
+.lab-frame.hide{opacity:0}
+.lab-stack .lab-frame+.lab-frame{position:absolute;left:0;top:0}
 .lab-chart{margin-top:14px;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px}
 .lab-chart svg{width:100%;height:170px;display:block}
 .lab-hint{color:var(--dim);font-size:13px;margin-top:14px;line-height:1.8}
@@ -118,9 +121,9 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     <input class="lab-range" type="range" id="labSlider" min="0" max="11" value="0" step="1">
     <span class="lab-epoch" id="labEpoch">epoch 1 / 4000</span>
     <select class="lab-sel" id="labSpeed">
-      <option value="1000">0.5x</option>
-      <option value="600" selected>1x</option>
-      <option value="300">2x</option>
+      <option value="450">0.5x</option>
+      <option value="200" selected>1x</option>
+      <option value="90">2x</option>
     </select>
   </div>
   <div class="lab-metrics">
@@ -130,8 +133,8 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     <div class="lab-metric"><span>学习率 lr</span><b id="labLr">—</b></div>
   </div>
   <div class="lab-panes">
-    <div class="lab-pane"><h4>决策边界</h4><img id="labImgB" alt="决策边界帧"></div>
-    <div class="lab-pane"><h4>各层权重参数分布</h4><img id="labImgW" alt="权重分布帧"></div>
+    <div class="lab-pane"><h4>决策边界</h4><div class="lab-stack"><img id="labImgB1" class="lab-frame" alt="决策边界帧"><img id="labImgB2" class="lab-frame hide" alt=""></div></div>
+    <div class="lab-pane"><h4>各层权重参数分布</h4><div class="lab-stack"><img id="labImgW1" class="lab-frame" alt="权重分布帧"><img id="labImgW2" class="lab-frame hide" alt=""></div></div>
   </div>
   <div class="lab-chart">
     <h4>训练曲线 · 紫=loss，青虚线=train_acc，橙色竖线=当前 epoch</h4>
@@ -160,11 +163,32 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     '<line id="labCursor" x1="'+P+'" y1="18" x2="'+P+'" y2="'+(H-P)+'" stroke="#f59e0b" stroke-width="1.6" stroke-dasharray="4 3"/>'+
     '<circle id="labDot" cx="'+P+'" cy="'+(H-P)+'" r="5" fill="#f59e0b"/>';
   var idx=0, playing=false, timer=null;
-  function render(i){
+  // 双层交叉淡入淡出：新帧淡入、旧帧淡出同时进行，视觉上连续过渡（不再硬切）
+  function makeStack(idA,idB){
+    var a=document.getElementById(idA), b=document.getElementById(idB), front=a, back=b;
+    return {
+      show:function(src,instant){
+        if(instant){front.src=src;back.src=src;front.classList.remove('hide');back.classList.add('hide');return;}
+        back.src=src;
+        void back.offsetWidth;                 // 强制重排，确保 transition 触发
+        back.classList.remove('hide');         // 新帧淡入
+        front.classList.add('hide');           // 旧帧淡出
+        var t=front;front=back;back=t;         // 交换前后层，下一帧复用
+      }
+    };
+  }
+  var stackB=makeStack('labImgB1','labImgB2'), stackW=makeStack('labImgW1','labImgW2');
+  // 预加载全部帧，切换时无需等待下载，保证每个点都流畅播过
+  F.forEach(function(f){var ib=new Image();ib.src=f.b;var iw=new Image();iw.src=f.w;});
+  function setFade(iv){
+    var d=Math.max(60,Math.round(iv*0.85))+'ms';
+    Array.prototype.forEach.call(document.querySelectorAll('.lab-frame'),function(el){el.style.transitionDuration=d;});
+  }
+  function render(i,instant){
     i=(i%N+N)%N; idx=i;
     var f=F[i];
-    document.getElementById('labImgB').src=f.b;
-    document.getElementById('labImgW').src=f.w;
+    stackB.show(f.b,instant);
+    stackW.show(f.w,instant);
     document.getElementById('labEpoch').textContent='epoch '+f.e+' / '+C.emax;
     document.getElementById('labLoss').textContent=f.loss.toFixed(4);
     document.getElementById('labTa').textContent=(f.ta*100).toFixed(1)+'%';
@@ -181,7 +205,9 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     playing=true;
     document.getElementById('labPlay').textContent='暂停';
     clearInterval(timer);
-    timer=setInterval(function(){render(idx+1);},+document.getElementById('labSpeed').value);
+    var iv=+document.getElementById('labSpeed').value;
+    setFade(iv);
+    timer=setInterval(function(){render(idx+1,false);},iv);
   }
   function pause(){
     playing=false;
@@ -189,10 +215,11 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     clearInterval(timer); timer=null;
   }
   document.getElementById('labPlay').onclick=function(){playing?pause():play();};
-  document.getElementById('labReset').onclick=function(){pause();render(0);};
-  document.getElementById('labSlider').oninput=function(){pause();render(+this.value);};
+  document.getElementById('labReset').onclick=function(){pause();render(0,true);};
+  document.getElementById('labSlider').oninput=function(){pause();render(+this.value,true);};
   document.getElementById('labSpeed').onchange=function(){if(playing)play();};
-  render(0);
+  setFade(+document.getElementById('labSpeed').value);
+  render(0,true);
 })();
 </script>
 
