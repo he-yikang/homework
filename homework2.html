@@ -258,7 +258,7 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     <div class="card"><h3>训练对比（原版 vs 新版）</h3><figure><img src="comparison/cmp_fig_00.png" /> /><figcaption>cmp_architecture.png</figcaption></figure><figure><img src="comparison/cmp_fig_01.png" /> /><figcaption>cmp_loss.png</figcaption></figure><figure><img src="comparison/cmp_fig_02.png" /> /><figcaption>cmp_boundary.png</figcaption></figure><figure><img src="comparison/cmp_fig_03.png" /> /><figcaption>cmp_radar.png</figcaption></figure><h3>MLP 网络结构与隐藏层表示</h3><figure><img src="comparison/cmp_fig_04.png" /> /><figcaption>network_topology.png</figcaption></figure><figure><img src="comparison/cmp_fig_05.png" /> /><figcaption>embedding_pca.png</figcaption></figure><h3>训练过程动态：决策边界演化</h3><figure><img src="comparison/cmp_fig_06.gif" /> /><figcaption>boundary_evolution.gif</figcaption></figure><h3>参数学习过程量化</h3><figure><img src="comparison/cmp_fig_07.png" /> /><figcaption>param_evolution.png</figcaption></figure><h3>评估与参数分布</h3><figure><img src="comparison/cmp_fig_08.png" /> /><figcaption>confusion_matrix.png</figcaption></figure><figure><img src="comparison/cmp_fig_09.png" /> /><figcaption>params_distribution.png</figcaption></figure></div>
 
     <h2 id="think">四、我的思考：从 XOR 到 MLP，重新认识神经网络</h2>
-    <div class="note">这一节是我把两组网络训练完、逐张看完结构之后，回头对照教材里讲神经网络的那几章写下的思考。只谈神经网络本身——单个神经元、隐藏层、深度、激活函数——尽量把书上的句子和自己的实验对上号。每张卡右上角标了对应章节，点「读讲义第 N 章」可回到讲义原文。</div>
+    <div class="note">这一节是我把两组网络训练完、逐张看完结构之后，回头对照教材第二篇写下的思考。前四张只谈神经网络本身——单个神经元、隐藏层、深度、激活函数；第二篇学完后，我又顺着第 17—20 章往下想了深度学习、前沿、挑战和大模型时代。尽量把书上的句子和自己的实验对上号，每张卡右上角标了对应章节，点「读讲义第 N 章」可回到讲义原文。</div>
     <style>
     #think .th-lead{color:#c9c9e6;font-size:14px;margin:6px 0 18px}
     #think .th-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}
@@ -276,7 +276,7 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
     #think .th-end a{color:#2dd4bf;text-decoration:none}
     @media(max-width:640px){#think .th-grid{grid-template-columns:1fr}}
     </style>
-    <p class="th-lead">下面四点，都是我把它和教材讲神经网络的章节对着看之后才想通的，尽量不说空话。</p>
+    <p class="th-lead">下面八点，前四点是神经网络本身，后四点是学完第二篇后顺着往下想的，都尽量不说空话。</p>
     <div class="th-grid">
 
       <div class="th">
@@ -309,8 +309,38 @@ figcaption{font-size:12px;color:var(--dim);text-align:center;margin-top:10px}
         <a class="th-lnk alt" href="atlas.html#course" target="_blank" rel="noopener">📖 课程坐标系</a>
       </div>
 
+      <div class="th">
+        <span class="th-tag">教材 第 17 章</span>
+        <h3>深度学习的「深」，到底带来了什么</h3>
+        <p>教材第 17 章讲深度学习。学完第 15、16 章我知道了「深」是多层非线性变换，但「深」到底换来什么，是看完作业 2 的回放才具体起来的：训练刚开始，决策边界几乎是一条直线，随着参数一层层被更新，边界慢慢弯折成能分开三类点的形状；隐藏层的 PCA 图也从一团混在一起，逐渐分出结构。这让我理解教材说的<b>表示学习</b>——深度学习不需要人事先写好特征，而是让网络自己从数据里学出从低级到高级的表示：靠近输入是坐标的组合，越往后越接近「判成哪一类」的判据。原版 2-2-1 只有一层隐藏，能做的有限；深层 MLP 用逐级变换换来了对复杂关系的拟合能力。这才是「深度」的意义，而不是把单元堆得多。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-17" target="_blank" rel="noopener">↗ 读讲义第 17 章 · 深度学习</a>
+      </div>
+
+      <div class="th">
+        <span class="th-tag">教材 第 18 章</span>
+        <h3>前沿离我很远，但「看得见」能拉近一点</h3>
+        <p>教材第 18 章讲深度学习前沿，本站没有复现前沿模型，我不想假装懂。但这一章给了我一个提醒：第 15、16 章学的神经元、层、激活函数，并不是过时的基础，前沿模型再大也是由这些基本单元一层层堆起来的。真正困扰我的不是「它有多大」，而是「那么高维的东西怎么想象」。实验室 2 的 <b>3D 决策空间</b>帮了我一点：把原本二维平面上的决策边界立起来，能拖动视角看置信度曲面怎么起伏。可视化不能替代理解，但它至少让我对「高维表示」有个可以抓的直觉——这可能是我目前接近前沿最现实的方式。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-18" target="_blank" rel="noopener">↗ 读讲义第 18 章 · 深度学习前沿</a>
+      </div>
+
+      <div class="th">
+        <span class="th-tag">教材 第 19 章</span>
+        <h3>能拟合，不等于真的学会了</h3>
+        <p>教材第 19 章讲深度学习面临的挑战。作业 2 给了我两个很具体的对照：原版 2-2-1 能漂亮地解开 XOR，但那是专门为此设计的小网络，换个任务就不行了——这说明一个网络的能力边界，比它「训练得多准」更值得先看清楚。深层 MLP 在训练数据上表现很好，可我真正该关心的是它面对没见过的数据还能不能对，也就是教材强调的<b>泛化</b>。以前我把「训练集准确率接近 100%」当成成功，现在明白那也可能只是把样本记住了。这一章让我把评价标准从「拟合得多好」改成「学到的是不是规律」；至于梯度、学习率具体怎么调，教材另有专门篇幅，我先把这个概念层面的坑认清。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-19" target="_blank" rel="noopener">↗ 读讲义第 19 章 · 深度学习面临的挑战</a>
+      </div>
+
+      <div class="th" style="grid-column:1/-1">
+        <span class="th-tag">教材 第 20 章</span>
+        <h3>从专用小网络到大模型时代</h3>
+        <p>教材第 20 章把视角拉到大模型时代。作业 2 的网络是 2→128→64→32→3，为三类点的分类任务定制，参数不过几千；而这一章讲的是能写程序、能对话的通用大模型，规模完全不是一个量级。把我这两份作业放在一起看，倒是有条清楚的头绪：作业 2 让我从最细的神经元出发，亲手搭起一个能解决具体问题的小网络；作业 1 则记录了我和 Agent 分工协作完成作品的体验——<b>大模型时代真正改变的，是「人怎么使用智能工具」</b>。规模变了，但第 15、16 章那套「加权求和＋非线性＋层层堆叠」的底子没变。学完整篇再看，我从「神经网络是什么」走到了「它把我能做的事扩展到哪里」。</p>
+        <a class="th-lnk" href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-20" target="_blank" rel="noopener">↗ 读讲义第 20 章 · 大模型时代</a>
+        <a class="th-lnk alt" href="homework1.html#think" target="_blank" rel="noopener">📖 作业 1 · 对 Agent 的思考</a>
+        <a class="th-lnk alt" href="atlas.html#course" target="_blank" rel="noopener">📖 课程坐标系</a>
+      </div>
+
     </div>
-    <div class="th-end">这四点都只围绕神经网络本身——单个神经元、隐藏层、深度、激活函数——对应教材的「人工神经元网络」与「典型网络结构」两章。教材原文留在原站，本站只做链接与对照；想看章节脉络，去 <a href="atlas.html#course">课程坐标系</a>。</div>
+    <div class="th-end">这八点沿着教材第二篇走了一遍：从第 15、16 章的神经元、隐藏层、深度、激活函数，到第 17—20 章的深度学习、前沿、挑战与大模型时代。教材原文留在原站，本站只做链接与对照；想看章节脉络，去 <a href="atlas.html#course">课程坐标系</a>。</div>
   </main>
 </div>
 <button class="totop" id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
