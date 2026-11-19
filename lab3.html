@@ -102,7 +102,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
   <div class="hero">
     <span class="badge">✦ 第三篇 · 人工智能应用 · 纯前端离线运行</span>
     <h1>诗中有画 · 交互实验室</h1>
-    <p>一句话需求 → 40 种诗体作诗（含 22 种词牌曲牌，古今中外 8 大类）→ 20 种画风作画（5 大类）</p>
+    <p>一句话需求 → 40 种诗体（含 22 种词牌）→ 20 种画风　·　可切换「离线可复现」或「AI 实时生成，每次不同」</p>
   </div>
 
   <div class="grid" id="studio">
@@ -110,6 +110,13 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
     <div>
       <section class="panel">
         <h2>① 说出你的需求</h2>
+        <div class="ctl">
+          <label>生成方式 <span style="color:#6f6f90" id="modeHint">离线 · 可复现</span></label>
+          <div class="seg" id="modeSeg">
+            <button data-v="offline" class="on">⚙ 离线生成</button><button data-v="ai">✦ AI 实时</button>
+          </div>
+          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：词库 + 格律本地生成，同一首诗画作固定、断网可用。</p>
+        </div>
         <div class="ctl">
           <label>主题 / 关键词 <span style="color:#6f6f90">如：秋夜 江边 思乡</span></label>
           <input class="txt" id="theme" value="秋夜江边" placeholder="输入主题或几个意象词…">
@@ -153,7 +160,11 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <summary>为什么每次都一样 / 可复现</summary>
           <p>画里所有「随机」元素都由诗句的<b style="color:#c4a4f8">哈希种子</b>决定，同一首诗、同一画风永远得到同一幅画——和作业 2「固定随机种子保证实验可复现」是一个道理（第 19 章）。</p>
         </details>
-        <div class="notice">本站为离线教学版：诗句由词库与格律/模板拼装、画由代码绘制，规模远小于真实大模型，但完整演示「语义 → 意象 → 像素」流水线。详见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3 · 工作原理</a>。</div>
+        <details>
+          <summary>离线 / AI 实时：两种模式</summary>
+          <p><b style="color:#c4a4f8">离线</b>：词库 + 格律本地拼装、Canvas 代码作画，断网可用、同诗同画风画作固定（种子可复现）。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「规则拼装」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
+        </details>
+        <div class="notice">API 调用直接在浏览器发起（OpenAI 兼容接口，CORS 开放），Key 公开写在本页源码中，<b>仅供课程作业演示</b>，请勿用于生产环境。若 AI 调用失败会自动降级回离线模式。</div>
       </section>
     </div>
 
@@ -174,7 +185,9 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         <h2>④ AI 绘画大师 <span style="font-size:11px;color:var(--gold);font-weight:400" id="artStyleTag">— 水墨</span></h2>
         <div class="canvas-box">
           <canvas id="art" width="800" height="600"></canvas>
+          <img id="artAI" alt="AI 生成的画作" style="display:none;width:100%;height:100%;object-fit:cover">
           <div class="art-empty" id="artEmpty">画作会随诗一起生成<br>（按诗句意象与所选画风绘制）</div>
+          <div class="art-empty" id="artLoading" style="display:none;background:rgba(10,10,15,.86);z-index:2">✦ AI 正在写诗作画…<br><small style="color:#6f6f90;margin-top:6px">首次调用约需 10–30 秒，请稍候</small></div>
         </div>
         <div class="chips" id="imgChips"></div>
         <div class="row no-print" style="margin-top:10px">
@@ -480,7 +493,33 @@ function drawScene(ctx,W,H,keys,mood,seed,styleId){
 }
 
 /* ================= 状态与交互 ================= */
-var state={poem:null,keys:[],seed:0,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0};
+/* ===== AI 实时模式：OpenAI 兼容 API（公开 Key，仅用于课程作业演示） ===== */
+var AI={base:'https://router.aionclaw.com/v1',
+        key:'sk-0mmAeoDoPrtcSRHR8dBkb7U5KFSXuBrItexIfBMa6SkTbqLA',
+        chat:'deepseek-flash', image:'doubao-seedream-4-5-251128'};
+var STYLE_PROMPT={
+ ink:'中国传统水墨画，宣纸质感，浓淡墨色晕染，大量留白，题款印章，意境悠远',
+ gongbi:'中国工笔重彩画，细腻线条，矿物颜料设色，工整华丽',
+ xieyi:'中国写意画，泼墨简笔，笔触奔放，气韵生动',
+ qinglv:'中国青绿山水画，石青石绿设色，金碧辉煌，层峦叠嶂',
+ baimiao:'中国白描，纯墨线勾勒，不设色，线条流畅',
+ ukiyoe:'日本浮世绘风格，木版画，平涂色块，粗黑轮廓线',
+ zen:'禅意极简画，大量留白，寥寥数笔，宁静空寂',
+ oil:'西方古典油画，厚涂笔触，深沉色调，明暗对比',
+ watercolor:'水彩画，透明晕染，清新淡雅，水痕交融',
+ sketch:'铅笔素描，灰阶明暗，细腻排线',
+ engraving:'铜版刻画，黑白线刻，精细交叉排线',
+ impression:'印象派，短促笔触与色点，光影斑驳，户外写生',
+ cubism:'立体主义，几何块面，多视角拼接，抽象重构',
+ minimal:'极简主义，纯色块，几何构图，克制留白',
+ pop:'波普艺术，高饱和撞色，平涂，流行视觉',
+ abstract:'抽象表现主义，泼洒色块，自由笔触，强烈情感',
+ surreal:'超现实主义，梦境般奇幻场景，柔和诡谲色调',
+ cyber:'赛博朋克，霓虹灯光，紫青配色，未来都市夜景',
+ pixel:'像素艺术，8-bit 方块构图，复古电子游戏风',
+ flat:'扁平插画，简洁几何形状，明快配色，现代设计感'
+};
+var state={poem:null,keys:[],seed:0,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null};
 function $(id){return document.getElementById(id);}
 function buildSelects(){
   var fs=$('formSel');
@@ -493,6 +532,18 @@ function buildSelects(){
 function segBind(id,cb){$(id).addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var bs=$(id).querySelectorAll('button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');b.classList.add('on');cb(b.getAttribute('data-v'));});}
 segBind('moodSeg',function(v){state.mood=v;});
 segBind('layoutSeg',function(v){state.layout=v;if(state.poem)renderPoem(state.poem);});
+segBind('modeSeg',function(v){
+  state.mode=v;
+  $('modeHint').textContent=v==='ai'?'AI 实时 · 每次不同':'离线 · 可复现';
+  $('modeTip').textContent=v==='ai'
+    ?'AI 模式：调用大语言模型按诗体写诗、再据诗句与画风由模型作画，每次结果都不同（需联网）。'
+    :'离线模式：词库 + 格律本地生成，同一首诗画作固定、断网可用。';
+  $('genBtn').textContent=v==='ai'?'✦ AI 写诗作画':'✦ 生成诗与画';
+  $('regenBtn').textContent=v==='ai'?'↻ AI 再写一首':'↻ 换个写法重生成';
+  // 切换模式时恢复对应画布
+  if(v==='offline'){$('artAI').style.display='none';$('art').style.display='block';if(state.seed)redraw();}
+  else{$('art').style.display='none';if(state.aiImage)$('artAI').style.display='block';}
+});
 $('formSel').addEventListener('change',function(){state.form=this.value;});
 $('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem)redraw();});
 function renderPoem(p){
@@ -510,36 +561,118 @@ function renderPoem(p){
 }
 function S_isDark(id){var s=STYLES[id],c=s.bg[0].slice(1,3);return parseInt(c,16)<90;}
 function redraw(){drawScene($('art').getContext('2d'),800,600,state.keys,state.mood,state.seed,state.style);}
-function generate(){
+/* ---------- 离线生成（原逻辑） ---------- */
+function generateOffline(){
   var theme=$('theme').value.trim();
   var baseSeed=hash(theme+'|'+state.form+'|'+state.mood+'|'+state.nonce);
   var keys=parseImages(theme,rng(baseSeed));
   var poem=makePoem(state.form,state.mood,keys,baseSeed);
   var seed=hash(poem.lines.join('')+poem.title+'|'+state.style);
-  state.poem=poem;state.keys=keys;state.seed=seed;
-  renderPoem(poem);redraw();$('artEmpty').style.display='none';
+  state.poem=poem;state.keys=keys;state.seed=seed;state.aiImage=null;
+  renderPoem(poem);
+  $('artAI').style.display='none';$('art').style.display='block';redraw();$('artEmpty').style.display='none';
   $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('');
   $('poemStat').innerHTML='诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
   if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
+}
+/* ---------- AI 实时生成 ---------- */
+function aiHeaders(){return {'Content-Type':'application/json','Authorization':'Bearer '+AI.key};}
+function formInstruction(fid){
+  var F=FORMS[fid],lang=F.lang==='en'?'英文':'中文';
+  if(F.kind==='line'){
+    var lens=F.lens.join('、');
+    return '写一首'+lang+'的'+F.n+'，共'+F.lens.length+'句，每句字数依次为：'+lens+'字。严格按此句数与字数。';
+  }
+  if(F.kind==='en'||F.kind==='limerick')return 'Write an English '+F.n+' in '+(F.kind==='limerick'?'5 lines with AABBA rhyme':'about '+F.lines+' lines')+'.';
+  return '写一首'+lang+'的'+F.n+'，'+(F.kind==='prose'?'散文诗，一段':'自由分行，'+ (F.lines||5) +'行左右')+'。';
+}
+function parseAiPoem(text,fid,theme){
+  var lines=text.split('\n').map(function(s){return s.trim();}).filter(function(s){return s&&!/^[《【(（]?\s*(标题|题目)/.test(s);});
+  var title='',F=FORMS[fid];
+  // 去掉可能的 Markdown 标题行 / 《…》首行
+  if(lines.length&&/^#{1,3}\s|^《.*》$|^\*\*.*\*\*$/.test(lines[0])){title=lines.shift().replace(/^#{1,3}\s|^[《*]+|[》*]+$/g,'');}
+  if(!title)title=(theme||'无题').slice(0,8);
+  // 去掉代码围栏
+  lines=lines.map(function(s){return s.replace(/^```.*$/,'');}).filter(Boolean);
+  return {title:title,lines:lines,form:fid,formName:F.n,tag:F.g,lang:F.lang,layout:F.lang==='en'?'horiz':state.layout,mood:state.mood,moodName:MOOD[state.mood].n,ai:true};
+}
+function generateAI(){
+  var theme=$('theme').value.trim()||'山水';
+  var btn=$('genBtn');btn.disabled=true;
+  $('artLoading').style.display='flex';$('artEmpty').style.display='none';
+  $('artAI').style.display='none';$('art').style.display='none';
+  var moodWord=MOOD[state.mood].n,formIns=formInstruction(state.form);
+  var fullTheme=theme+'（情感基调：'+moodWord+'）';
+  var prompt='你是人工智能诗人。'+formIns+'\n主题：'+theme+'，情感基调：'+moodWord+'。\n'
+    +'只输出诗本身：第一行写《标题》，随后每行一句诗。不要任何解释、注释、格律说明、代码块或 Markdown 标记。';
+  fetch(AI.base+'/chat/completions',{method:'POST',headers:aiHeaders(),
+    body:JSON.stringify({model:AI.chat,messages:[{role:'user',content:prompt}],max_tokens:2000,temperature:1.25})})
+  .then(function(r){if(!r.ok)throw new Error('写诗请求失败 HTTP '+r.status);return r.json();})
+  .then(function(d){
+    var ch=d.choices&&d.choices[0]&&d.choices[0].message;
+    var txt=(ch&&(ch.content||ch.reasoning_content)||'').trim();
+    if(!txt)throw new Error('模型未返回内容');
+    var poem=parseAiPoem(txt,state.form,theme);
+    if(!poem.lines.length)throw new Error('未能解析出诗句');
+    state.poem=poem;
+    renderPoem(poem);
+    // 从诗句/主题提取画面意象，交由画风提示词统一成一幅画
+    var sceneHint=poem.lines.slice(0,4).join('，');
+    var imgPrompt=STYLE_PROMPT[state.style]+'。画面内容：'+fullTheme+'；诗意：'+sceneHint+'。不要出现文字、水印。';
+    $('artLoading').firstChild.textContent='✦ 诗已成，AI 正在作画…';
+    return fetch(AI.base+'/images/generations',{method:'POST',headers:aiHeaders(),
+      body:JSON.stringify({model:AI.image,prompt:imgPrompt,n:1,size:'2048x2048',response_format:'b64_json'})})
+      .then(function(r2){if(!r2.ok)throw new Error('作画请求失败 HTTP '+r2.status);return r2.json();})
+      .then(function(d2){
+        var b64=d2.data&&d2.data[0]&&d2.data[0].b64_json;
+        if(!b64)throw new Error('模型未返回图片');
+        var url='data:image/jpeg;base64,'+b64;
+        state.aiImage=url;
+        $('artAI').src=url;$('artAI').style.display='block';
+        $('artLoading').style.display='none';$('artEmpty').style.display='none';
+        $('imgChips').innerHTML='<span class="chip">AI 实时生成</span><span class="chip">'+STYLES[state.style].n+'</span><span class="chip">'+AI.chat+'</span><span class="chip">'+AI.image+'</span>';
+        $('poemStat').innerHTML='模式 <b>AI 实时</b> · 诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 模型 <b>'+AI.chat+' / '+AI.image+'</b>';
+        if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
+        toast('✦ AI 诗画已生成');
+      });
+  }).catch(function(e){
+    $('artLoading').style.display='none';
+    toast('AI 生成失败：'+(e.message||'网络错误')+'，已切换回离线模式');
+    // 失败降级到离线
+    state.mode='offline';
+    var bs=$('modeSeg').querySelectorAll('button');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-v')==='offline');
+    $('modeHint').textContent='离线 · 可复现';$('genBtn').textContent='✦ 生成诗与画';$('regenBtn').textContent='↻ 换个写法重生成';
+    generateOffline();
+  }).then(function(){btn.disabled=false;});
+}
+function generate(){
+  if(state.mode==='ai')generateAI();else generateOffline();
 }
 $('genBtn').onclick=function(){state.nonce=0;generate();};
 $('regenBtn').onclick=function(){state.nonce++;generate();};
 $('theme').addEventListener('keydown',function(e){if(e.key==='Enter'){state.nonce=0;generate();}});
 $('copyPoem').onclick=function(){if(!state.poem)return;var t=poemText();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('诗已复制');},function(){toast('请手动复制');});else toast('请手动复制');};
 $('dlPoem').onclick=function(){if(!state.poem)return;dl(new Blob([poemText()],{type:'text/plain;charset=utf-8'}),'诗中有画-'+state.poem.title+'.txt');toast('诗已下载');};
-$('dlArt').onclick=function(){if(!state.poem)return;var a=document.createElement('a');a.download='诗中有画-'+state.poem.title+'-'+STYLES[state.style].n+'.png';a.href=$('art').toDataURL('image/png');document.body.appendChild(a);a.click();document.body.removeChild(a);toast('画作已下载');};
+$('dlArt').onclick=function(){
+  if(!state.poem)return;
+  var a=document.createElement('a');a.download='诗中有画-'+state.poem.title+'-'+STYLES[state.style].n+'.png';
+  a.href=state.aiImage?state.aiImage:$('art').toDataURL('image/png');
+  document.body.appendChild(a);a.click();document.body.removeChild(a);toast('画作已下载');
+};
 function poemText(){var p=state.poem;return '《'+p.title+'》\n'+p.lines.join('\n')+'\n\n—— '+p.formName+' · '+p.moodName+' · 实验室 3 诗中有画';}
 function dl(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);}
 function toast(m){if(window.ENH)window.ENH.toast(m);}
 $('reportBtn').onclick=function(){
   if(!state.poem){toast('请先生成诗与画');return;}
-  var p=state.poem,md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','','- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、'),'- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）','','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ 格律/模板生成（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）。',''].join('\n');
-  var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 诗中有画 · 实验报告</h1><img src="'+ $('art').toDataURL('image/png') +'" alt="生成的画作"><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
+  var p=state.poem,isAI=state.mode==='ai'&&state.aiImage;
+  var md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗 / '+AI.image+' 作画）':'离线词库 + 格律'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','',isAI?'- 由文生图模型按诗句与画风实时生成，每次不同':('- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、')+'\n- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）'),'','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'格律/模板生成（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。',''].join('\n');
+  var imgSrc=isAI?state.aiImage:$('art').toDataURL('image/png');
+  var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 诗中有画 · 实验报告</h1><img src="'+ imgSrc +'" alt="生成的画作"><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
   var w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}else toast('弹窗被拦截');
   if(window.ENH)window.ENH.unlock('report');
 };
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-globalThis.__LAB3__={getPoem:function(){return state.poem;},getState:function(){return {theme:$('theme').value.trim(),form:state.form,mood:state.mood,style:state.style,layout:state.layout,keys:state.keys.slice(),seed:state.seed};},generate:generate};
+globalThis.__LAB3__={getPoem:function(){return state.poem;},getState:function(){return {theme:$('theme').value.trim(),form:state.form,mood:state.mood,style:state.style,layout:state.layout,mode:state.mode,keys:state.keys.slice(),seed:state.seed,hasAI:!!state.aiImage};},generate:generate};
 window.addEventListener('scroll',function(){var b=$('totop');if(window.scrollY>400)b.classList.add('show');else b.classList.remove('show');});
 buildSelects();
 })();
