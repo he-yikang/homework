@@ -1,0 +1,446 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作业 3 · 人工智能应用：诗中有画 · 人工智能概论课程作业</title>
+<style>
+@media print{*{box-shadow:none!important;text-shadow:none!important;background:transparent!important}body{background:#fff!important;color:#000!important}.topnav,.toc,.totop,.skip-link,#hwcmd-ov,#hwcmd-fab,.footer,.enh-tourbar,#enh-panel,.enh-note,.cta-card{display:none!important}a{color:#000!important;text-decoration:underline}.card,.banner{border:1px solid #ccc!important;break-inside:avoid}main,section,.wrap,.grid{max-width:100%!important}}
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:300;background:#a855f7;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px}
+.skip-link:focus{left:12px}
+:root{--bg:#0a0a0f;--card:#16161f;--border:#26263a;--text:#e8e8f0;--dim:#9a9ab8;--purple:#a855f7;--blue:#3b82f6;--teal:#2dd4bf;--gold:#e8c07d}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradient(circle at 15% 0%,#1a1530 0%,var(--bg) 55%);color:var(--text);min-height:100vh;line-height:1.75}
+.topnav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;padding:14px 28px;background:rgba(10,10,15,.72);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.topnav .logo{font-weight:700;font-size:17px;background:linear-gradient(90deg,var(--purple),var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+.topnav a{color:var(--dim);text-decoration:none;font-size:14px;padding:6px 12px;border-radius:8px;transition:.2s}
+.topnav a:hover{color:#fff;background:rgba(168,85,247,.15)}
+.topnav a.active{color:#fff;background:linear-gradient(90deg,rgba(168,85,247,.3),rgba(59,130,246,.3))}
+.topnav .spacer{flex:1}
+.layout{display:grid;grid-template-columns:230px 1fr;gap:30px;max-width:1200px;margin:0 auto;padding:30px 24px}
+.toc{position:sticky;top:78px;align-self:start;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px}
+.toc h3{color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.toc a{display:block;color:var(--dim);text-decoration:none;font-size:14px;padding:7px 10px;border-radius:8px;transition:.2s;border-left:2px solid transparent}
+.toc a:hover{color:#fff;background:rgba(168,85,247,.12);border-left-color:var(--purple)}
+.toc hr{border:none;border-top:1px solid var(--border);margin:12px 0}
+main{min-width:0}
+h1{font-size:32px;margin-bottom:10px;background:linear-gradient(90deg,var(--purple),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:22px;margin:36px 0 16px;color:#fff;border-left:4px solid var(--purple);padding-left:12px}
+h3{color:var(--teal);margin:22px 0 10px;font-size:16px}
+.meta{color:var(--dim);font-size:13px;margin-bottom:12px}
+.sub{color:#c9c9e6;font-size:15px;margin:0 0 12px;letter-spacing:.3px}
+.note{background:rgba(45,212,191,.08);border-left:4px solid var(--teal);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;color:#cfeee9;font-size:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.card p{color:#b9b9d4;font-size:14px;margin:10px 0}
+.card p b{color:#c4a4f8}
+table{border-collapse:collapse;margin:14px 0;width:100%;font-size:14px;border-radius:10px;overflow:hidden}
+th,td{border:1px solid var(--border);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:linear-gradient(90deg,rgba(168,85,247,.25),rgba(59,130,246,.25));color:#fff}
+tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:6px;font-size:.92em;color:var(--teal)}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:16px 0}
+.flow .node{border:1px solid rgba(168,85,247,.5);background:rgba(168,85,247,.10);border-radius:10px;padding:10px 14px;font-size:13px;color:#e8e8f0;min-width:120px;text-align:center}
+.flow .node.t2{border-color:rgba(45,212,191,.5);background:rgba(45,212,191,.09)}
+.flow .node.t3{border-color:rgba(232,192,125,.5);background:rgba(232,192,125,.08)}
+.flow .arw{color:var(--gold);font-size:18px}
+.pillar{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0}
+.pillar .pc{border:1px solid var(--border);border-radius:12px;padding:16px;background:linear-gradient(150deg,rgba(168,85,247,.07),rgba(45,212,191,.05))}
+.pillar .pc h4{color:var(--gold);font-size:14px;margin-bottom:8px}
+.pillar .pc p{font-size:13px;color:#b9b9d4}
+.cta-card{margin:26px 0;padding:20px 22px;border:1px solid rgba(45,212,191,.4);border-radius:16px;background:linear-gradient(120deg,rgba(45,212,191,.10),rgba(168,85,247,.10))}
+.cta-card h3{color:var(--teal);margin-top:0}
+.cta-card a{display:inline-block;margin-top:8px;background:linear-gradient(120deg,var(--purple),var(--blue));color:#fff;text-decoration:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600}
+.banner{display:block;width:100%;border:1px solid var(--border);border-radius:14px;margin:6px 0 22px;animation:bnGlow 6s ease-in-out infinite}
+@keyframes bnGlow{0%,100%{box-shadow:0 8px 30px rgba(168,85,247,.14)}50%{box-shadow:0 8px 46px rgba(232,192,125,.28)}}
+.totop{position:fixed;right:24px;bottom:24px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;cursor:pointer;font-size:16px;box-shadow:0 6px 20px rgba(168,85,247,.4);opacity:0;transition:.3s;pointer-events:none;z-index:60}
+.totop.show{opacity:1;pointer-events:auto}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.toc{position:static;top:auto}}
+</style><meta property="og:type" content="website">
+<meta property="og:title" content="作业 3 · 人工智能应用：诗中有画">
+<meta property="og:description" content="人工智能概论课程作业：把人工智能诗人与 AI 绘画大师结合，从需求到诗、从诗到画，回望前两篇的 AI 基础知识。">
+<meta property="og:site_name" content="课程作业站点">
+<meta name="twitter:card" content="summary">
+</head><body>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<nav class="topnav" aria-label="主导航">
+  <span class="logo">作业 3 · 诗中有画</span>
+  <a href="index.html">首页</a>
+  <a href="atlas.html">🧭 知识地图</a>
+  <a href="homework1.html">作业 1</a>
+  <a href="lab1.html">实验室 1</a>
+  <a href="homework2.html">作业 2</a>
+  <a href="lab2.html">实验室 2</a>
+  <a href="homework3.html" class="active">作业 3</a>
+  <a href="lab3.html">实验室 3</a>
+  <span class="spacer"></span>
+  <a href="#origin">缘起</a><a href="#principle">原理</a><a href="#basis">知识对照</a><a href="#think">思考</a>
+  <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
+</nav>
+<div class="layout">
+  <nav class="toc" aria-label="站内导航">
+    <h3>站内导航</h3>
+    <a href="index.html">返回首页</a>
+    <a href="atlas.html">🧭 知识地图</a>
+    <a href="homework1.html">作业 1</a>
+    <a href="lab1.html">实验室 1</a>
+    <a href="homework2.html">作业 2</a>
+    <a href="lab2.html">实验室 2</a>
+    <a href="homework3.html">作业 3（本页）</a>
+    <a href="lab3.html">实验室 3</a>
+    <hr>
+    <a href="#origin">一、项目缘起</a>
+    <a href="#principle">二、工作原理</a>
+    <a href="#basis">三、前两篇知识对照</a>
+    <a href="#think">四、我的思考与局限</a>
+  <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener">↗ GitHub 仓库（源码）</a>
+</nav>
+  <main id="main-content" tabindex="-1">
+    <img class="banner" src="banner.svg" alt="人工智能概论课程作业站点封面">
+    <h1>作业 3 · 人工智能应用：诗中有画</h1>
+    <p class="meta">人工智能概论 · 第三篇「人工智能应用」 · 把「人工智能诗人」与「AI 绘画大师」串成一条从需求到诗、从诗到画的流水线</p>
+    <div class="note">说明：截止本页完成时，课程讲义原站仍只发布第一、二篇（20 章）。本作业依据教材对第三篇「人工智能应用 · 通过视觉、语言和机器人等任务认识技术」的定位展开，重点回望并调用前两篇学过的基础知识；待讲义第三篇上线后，再按原文逐条校对优化。</div>
+
+    <section class="card" id="origin">
+      <h2>一、项目缘起：诗中有画，画中有诗</h2>
+      <p>苏轼评王维「味摩诘之诗，诗中有画；观摩诘之画，画中有诗」。过去这句话只存在于赏析里——诗是语言艺术，画是视觉艺术，两者的转换靠人的想象。这一篇讲「人工智能应用」，课堂上先后接触了两个案例：一个是<b>人工智能诗人</b>，给出主题或几个词，它就能写出一首像模像样的诗；另一个是<b>AI 绘画大师</b>，给一段文字描述，它就能画出一幅对应的图。</p>
+      <p>我把这两个案例接在了一起：既然诗人能把「需求 → 诗」，画师能把「文字 → 画」，那么把两者的接口打通，就能得到「<b>一句话需求 → 一首诗 → 一幅画</b>」的完整链路。这就是本次作业的题目——「诗中有画」：让机器先把意图凝成意象、写成诗，再把诗里的意象铺陈成一幅有山有水、有月有舟的画——动画面可以用水墨晕染，也可以用现代色块或单色线描来表现。</p>
+      <div class="flow">
+        <div class="node">一句话需求<br><small style="color:#9a9ab8">主题 / 情感 / 风格</small></div>
+        <span class="arw">→</span>
+        <div class="node">人工智能诗人<br><small style="color:#9a9ab8">意象 + 格律 + 生成</small></div>
+        <span class="arw">→</span>
+        <div class="node t2">一首诗<br><small style="color:#9a9ab8">语义与意象的载体</small></div>
+        <span class="arw">→</span>
+        <div class="node t3">AI 绘画大师<br><small style="color:#9a9ab8">意象 → 视觉元素</small></div>
+        <span class="arw">→</span>
+        <div class="node t3">一幅画<br><small style="color:#9a9ab8">题款 + 钤印</small></div>
+      </div>
+      <p>配套交互项目放在 <a href="lab3.html" style="color:#2dd4bf;text-decoration:none">实验室 3 · 诗中有画</a>：输入你想表达的意思，选一种诗体，就能现场看到诗与画一起生成。本页先讲清楚它<em>为什么能工作</em>，以及它站在前两篇的哪些肩膀上。</p>
+    </section>
+
+    <section class="card" id="principle">
+      <h2>二、工作原理：从需求到诗，从诗到画</h2>
+      <p>整条链路可以拆成三段。每一段都不是魔法，而是前两篇里「表示—学习—生成」思想的组合。</p>
+
+      <h3>2.1 人工智能诗人：需求怎样变成一首诗</h3>
+      <p>诗人要做的事，是把模糊的意图变成受约束的文字序列。工程上分四步：</p>
+      <table>
+        <tr><th>步骤</th><th>做什么</th><th>对应前两篇的概念</th></tr>
+        <tr><td>① 意图解析</td><td>从需求里认出主题（思乡、送别、春景……）与情感基调（喜、悲、壮、淡）。</td><td>把自然语言变成可计算的<b>表示</b>（第 10、11 章：知识表示 vs 学习到的表示）</td></tr>
+        <tr><td>② 意象抽取</td><td>由主题联想一组意象：月、柳、舟、雁、雪……意象是诗的「语义骨架」。</td><td>特征与<b>中间表示</b>（第 15、16 章：隐藏层把输入映射到新空间）</td></tr>
+        <tr><td>③ 风格约束</td><td>选定诗体（五言 / 七言 / 词 / 现代诗 / 俳句 / 十四行），规定句数、字数与押韵方式。</td><td>规则与约束（第 10 章基于知识：格律是人写死的确定性规则）</td></tr>
+        <tr><td>④ 序列生成</td><td>在约束下逐字/逐词挑出最合适的下一个符号，组成诗句，再筛掉不通顺的候选。</td><td>从数据中学习概率规律（第 11、20 章基于学习：语言模型预测下一个词）</td></tr>
+      </table>
+      <p>换句话说，诗人同时用了两种力量：<b>人写的规则</b>（格律、押韵、字数）保证「像一首诗」，<b>从数据学到的规律</b>（哪些词常搭配、哪些意象常同现）保证「读起来通顺、有意境」。真实的大语言模型把第二步和第四步都放进一个巨大的神经网络里完成；实验室 3 为了能在浏览器里离线运行，用一个精简的意象词库与格律模板来做同样的分工——原理相同，规模不同。</p>
+
+      <h3>2.2 AI 绘画大师：诗句怎样变成一幅画</h3>
+      <p>画师的输入不是「关键词列表」，而是一整首诗。它要先把诗读成一组画面元素，再把它们安排到二维画布上：</p>
+      <div class="flow">
+        <div class="node t2">诗句</div><span class="arw">→</span>
+        <div class="node t2">意象识别<br><small style="color:#9a9ab8">月 / 山 / 水 / 舟 / 柳…</small></div><span class="arw">→</span>
+        <div class="node t3">视觉映射<br><small style="color:#9a9ab8">形状·墨色·位置</small></div><span class="arw">→</span>
+        <div class="node t3">构图渲染<br><small style="color:#9a9ab8">远近·留白·题款</small></div>
+      </div>
+      <p>关键在<b>视觉映射</b>：每个意象都对应一套画法——「月」是淡黄的圆与晕，「山」是浓淡相间的墨色轮廓，「水」是几道横向波纹，「舟」是一叶小形，「雁」是天边的几笔。识别出诗里有哪些意象，就从画法库里取出对应的绘制函数；再按「天在上、水在下、远山淡、近树浓」的常识安排位置，最后题上诗句、盖一枚朱红印章。这就是一幅「按诗生成的画」。</p>
+      <p>这里还有一个容易被忽略的点：<b>同一首诗应该画出同一幅画</b>。所以实验室 3 用诗句的哈希做随机种子，所有「随机」的墨点、波纹、飞鸟位置都由种子决定——可复现，才谈得上「这首诗的画」，而不是每次刷新都换一张。这与作业 2 里「固定随机种子保证实验可复现」是同一个道理。</p>
+
+      <h3>2.3 两段相接：一条「语义—意象—像素」的流水线</h3>
+      <p>诗人输出的诗，正是画师输入的文本；<b>意象</b>是两者共用的接口。诗人把需求压成意象写进诗，画师把诗里的意象解出来画成像素。这条链路把第一篇的「语言与智能」和第二篇的「表示、学习、网络结构、多模态」串成了一次完整的生成任务——也正是第三篇「人工智能应用」最典型的样子：<b>不是单一模型，而是把多种能力组织成一个能用的系统</b>。</p>
+    </section>
+
+    <section class="card" id="basis">
+      <h2>三、用到了前两篇的哪些人工智能基础知识</h2>
+      <p class="sub">这一节把项目拆回教材章节，逐条说明「哪里用到了」。这也是本作业刻意要做的事：应用不是凭空来的，它站在基础之上。</p>
+      <table>
+        <tr><th>教材章节</th><th>知识点</th><th>在本项目里的落点</th></tr>
+        <tr><td>第 1 章 什么是人工智能</td><td>让机器做需要人类智能的事</td><td>写诗、作画过去都被认为是「人的创造」，本项目正是让机器去尝试这两件典型的人类智能任务。</td></tr>
+        <tr><td>第 2、3 章 人类智能</td><td>语言、想象与知识积累</td><td>「意象」是人脑把感受组织成画面的方式；项目把意象显式化，作为诗与画的中间接口。</td></tr>
+        <tr><td>第 5 章 图灵</td><td>可计算与形式化</td><td>把「写诗」形式化为「在约束下生成符号序列」，才可能被程序处理。</td></tr>
+        <tr><td>第 7 章 发展历程</td><td>符号主义 ↔ 连接主义</td><td>格律词库是符号主义（人写规则），大模型生成是连接主义（从数据学），本项目两者并用。</td></tr>
+        <tr><td>第 8 章 让人惊讶的 AI</td><td>生成式 AI 的能力</td><td>「根据需求生成全新的诗与画」正是生成式 AI 让人惊讶的地方，也是本项目的直接灵感。</td></tr>
+        <tr><td>第 9 章 人工智能风险</td><td>幻觉、偏见、版权</td><td>模型可能「编造」事实、继承训练数据偏见；诗画作品的版权归属也是真实争议——见第四节。</td></tr>
+        <tr><td>第 10 章 基于知识的人工智能</td><td>规则由人写死、结果可复现</td><td>诗体的字数、押韵、意象到画法的映射表，都是人写的确定性规则。</td></tr>
+        <tr><td>第 11 章 基于学习的人工智能</td><td>从数据里学规则</td><td>真实诗人/画师模型的生成能力来自海量诗画数据的学习，不是把规则一条条写进去。</td></tr>
+        <tr><td>第 12 章 机器学习基本流程</td><td>数据 → 模型 → 训练 → 推理</td><td>「生成」对应流程最后的推理阶段；训练阶段决定了模型见过多少诗与画。</td></tr>
+        <tr><td>第 13、14 章 学习方法与策略</td><td>如何学、学到什么程度</td><td>生成质量取决于训练目标与数据；采样策略（贪心 vs 带随机）决定诗是稳妥还是灵动。</td></tr>
+        <tr><td>第 15 章 人工神经元网络</td><td>加权求和 + 激活</td><td>语言模型与图像模型的最底层，都是这种简单单元的堆叠。</td></tr>
+        <tr><td>第 16 章 典型网络结构</td><td>面向任务的网络结构</td><td>写诗常用 Transformer（处理序列），作画常用扩散模型 / CNN（处理图像）——结构为任务而生。</td></tr>
+        <tr><td>第 17 章 深度学习</td><td>多层表示、端到端</td><td>「语义 → 意象 → 像素」是逐层抽象的表示链，深层网络能把高维语义一步步变成画面。</td></tr>
+        <tr><td>第 18 章 深度学习前沿</td><td>多模态</td><td>把文字和图像放进同一个表示空间，是「图文互生成」能成立的前沿基础。</td></tr>
+        <tr><td>第 19 章 面临的挑战</td><td>泛化、过拟合</td><td>模型可能只会「背」见过的句子；能不能写出没见过的好诗，考验的是泛化而非记忆。</td></tr>
+        <tr><td>第 20 章 大模型时代</td><td>大语言模型 / 多模态大模型</td><td>完整版「AI 诗人 + 绘画大师」正是大模型时代的产物；本项目是它在浏览器里的教学化缩影。</td></tr>
+      </table>
+      <p>如果把这些章节再往上抽一层，可以归纳成三根支柱，整个项目都搭在它们上面：</p>
+      <div class="pillar">
+        <div class="pc"><h4>① 表示</h4><p>把主题、情感、意象变成可计算的形式。对应第 10/11 章的「知识表示」与「学习到的表示」，以及第 15/16 章的中间表示。</p></div>
+        <div class="pc"><h4>② 学习</h4><p>从大量诗画数据里学到「什么跟什么搭配」。对应第 11—14 章的学习流程、方法与策略。</p></div>
+        <div class="pc"><h4>③ 生成</h4><p>在约束下产出全新的诗与画，并保证可复现。对应第 17—20 章的深度学习、多模态与大模型。</p></div>
+      </div>
+    </section>
+
+    <section class="card" id="think">
+      <h2>四、我的思考与局限</h2>
+      <p>做完这个项目，最深的体会是：<b>第三篇的「应用」并没有引入一套全新的原理，它更像是一次 combinational 的调用</b>——把前两篇的「规则」「表示」「学习」「网络结构」按需拼起来，组织成一个能解决具体问题的系统。作业 1 用 Agent 写代码，作业 2 用 MLP 拟合 XOR，这次把语言与视觉接在一起，三者其实都在回答同一个问题：怎样把人的意图交给机器完成。</p>
+      <p>但我也清楚实验室 3 的边界。它为了离线运行，用的是<b>词库与模板</b>，不是真正从数据训练出来的大模型：诗句是意象按格律拼装的，画是意象按画法库绘制的。它能 demonstration「原理」，却达不到真实大模型的灵活与意境。这正是第 19 章讲的道理——能跑通流程，不等于学到了规律。真实系统里那些让诗「有味」、让画「传神」的能力，来自海量数据与巨大算力，不是几条规则能替代的。</p>
+      <p>还有第 9 章的现实风险：生成式模型会有幻觉、会继承训练数据里的偏见，AI 生成作品的著作权归属至今没有定论。把这些写进作业，不是为了唱衰，而是提醒自己：会用工具之前，先理解它的能力与边界。等讲义第三篇上线，我打算再回头逐条校对这一次的理解，看看哪些说对了、哪些想简单了。</p>
+      <div class="cta-card">
+        <h3>→ 去实验室 3，亲手生成一首诗和一幅画</h3>
+        <p style="color:#cfeee9">输入主题与情感，选一种诗体，看看「人工智能诗人」怎么写、「AI 绘画大师」怎么画，还能下载作品、生成实验报告。</p>
+        <a href="lab3.html">打开实验室 3 · 诗中有画 →</a>
+      </div>
+    </section>
+
+    <div class="footer" style="margin-top:26px;padding:16px 0;border-top:1px solid var(--border);color:#6f6f90;font-size:13px">
+      <p>人工智能概论 · 课程作业站点 · 作业 3</p>
+      <p><a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;text-decoration:none">↗ 返回 GitHub 仓库</a> · <a href="atlas.html#course" style="color:#2dd4bf;text-decoration:none">📖 课程教材 20 章对照</a></p>
+    </div>
+  </main>
+</div>
+<button class="totop" id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
+<script>
+var b=document.getElementById('totop');
+window.addEventListener('scroll',function(){if(window.scrollY>400)b.classList.add('show');else b.classList.remove('show');});
+</script>
+<style>
+#hwcmd-ov{position:fixed;inset:0;background:rgba(5,5,10,.72);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding-top:14vh}
+#hwcmd-ov.show{display:flex}
+#hwcmd-box{width:min(560px,92vw);background:#16161f;border:1px solid #a855f7;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.7);overflow:hidden}
+#hwcmd-in{width:100%;background:transparent;border:none;border-bottom:1px solid #26263a;color:#e8e8f0;font-size:16px;padding:16px;outline:none;box-sizing:border-box}
+#hwcmd-list{max-height:320px;overflow:auto;padding:8px}
+#hwcmd-list a{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:8px;color:#e8e8f0;font-size:13px;cursor:pointer;text-decoration:none}
+#hwcmd-list a:hover,#hwcmd-list a.sel{background:rgba(168,85,247,.18)}
+#hwcmd-list small{color:#9a9ab8;white-space:nowrap}
+#hwcmd-fab{position:fixed;right:22px;bottom:84px;z-index:90;background:linear-gradient(135deg,#a855f7,#3b82f6);color:#fff;border:none;border-radius:99px;padding:11px 16px;font-size:12px;cursor:pointer;box-shadow:0 8px 24px rgba(168,85,247,.4)}
+#hwcmd-fab:hover{filter:brightness(1.15)}
+#hwcmd-prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#a855f7,#2dd4bf);z-index:210;transition:width .1s}
+@media(max-width:640px){#hwcmd-fab{right:12px;bottom:76px;padding:9px 12px}}
+</style>
+<div id="hwcmd-prog"></div>
+<button id="hwcmd-fab" title="站内搜索 (Ctrl/⌘+K)">⌘K 站内搜索</button>
+<div id="hwcmd-ov"><div id="hwcmd-box"><input id="hwcmd-in" placeholder="搜索页面或章节，回车跳转…" autocomplete="off"><div id="hwcmd-list"></div></div></div>
+<script>
+(function(){
+var ITEMS=[
+/* ENH:CMD */
+ {t:'📖 课程教材 · 20 章脉络与本站实践对照',u:'atlas.html#course',d:'课程',k:'教材 人工智能通识 章节 大纲 第一篇 第二篇 王东 马少平 朱梦尧 课程坐标系 course'},
+ {t:'↗ 课程讲义原站 · Lecture V8',u:'https://zhumy.github.io/Introduction_to_Artificial_Intelligence/',d:'外链',k:'课程 讲义 教材 章节 原站 lecture 人工智能概论'},
+ {t:'🧭 知识地图 · 课程概念串联',u:'atlas.html#map',d:'扩展',k:'概念 知识图谱 地图 串联 梯度 泛化 复杂度 atlas'},
+ {t:'⏳ 确定性 vs 学习 · 对照时间轴',u:'atlas.html#timeline',d:'扩展',k:'时间轴 对照 幻方 筛法 收敛 叙事 timeline'},
+ {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
+ {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
+ {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
+ {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
+ {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
+/* /ENH:CMD */
+ {t:'首页 · 课程作业导航',u:'index.html',d:'首页',k:'首页 home index 导航'},
+ {t:'作业 1 · AI 编程工具作品展示',u:'homework1.html',d:'作业 1',k:'workbuddy deepseek trae 幻方 质数 agent'},
+ {t:'实验室 1 · 幻方与质数互动实验室',u:'lab1.html',d:'实验室 1',k:'幻方 质数 互动 算法 动画 实验室1'},
+ {t:'作业 2 · MLP 学习参数的实现和可视化',u:'homework2.html',d:'作业 2',k:'MLP 对比报告 参数 可视化 训练'},
+ {t:'实验室 2 · 实时神经网络训练台',u:'lab2.html',d:'实验室 2',k:'实时 训练 交互 画数据 神经元 探针 实验室2'},
+ {t:'作业 3 · 人工智能应用：诗中有画',u:'homework3.html',d:'作业 3',k:'应用 诗 画 诗人 绘画 多模态 大模型 第三篇'},
+ {t:'实验室 3 · 诗中有画交互项目',u:'lab3.html',d:'实验室 3',k:'诗 画 生成 水墨 现代 线描 英文诗 意象 实验室3'},
+ {t:'↗ GitHub 仓库 · 源码 / README',u:'https://github.com/he-yikang/homework',d:'外链',k:'仓库 源码 github repository 返回仓库'}
+];
+var ov=document.getElementById('hwcmd-ov'),inp=document.getElementById('hwcmd-in'),list=document.getElementById('hwcmd-list'),sel=0,shown=[];
+function render(q){shown=ITEMS.filter(function(i){return (i.t+i.k+i.d).toLowerCase().indexOf(q.toLowerCase())>=0;});sel=0;list.innerHTML=shown.length?shown.map(function(i,n){return '<a class="'+(n===0?'sel':'')+'" href="'+i.u+'">'+i.t+'<small>'+i.d+'</small></a>';}).join(''):'<div style="color:#6f6f90;text-align:center;padding:16px;font-size:12px">没有匹配的页面或章节</div>';}
+function open(){ov.classList.add('show');inp.value='';render('');inp.focus();}
+function close(){ov.classList.remove('show');}
+document.getElementById('hwcmd-fab').onclick=open;
+ov.onclick=function(e){if(e.target===ov)close();};
+inp.addEventListener('input',function(){render(inp.value);});
+inp.addEventListener('keydown',function(e){
+ if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(shown.length-1,sel+1);}
+ else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(0,sel-1);}
+ else if(e.key==='Enter'){if(shown[sel])location.href=shown[sel].u;}
+ else if(e.key==='Escape')close();
+ var a=list.querySelectorAll('a');for(var i=0;i<a.length;i++)a[i].classList.toggle('sel',i===sel);
+});
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();ov.classList.contains('show')?close():open();}
+ else if(e.key==='Escape')close();
+});
+window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('hwcmd-prog').style.width=(h>0?window.scrollY/h*100:0)+'%';});
+})();
+</script>
+<!-- ENH:COMMON -->
+<style>
+#enh-fab,#enh-tour-fab{position:fixed;left:18px;z-index:95;border:1px solid rgba(45,212,191,.45);background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(168,85,247,.16));color:#e8e8f0;border-radius:99px;padding:9px 14px;font-size:12px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 6px 20px rgba(0,0,0,.4);font-family:inherit}
+#enh-fab{bottom:20px}
+#enh-tour-fab{bottom:64px;border-color:rgba(168,85,247,.5)}
+#enh-fab:hover,#enh-tour-fab:hover{filter:brightness(1.28)}
+#enh-toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);z-index:260;background:#1c1c28;border:1px solid #2dd4bf;color:#e8e8f0;padding:11px 20px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.28s;box-shadow:0 12px 36px rgba(0,0,0,.6);max-width:88vw;text-align:center}
+#enh-toast.show{opacity:1;transform:translate(-50%,0)}
+#enh-panel{position:fixed;inset:0;background:rgba(5,5,10,.76);backdrop-filter:blur(7px);z-index:230;display:none;align-items:center;justify-content:center;padding:20px}
+#enh-panel.show{display:flex}
+#enh-panel .box{width:min(720px,94vw);max-height:86vh;overflow:auto;background:linear-gradient(160deg,#1c1c28,#14141e);border:1px solid #33334d;border-radius:18px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.7)}
+#enh-panel h3{margin:0 0 4px;font-size:20px;background:linear-gradient(90deg,#a855f7,#2dd4bf);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#enh-panel .sub{color:#9a9ab8;font-size:12px;margin-bottom:16px}
+#enh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+#enh-grid a{display:block;text-decoration:none;color:#e8e8f0;border:1px solid #2c2c42;background:rgba(255,255,255,.025);border-radius:12px;padding:12px 14px;transition:.2s}
+#enh-grid a:hover{border-color:#a855f7;background:rgba(168,85,247,.12);transform:translateY(-2px)}
+#enh-grid b{display:block;font-size:13px;margin-bottom:4px}
+#enh-grid small{color:#9a9ab8;font-size:11px;line-height:1.5}
+#enh-panel .close{float:right;background:none;border:1px solid #3a3a55;color:#c8c8dd;border-radius:8px;padding:4px 11px;cursor:pointer;font-size:12px}
+#enh-panel .readme{display:block;margin-top:16px;text-align:center;color:#2dd4bf;font-size:12px;text-decoration:none}
+#enh-tourbar{position:fixed;left:50%;bottom:22px;transform:translate(-50%,120%);z-index:240;width:min(620px,92vw);background:linear-gradient(135deg,#1d1d2c,#171722);border:1px solid #a855f7;border-radius:16px;padding:15px 18px;box-shadow:0 18px 50px rgba(0,0,0,.7);transition:.35s;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+#enh-tourbar.show{transform:translate(-50%,0)}
+#enh-tourbar .tx{flex:1;min-width:200px}
+#enh-tourbar b{display:block;font-size:14px;color:#e8e8f0;margin-bottom:3px}
+#enh-tourbar small{font-size:12px;color:#9a9ab8;line-height:1.5}
+#enh-tourbar .pg{font-size:11px;color:#2dd4bf;letter-spacing:1px;white-space:nowrap}
+#enh-tourbar button{border:1px solid #3a3a55;background:rgba(255,255,255,.04);color:#e8e8f0;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+#enh-tourbar button.pri{background:linear-gradient(120deg,#a855f7,#3b82f6);border:none;color:#fff}
+.enh-hl{outline:2px solid #2dd4bf;outline-offset:6px;border-radius:10px}
+#enh-achv{margin:26px 0 4px;padding:18px 20px;border:1px solid rgba(168,85,247,.3);border-radius:16px;background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(45,212,191,.06))}
+#enh-achv .hd{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+#enh-achv h3{font-size:16px;margin:0}
+#enh-achv .ring{flex:0 0 auto}
+#enh-achv .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#enh-achv .bd{font-size:11px;padding:5px 11px;border-radius:99px;border:1px solid #33334d;color:#6f6f90;background:rgba(255,255,255,.02)}
+#enh-achv .bd.on{color:#2dd4bf;border-color:rgba(45,212,191,.5);background:rgba(45,212,191,.1)}
+@media(max-width:640px){#enh-fab,#enh-tour-fab{left:10px;padding:8px 11px;font-size:11px}#enh-tourbar{bottom:10px}}
+</style>
+<button id="enh-fab" title="八项扩展能力">✦ 扩展能力</button>
+<button id="enh-tour-fab" title="自动导览">▶ 带我看一遍</button>
+<div id="enh-toast"></div>
+<div id="enh-panel"><div class="box">
+  <button class="close" id="enh-panel-close">关闭 ✕</button>
+  <h3>🧭 扩展能力 · 创新交互 + 课程坐标系</h3>
+  <div class="sub">原有栏目结构保持不变，以下能力作为扩展层挂在各页；点任意一项直达。</div>
+  <div id="enh-grid">
+    <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 20 章</b><small>《人工智能通识》20 章逐章对照本站实践，可搜索、筛选、标记已读，并直达讲义原文</small></a>
+    <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
+    <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>11 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
+    <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
+    <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
+    <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
+    <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
+    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成水墨画，第三篇「人工智能应用」交互项目</small></a>
+  </div>
+  <a class="readme" href="https://github.com/he-yikang/homework#enhance" target="_blank" rel="noopener">↗ 这些能力在 README 里也有完整说明与直达链接</a>
+</div></div>
+<div id="enh-tourbar"><span class="pg" id="enh-tour-pg"></span><div class="tx"><b id="enh-tour-t"></b><small id="enh-tour-d"></small></div><button id="enh-tour-skip">跳过</button><button id="enh-tour-next" class="pri">下一步 →</button></div>
+<script>
+(function(){
+'use strict';
+var KEY='hw_enh_v1', REPO='https://github.com/he-yikang/homework';
+var ACHV=[
+ {id:'magic1000',t:'百万格校验',d:'在实验室 1 跑完 1000 阶幻方极限校验'},
+ {id:'prime4',t:'四种筛法',d:'在实验室 1 完成四种质数算法竞赛'},
+ {id:'prime168',t:'168 个质数',d:'把质数上限设为 1000，找到原文那 168 个质数'},
+ {id:'spiral100',t:'螺旋全对',d:'在实验室 2 把三类螺旋数据训到 100%'},
+ {id:'custom90',t:'自己出题',d:'用自画数据集训到 90% 以上'},
+ {id:'sgdbeat',t:'SGD 也不错',d:'用 SGD 优化器把准确率训到 95% 以上'},
+ {id:'probe',t:'看见神经元',d:'点开隐藏层节点查看感受野'},
+ {id:'grad',t:'梯度显微镜',d:'采样一次逐层梯度范数'},
+ {id:'report',t:'能交的作业',d:'导出一份实验报告'},
+ {id:'challenge',t:'挑战达成',d:'完成一个分享给你的训练挑战'},
+ {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
+ {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
+ {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
+ {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'}
+];
+var state={u:{},c:[]};
+try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function toast(msg){var t=document.getElementById('enh-toast');if(!t)return;t.textContent=msg;t.className='show';clearTimeout(t._t);t._t=setTimeout(function(){t.className='';},2500);}
+function unlock(id){
+  if(state.u[id])return false;
+  var a=null;for(var i=0;i<ACHV.length;i++)if(ACHV[i].id===id)a=ACHV[i];
+  if(!a)return false;
+  state.u[id]=Date.now();save();
+  toast('🏅 成就解锁 · '+a.t+'｜'+a.d);
+  var box=document.getElementById('enh-achv');if(box)renderAchv(box);
+  return true;
+}
+function done(){var n=0;for(var i=0;i<ACHV.length;i++)if(state.u[ACHV[i].id])n++;return n;}
+var ACHV_BTN='<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button style="border:1px solid #3a3a55;background:rgba(168,85,247,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="window.ENH.exportAchv()">⬇ 导出进度</button><button style="border:1px solid #3a3a55;background:rgba(45,212,191,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="document.getElementById(\'enh-imp\').click()">⬆ 导入进度</button><input id="enh-imp" type="file" accept="application/json" style="display:none" onchange="if(this.files[0])window.ENH.importAchv(this.files[0])"></div>';
+function exportAchv(){try{var data=JSON.stringify({v:1,state:state},null,2);var blob=new Blob([data],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='homework-achievements.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);toast('已导出探索进度');}catch(e){toast('导出失败');}}
+function importAchv(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(d&&d.state){state.u=d.state.u||{};state.c=d.state.c||[];save();var box=document.getElementById('enh-achv');if(box)renderAchv(box);toast('已导入探索进度 · 解锁 '+done()+'/'+ACHV.length);}else{toast('文件格式不对');}}catch(e){toast('导入失败：格式错误');}};r.readAsText(file);}
+function renderAchv(box){
+  var n=done(),pct=n/ACHV.length,r=38,c=2*Math.PI*r;
+  var ring='<svg class="ring" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2c2c42" stroke-width="8"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+(c*pct).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="45" text-anchor="middle" fill="#e8e8f0" font-size="17" font-weight="700">'+n+'/'+ACHV.length+'</text><text x="48" y="62" text-anchor="middle" fill="#9a9ab8" font-size="9">已解锁</text></svg>';
+  var bd='';for(var j=0;j<ACHV.length;j++){var a=ACHV[j];bd+='<span class="bd'+(state.u[a.id]?' on':'')+'" title="'+a.d+'">'+(state.u[a.id]?'✓ ':'🔒 ')+a.t+'</span>';}
+  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机；可导出 / 导入，换设备也不丢。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部交互。</div></div>'+ACHV_BTN+'</div><div class="badges">'+bd+'</div>';
+}
+window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO,exportAchv:exportAchv,importAchv:importAchv};
+var box=document.getElementById('enh-achv');if(box)renderAchv(box);
+
+/* 扩展能力面板 */
+var panel=document.getElementById('enh-panel');
+function openPanel(){panel.className='show';}
+function closePanel(){panel.className='';}
+document.getElementById('enh-fab').onclick=openPanel;
+document.getElementById('enh-panel-close').onclick=closePanel;
+panel.onclick=function(e){if(e.target===panel)closePanel();};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePanel();stopTour();}});
+
+/* 自动导览 */
+var TOUR={
+ 'index.html':{next:'homework1.html',steps:[
+  {t:'欢迎来到课程作业站点',d:'卡片对应各次作业与实验室，顺序为 作业 1 → 实验室 1 → 作业 2 → 实验室 2 → 作业 3 → 实验室 3。',s:'.grid'},
+  {t:'扩展层与探索进度',d:'左下角「✦ 扩展能力」随时打开八项交互；这里的进度环记录你做过的实验。',s:'#enh-achv'}]},
+ 'homework1.html':{next:'lab1.html',steps:[
+  {t:'作业 1 · AI 编程工具实践',d:'原文与三张过程截图完整保留，记录了 TRAE / DeepSeek Codex / WorkBuddy 的分工和踩坑。',s:null},
+  {t:'从作品延伸出实验室',d:'页面底部的引导卡片通往实验室 1，把当时的 Python 作品变成可以亲手调参的网页实验。',s:null}]},
+ 'lab1.html':{next:'homework2.html',steps:[
+  {t:'🔢 幻方实验室',d:'拖动阶数看三种构造算法逐格填数，实时校验幻和；「极限校验」真跑 1000 阶 100 万格。',s:'#magic'},
+  {t:'⚡ 质数实验室',d:'四种算法同场计时，逐轮播放筛法划掉倍数，默认上限 1000 正好得到原文那 168 个质数。',s:'#prime'}]},
+ 'homework2.html':{next:'lab2.html',steps:[
+  {t:'作业 2 · 训练过程回放',d:'首屏是 PyTorch 训练的逐帧回放，下面是架构对比与九张分析图。',s:'#lab'},
+  {t:'从回放走向现场训练',d:'报告里的 CTA 通往实验室 2 —— 那里不是看录像，而是在浏览器里真跑反向传播。',s:'#arch'}]},
+ 'lab2.html':{next:'homework3.html',steps:[
+  {t:'实时神经网络训练台',d:'画数据、改隐藏层、调学习率，决策边界与 loss 曲线每帧刷新。',s:'#boundary'},
+  {t:'梯度显微镜与 3D 决策空间',d:'看懂「为什么学得动」：优化轨迹、逐层梯度、可旋转的置信度曲面。',s:'#grad'},
+  {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
+ 'homework3.html':{next:'lab3.html',steps:[
+  {t:'作业 3 · 人工智能应用：诗中有画',d:'把「人工智能诗人」与「AI 绘画大师」接成一条流水线：需求 → 诗 → 画，讲清工作原理。',s:'#origin'},
+  {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
+ 'lab3.html':{next:'atlas.html',steps:[
+  {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
+  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#how'}]},
+ 'atlas.html':{next:null,steps:[
+  {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
+  {t:'📖 课程教材脉络',d:'《人工智能通识》20 章逐章对照：哪几章在本站有实验、点一下就能回讲义原文。',s:'#course'},
+  {t:'确定性 vs 学习',d:'同一条时间轴并排看幻方 / 筛法与神经网络收敛，标出共同点与那道分界。',s:'#timeline'}]}
+};
+var bar=document.getElementById('enh-tourbar'),curPage=location.pathname.split('/').pop()||'index.html';
+if(curPage===''||curPage.indexOf('.html')<0)curPage='index.html';
+var ti=0,timer=null,active=false,hl=null;
+function clearHl(){if(hl){hl.classList.remove('enh-hl');hl=null;}}
+function showStep(){
+  var conf=TOUR[curPage];if(!conf)return;
+  var st=conf.steps[ti];
+  document.getElementById('enh-tour-pg').textContent=(ti+1)+' / '+conf.steps.length;
+  document.getElementById('enh-tour-t').textContent=st.t;
+  document.getElementById('enh-tour-d').textContent=st.d;
+  var nx=document.getElementById('enh-tour-next');
+  nx.textContent=(ti===conf.steps.length-1)?(conf.next?'下一站 →':'结束导览 ✓'):'下一步 →';
+  clearHl();
+  if(st.s){var el=null;try{el=document.querySelector(st.s);}catch(e){}if(el){el.scrollIntoView({behavior:'smooth',block:'center'});hl=el;hl.classList.add('enh-hl');}}
+  else window.scrollTo({top:0,behavior:'smooth'});
+  clearTimeout(timer);
+  if(ti<conf.steps.length-1)timer=setTimeout(nextStep,4600);
+}
+function nextStep(){
+  var conf=TOUR[curPage];if(!conf)return;
+  if(ti<conf.steps.length-1){ti++;showStep();return;}
+  if(conf.next){try{sessionStorage.setItem('hw_tour','1');}catch(e){}location.href=conf.next+'?tour=1';}
+  else{stopTour();window.ENH.unlock('atlas');window.ENH.toast('🎉 导览完成，感谢观看！');}
+}
+function startTour(){active=true;ti=0;bar.className='show';showStep();}
+function stopTour(){if(!active)return;active=false;clearTimeout(timer);clearHl();bar.className='';try{sessionStorage.removeItem('hw_tour');}catch(e){}}
+document.getElementById('enh-tour-fab').onclick=startTour;
+document.getElementById('enh-tour-link').onclick=function(e){e.preventDefault();closePanel();startTour();};
+document.getElementById('enh-tour-next').onclick=nextStep;
+document.getElementById('enh-tour-skip').onclick=stopTour;
+if(/[?&]tour=1/.test(location.search)){
+  setTimeout(function(){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}startTour();},700);
+}
+window.ENH.startTour=startTour;
+window.ENH.stopTour=stopTour;
+})();
+</script>
+<!-- /ENH:COMMON -->
+</body></html>

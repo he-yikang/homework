@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>实验室 3 · 诗中有画 · 人工智能概论课程作业</title>
+<style>
+.skip-link{position:absolute;left:-9999px;top:8px;z-index:300;background:#a855f7;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px}
+.skip-link:focus{left:12px}
+@media print{*{box-shadow:none!important}body{background:#fff!important;color:#111!important}.topnav,.totop,.skip-link,#hwcmd-ov,#hwcmd-fab,.enh-tourbar,#enh-panel,.enh-note,.no-print{display:none!important}.panel{border:1px solid #ccc;break-inside:avoid}a{color:#111!important}.grid{grid-template-columns:1fr!important}}
+:root{--bg:#0a0a0f;--card:#16161f;--card2:#1c1c28;--border:#26263a;--text:#e8e8f0;--dim:#9a9ab8;--purple:#a855f7;--blue:#3b82f6;--teal:#2dd4bf;--gold:#e8c07d}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradient(circle at 12% 0%,#1a1530 0%,var(--bg) 52%) fixed;color:var(--text);line-height:1.6;min-height:100vh}
+.topnav{position:sticky;top:0;z-index:60;display:flex;align-items:center;gap:10px;padding:12px 24px;background:rgba(10,10,15,.8);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.topnav .logo{font-weight:700;font-size:16px;background:linear-gradient(90deg,var(--purple),var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;margin-right:8px}
+.topnav a{color:var(--dim);text-decoration:none;font-size:13px;padding:6px 12px;border-radius:8px;transition:.2s;white-space:nowrap}
+.topnav a:hover,.topnav a.active{color:#fff;background:rgba(168,85,247,.18)}
+.topnav .spacer{flex:1}
+.wrap{max-width:1440px;margin:0 auto;padding:24px}
+.hero{text-align:center;padding:20px 12px 8px}
+.hero .badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:1px;color:var(--gold);border:1px solid rgba(232,192,125,.35);background:rgba(232,192,125,.08);padding:5px 14px;border-radius:99px;margin-bottom:12px}
+.hero h1{font-size:clamp(26px,4vw,40px);letter-spacing:1px;background:linear-gradient(100deg,#fff 10%,var(--purple) 42%,var(--blue) 68%,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--dim);font-size:14px;margin-top:8px}
+.grid{display:grid;grid-template-columns:320px minmax(320px,1fr) minmax(360px,500px);gap:16px;align-items:start;margin-top:18px}
+@media(max-width:1200px){.grid{grid-template-columns:300px 1fr}.col-art{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}}
+@media(max-width:860px){.grid{grid-template-columns:1fr}.col-art{grid-column:auto;grid-template-columns:1fr}}
+.panel{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.3);margin-bottom:16px}
+.panel h2{font-size:14px;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel h2::before{content:'';width:3px;height:15px;border-radius:3px;background:linear-gradient(var(--purple),var(--gold))}
+.ctl{margin-bottom:11px}
+.ctl label{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-bottom:5px}
+input.txt,select{width:100%;background:#101018;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:13px;outline:none;font-family:inherit}
+input.txt:focus,select:focus{border-color:var(--purple)}
+select optgroup{background:#1c1c28;color:#e8c07d;font-weight:700}
+select option{background:#101018;color:#e8e8f0;font-weight:400}
+.seg{display:flex;gap:5px;flex-wrap:wrap}
+.seg button{flex:1;min-width:44px;background:#101018;border:1px solid var(--border);color:var(--dim);border-radius:8px;padding:6px 4px;font-size:12px;cursor:pointer;transition:.18s}
+.seg button:hover{border-color:var(--purple);color:#fff}
+.seg button.on{background:linear-gradient(135deg,rgba(168,85,247,.32),rgba(232,192,125,.25));border-color:var(--purple);color:#fff}
+.btn{width:100%;background:#101018;border:1px solid var(--border);color:var(--text);border-radius:9px;padding:9px;font-size:13px;cursor:pointer;transition:.2s;margin-top:7px}
+.btn:hover{border-color:var(--purple);background:rgba(168,85,247,.1)}
+.btn.primary{background:linear-gradient(120deg,var(--purple),var(--blue));border:none;color:#fff;font-weight:600;box-shadow:0 6px 20px rgba(168,85,247,.3)}
+.btn.sm{width:auto;flex:1;margin-top:0;padding:7px 6px;font-size:12px}
+.row{display:flex;gap:7px;margin-top:7px}
+.tip{font-size:11px;color:#6f6f90;line-height:1.6;margin-top:7px}
+.poem-box{border-radius:12px;padding:20px 18px;min-height:340px;position:relative;overflow:hidden}
+.poem-paper{background:linear-gradient(160deg,#f6efdc,#ebe1c6);border:1px solid #b8a880;color:#2a2418}
+.poem-canvas{background:radial-gradient(120% 100% at 30% 0%,#241a3a,#10101a);border:1px solid #3a2a55;color:#efe7c9}
+.poem-box::before{content:' poem · generated';position:absolute;top:9px;left:14px;font-size:10px;color:#9a8b64;letter-spacing:2px;opacity:.8}
+.poem-canvas::before{color:#a892c9}
+/* 横排：逐行铺开、整体居中，占满卡片宽度 */
+.poem-hlines{text-align:center;font-family:'KaiTi','STKaiti','SimSun',serif;font-size:17px;line-height:2.05;letter-spacing:2px;padding:26px 4px 10px}
+.poem-hlines .pt{font-size:20px;font-weight:700;color:#8a2b1f;display:block;margin-bottom:12px;letter-spacing:3px}
+.poem-hlines .ln{display:block;white-space:nowrap}
+.poem-canvas .poem-hlines .pt{color:#e8c07d}
+/* 英文横排：左对齐分栏铺开 */
+.poem-en{font-family:Georgia,'Times New Roman',serif;font-size:15px;line-height:1.95;text-align:left;padding:26px 14px 10px;letter-spacing:.2px}
+.poem-en .pt{font-size:17px;font-style:italic;display:block;margin-bottom:12px;color:#8a2b1f}
+.poem-canvas .poem-en .pt{color:#e8c07d}
+/* 竖排：每句独立一列，列沿水平方向（block 轴）从右到左均匀排开 */
+.poem-vert{writing-mode:vertical-rl;text-orientation:upright;display:flex;flex-direction:column;justify-content:space-evenly;align-items:flex-start;gap:4px;height:300px;width:100%;font-family:'KaiTi','STKaiti','SimSun',serif;font-size:18px;line-height:1.9;letter-spacing:2px;padding:26px 10px 14px 0;overflow-x:auto;overflow-y:hidden}
+.poem-vert .pl{white-space:nowrap;flex:0 0 auto}
+.poem-vert .pt{font-size:21px;font-weight:700;color:#8a2b1f}
+.poem-empty{color:#9a8b64;font-size:13px;text-align:center;padding-top:140px;font-family:system-ui,sans-serif;letter-spacing:0}
+.canvas-box{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0b0b12;aspect-ratio:4/3}
+canvas{width:100%;height:100%;display:block}
+.art-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#6f6f90;font-size:13px;text-align:center;padding:20px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;min-height:24px}
+.chip{font-size:11px;color:var(--teal);border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.08);border-radius:99px;padding:3px 10px}
+.stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#6f6f90}
+.stat b{color:var(--teal);font-weight:500}
+.notice{font-size:12px;color:#cfeee9;background:rgba(45,212,191,.07);border-left:3px solid var(--teal);padding:10px 12px;border-radius:0 8px 8px 0;margin-top:10px;line-height:1.7}
+details{border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,.02);padding:10px 14px;margin-top:14px;font-size:13px;color:var(--dim)}
+summary{cursor:pointer;color:var(--gold);font-size:13px}
+details p{margin-top:8px;line-height:1.75}
+code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:5px;color:var(--teal);font-size:.92em}
+.totop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;cursor:pointer;font-size:15px;box-shadow:0 6px 20px rgba(168,85,247,.4);opacity:0;transition:.3s;pointer-events:none;z-index:60}
+.totop.show{opacity:1;pointer-events:auto}
+</style><meta property="og:type" content="website">
+<meta property="og:title" content="实验室 3 · 诗中有画">
+<meta property="og:description" content="纯前端交互：40 种诗体（含 22 种词牌曲牌，古今中外 8 大类）、20 种画风（5 大类），输入需求生成诗与画，可切换横竖排版。">
+<meta property="og:site_name" content="课程作业站点">
+<meta name="twitter:card" content="summary">
+</head><body>
+<a class="skip-link" href="#main-content">跳到正文</a>
+<nav class="topnav" aria-label="主导航">
+  <span class="logo">实验室 3 · 诗中有画</span>
+  <a href="index.html">首页</a>
+  <a href="atlas.html">🧭 知识地图</a>
+  <a href="homework1.html">作业 1</a>
+  <a href="lab1.html">实验室 1</a>
+  <a href="homework2.html">作业 2</a>
+  <a href="lab2.html">实验室 2</a>
+  <a href="homework3.html">作业 3</a>
+  <a href="lab3.html" class="active">实验室 3</a>
+  <span class="spacer"></span>
+  <a href="#studio">创作台</a><a href="#how">原理</a>
+  <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
+</nav>
+<div class="wrap" id="main-content">
+  <div class="hero">
+    <span class="badge">✦ 第三篇 · 人工智能应用 · 纯前端离线运行</span>
+    <h1>诗中有画 · 交互实验室</h1>
+    <p>一句话需求 → 40 种诗体作诗（含 22 种词牌曲牌，古今中外 8 大类）→ 20 种画风作画（5 大类）</p>
+  </div>
+
+  <div class="grid" id="studio">
+    <!-- 控制面板 -->
+    <div>
+      <section class="panel">
+        <h2>① 说出你的需求</h2>
+        <div class="ctl">
+          <label>主题 / 关键词 <span style="color:#6f6f90">如：秋夜 江边 思乡</span></label>
+          <input class="txt" id="theme" value="秋夜江边" placeholder="输入主题或几个意象词…">
+        </div>
+        <div class="ctl">
+          <label>情感基调</label>
+          <div class="seg" id="moodSeg">
+            <button data-v="jing" class="on">静</button><button data-v="bei">愁</button><button data-v="xi">喜</button><button data-v="zhuang">壮</button><button data-v="you">幽</button>
+          </div>
+        </div>
+        <div class="ctl">
+          <label>诗体 <span style="color:#6f6f90" id="formCount"></span></label>
+          <select id="formSel"></select>
+        </div>
+        <div class="ctl">
+          <label>画风 <span style="color:#6f6f90" id="styleCount"></span></label>
+          <select id="styleSel"></select>
+        </div>
+        <div class="ctl">
+          <label>诗的排版</label>
+          <div class="seg" id="layoutSeg">
+            <button data-v="horiz" class="on">横排 · 逐行</button><button data-v="vert">竖排 · 传统</button>
+          </div>
+        </div>
+        <button class="btn primary" id="genBtn">✦ 生成诗与画</button>
+        <button class="btn" id="regenBtn">↻ 换个写法重生成</button>
+        <p class="tip">主题里的字会自动匹配意象（月/山/水/柳/雪/花/鸟/舟/竹/云/亭/星）；留空则按情感随机取景。诗体与画风见下拉分组，可随时切换。</p>
+      </section>
+
+      <section class="panel" id="how">
+        <h2>② 它怎么工作</h2>
+        <details open>
+          <summary>需求 → 诗：规则 + 意象</summary>
+          <p>先由主题匹配一组<b style="color:#c4a4f8">意象</b>（月、山、水、舟…），再按所选诗体的<b style="color:#c4a4f8">格律</b>（句数、字数、韵脚）逐句拼装；词曲用长短句模板，英文诗用英文意象词填句式。对应教材第 10 章<b>基于知识</b>的方法。</p>
+        </details>
+        <details>
+          <summary>诗 → 画：意象映射成不同笔墨</summary>
+          <p>画师从诗句读回意象，再按画风参数（色板、背景、笔法模式）绘制：水墨晕染、工笔平涂、白描勾线、印象派点彩、立体主义几何、赛博霓虹……同一个意象在不同画风下画法完全不同，这正是<b style="color:#c4a4f8">语义 → 视觉表示</b>的直观演示。</p>
+        </details>
+        <details>
+          <summary>为什么每次都一样 / 可复现</summary>
+          <p>画里所有「随机」元素都由诗句的<b style="color:#c4a4f8">哈希种子</b>决定，同一首诗、同一画风永远得到同一幅画——和作业 2「固定随机种子保证实验可复现」是一个道理（第 19 章）。</p>
+        </details>
+        <div class="notice">本站为离线教学版：诗句由词库与格律/模板拼装、画由代码绘制，规模远小于真实大模型，但完整演示「语义 → 意象 → 像素」流水线。详见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3 · 工作原理</a>。</div>
+      </section>
+    </div>
+
+    <!-- 诗歌 -->
+    <section class="panel">
+      <h2>③ 人工智能诗人 <span style="font-size:11px;color:var(--gold);font-weight:400" id="poemFormTag">— 生成的诗</span></h2>
+      <div class="poem-box poem-paper" id="poemBox"><div class="poem-empty">点击左侧「生成诗与画」<br>这里会出现一首为你而作的诗</div></div>
+      <div class="row no-print">
+        <button class="btn sm" id="copyPoem">复制诗</button>
+        <button class="btn sm" id="dlPoem">下载 .txt</button>
+      </div>
+      <div class="stat" id="poemStat" aria-live="polite"></div>
+    </section>
+
+    <!-- 画作 -->
+    <div class="col-art">
+      <section class="panel">
+        <h2>④ AI 绘画大师 <span style="font-size:11px;color:var(--gold);font-weight:400" id="artStyleTag">— 水墨</span></h2>
+        <div class="canvas-box">
+          <canvas id="art" width="800" height="600"></canvas>
+          <div class="art-empty" id="artEmpty">画作会随诗一起生成<br>（按诗句意象与所选画风绘制）</div>
+        </div>
+        <div class="chips" id="imgChips"></div>
+        <div class="row no-print" style="margin-top:10px">
+          <button class="btn sm" id="dlArt">下载画作 .png</button>
+          <button class="btn sm" id="reportBtn">📄 实验报告</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <details class="no-print" style="max-width:1440px">
+    <summary>📖 诗体 40 种 / 画风 20 种 · 完整清单</summary>
+    <p><b style="color:#2dd4bf">诗体（8 类 40 种）</b>：中国古典诗（五绝/七绝/五律/七律/古体/乐府）；<b style="color:#e8c07d">宋词·小令</b>（如梦令/忆江南/相见欢/卜算子/采桑子/鹊桥仙/醉花阴）、<b style="color:#e8c07d">宋词·中调</b>（浣溪沙/蝶恋花/临江仙/虞美人/浪淘沙/一剪梅/青玉案/江城子）、<b style="color:#e8c07d">宋词·长调</b>（水调歌头/念奴娇/满江红/沁园春）、<b style="color:#e8c07d">元曲</b>（天净沙/山坡羊/水仙子）——共 22 种词牌曲牌，各按真实字数格律；中国现当代（自由诗/散文诗/朦胧诗/打油诗/中文俳句）、东亚短诗（俳句/短歌）、西方诗歌（英文自由诗/十四行诗/五行打油诗/英文俳句/颂歌）。</p>
+    <p><b style="color:#2dd4bf">画风（5 类 20 种）</b>：中国绘画（水墨/工笔/写意/青绿/白描）、东方绘画（浮世绘/禅意）、西方古典（油画/水彩/素描/版画）、西方现代（印象派/立体主义/极简/波普/抽象表现/超现实）、数字当代（赛博朋克/像素/扁平插画）。</p>
+    <p>用到的前两篇知识见 <a href="homework3.html#basis" style="color:#2dd4bf">作业 3 · 前两篇知识对照</a>。全部由原生 JS + Canvas 实现，断网可用。</p>
+  </details>
+</div>
+<button class="totop" id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
+
+<script>
+(function(){
+'use strict';
+/* ================= 意象词库 ================= */
+var IMG={
+ moon:{n:'月',w:['明月','孤月','皓月','凉月','残月']},
+ mountain:{n:'山',w:['远山','青山','空山','孤峰','层峦']},
+ water:{n:'水',w:['江水','流水','秋水','寒江','碧波']},
+ willow:{n:'柳',w:['垂柳','杨柳','柳岸','疏柳','青柳']},
+ snow:{n:'雪',w:['飞雪','白雪','残雪','暮雪','寒雪']},
+ flower:{n:'花',w:['落花','梅花','桃花','飞花','繁花']},
+ bird:{n:'鸟',w:['归鸟','孤雁','飞鸟','寒鸦','白鹭']},
+ boat:{n:'舟',w:['孤舟','轻舟','扁舟','渔舟','行舟']},
+ bamboo:{n:'竹',w:['修竹','翠竹','疏竹','青竹','幽篁']},
+ cloud:{n:'云',w:['白云','浮云','暮云','寒云','流云']},
+ pavilion:{n:'亭',w:['孤亭','长亭','小亭','山亭','水亭']},
+ star:{n:'星',w:['星河','疏星','繁星','寒星','晨星']}
+};
+var EN_W={
+ moon:['the moon','a pale moon','the silver moon'],
+ mountain:['the mountains','distant hills','the old peaks'],
+ water:['the river','still water','the sea'],
+ willow:['the willow','willow branches'],
+ snow:['the snow','falling snow'],
+ flower:['the blossoms','wild flowers'],
+ bird:['a lone bird','the birds'],
+ boat:['a small boat','the boat'],
+ bamboo:['the bamboo','green bamboo'],
+ cloud:['the clouds','white clouds'],
+ pavilion:['the pavilion','an old pavilion'],
+ star:['the stars','starlight']
+};
+var THEME={
+ '春':['willow','flower','water','bird'],'夏':['bamboo','water','cloud','moon'],
+ '秋':['moon','mountain','water','boat','bird'],'冬':['snow','mountain','flower','pavilion'],
+ '月':['moon','cloud','water','mountain'],'山':['mountain','cloud','bamboo','pavilion'],
+ '水':['water','boat','willow','mountain'],'江':['water','boat','mountain','bird'],
+ '河':['water','boat','mountain'],'花':['flower','willow','bird','water'],
+ '雪':['snow','mountain','pavilion','flower'],'思':['moon','boat','water','bird'],
+ '乡':['moon','boat','water','bird'],'别':['willow','pavilion','boat','moon'],
+ '舟':['boat','water','mountain','bird'],'夜':['moon','star','mountain','water'],
+ '竹':['bamboo','mountain','pavilion','moon'],'鸟':['bird','cloud','mountain','willow'],
+ '风':['willow','cloud','water','flower'],'雨':['water','willow','boat','mountain'],
+ '亭':['pavilion','mountain','water','bamboo'],'云':['cloud','mountain','bird','moon']
+};
+var MOOD={
+ jing:{n:'静',v:['照','映','临','绕','卧','浮','栖'],a:['清冷','寂寥','空蒙','依稀','疏淡'],t:['何处','自闲','依然','几许','无声'],tint:'rgba(120,160,200,.05)'},
+ bei:{n:'愁',v:['冷','寒','孤','暗','断','泣','锁'],a:['萧瑟','苍凉','凄清','黯淡','寥落'],t:['未还','无际','几回','此间','奈何'],tint:'rgba(80,90,130,.08)'},
+ xi:{n:'喜',v:['暖','明','拂','涨','笑','照','生'],a:['明媚','温柔','轻快','和煦','鲜妍'],t:['正好','无边','有意','初起','依然'],tint:'rgba(240,190,110,.07)'},
+ zhuang:{n:'壮',v:['卷','横','开','落','连','涌','吞'],a:['苍茫','辽阔','雄奇','浩荡','峥嵘'],t:['万里','千秋','不尽','无边','如许'],tint:'rgba(150,60,70,.06)'},
+ you:{n:'幽',v:['隐','藏','深','度','锁','漏','凝'],a:['幽深','清寂','朦胧','苔痕','空翠'],t:['深处','不知','谁来','几重','依然'],tint:'rgba(70,130,110,.07)'}
+};
+
+/* ================= 诗体：8 类 40 种（其中词牌曲牌 22 种） ================= */
+var FORMS={
+ wujue:{n:'五言绝句',g:'中国古典诗',lang:'zh',kind:'line',lens:[5,5,5,5]},
+ qijue:{n:'七言绝句',g:'中国古典诗',lang:'zh',kind:'line',lens:[7,7,7,7]},
+ wulv:{n:'五言律诗',g:'中国古典诗',lang:'zh',kind:'line',lens:[5,5,5,5,5,5,5,5]},
+ qilv:{n:'七言律诗',g:'中国古典诗',lang:'zh',kind:'line',lens:[7,7,7,7,7,7,7,7]},
+ gushi:{n:'古体诗（五言）',g:'中国古典诗',lang:'zh',kind:'line',lens:[5,5,5,5,5,5]},
+ yuefu:{n:'乐府（杂言）',g:'中国古典诗',lang:'zh',kind:'line',lens:[7,5,7,5,7,5]},
+ rumengling:{n:'如梦令',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[6,6,5,6,2,2,6]},
+ yijiangnan:{n:'忆江南',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[5,7,7,5,7]},
+ xiangjianhuan:{n:'相见欢',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[3,3,9,7,3,3,9]},
+ busuanzi:{n:'卜算子',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[5,5,7,5,5,5,7,5]},
+ caisangzi:{n:'采桑子',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[7,4,4,7,7,4,4,7]},
+ guqiaoxian:{n:'鹊桥仙',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[4,4,6,7,7,4,4,6,7,7]},
+ chahuayin:{n:'醉花阴',g:'宋词 · 小令',lang:'zh',kind:'line',lens:[7,5,7,5,5,7,5,5]},
+ huanxisha:{n:'浣溪沙',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,7,7,7,7,7]},
+ dieLianhua:{n:'蝶恋花',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,4,5,7,7,7,4,5,7,7]},
+ linjiangxian:{n:'临江仙',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,6,7,5,5,7,6,7,5,5]},
+ yumeiren:{n:'虞美人',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,7,7,5,5,7,7,7,5,5]},
+ langtaosha:{n:'浪淘沙',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[4,5,7,7,7,4,5,7,7,7]},
+ yijianmei:{n:'一剪梅',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,7,7,4,7,7,7,4,7,7]},
+ qingyuan:{n:'青玉案',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,7,7,7,6,5,7,7,7,7,6,5]},
+ jiangchengzi:{n:'江城子',g:'宋词 · 中调',lang:'zh',kind:'line',lens:[7,7,7,3,3,7,7,7,7,3,3,7]},
+ shuidiaogetou:{n:'水调歌头',g:'宋词 · 长调',lang:'zh',kind:'line',lens:[6,6,5,5,5,6,6,5,5,5,4,4,4,5]},
+ niannujiao:{n:'念奴娇',g:'宋词 · 长调',lang:'zh',kind:'line',lens:[4,4,5,4,4,5,7,7,4,5,4,4,5,7,7,5,4]},
+ manjianghong:{n:'满江红',g:'宋词 · 长调',lang:'zh',kind:'line',lens:[4,4,5,6,5,5,5,5,5,5,4,5,5,5,4,4,5,5]},
+ qinyuanchun:{n:'沁园春',g:'宋词 · 长调',lang:'zh',kind:'line',lens:[4,4,4,4,4,4,7,4,4,4,4,4,7,4,4,4,4,4,7,4,4,4,4,4,7]},
+ tianjingsha:{n:'天净沙',g:'元曲',lang:'zh',kind:'line',lens:[6,6,6,4,6]},
+ shanpoyang:{n:'山坡羊',g:'元曲',lang:'zh',kind:'line',lens:[4,4,7,4,4,7,3,3,7,4,4,7]},
+ shuixianzi:{n:'水仙子',g:'元曲',lang:'zh',kind:'line',lens:[7,7,7,6,7,6,6,4]},
+ modern:{n:'现代诗 · 自由体',g:'中国现当代诗',lang:'zh',kind:'tpl'},
+ prose:{n:'散文诗',g:'中国现当代诗',lang:'zh',kind:'prose'},
+ menglong:{n:'朦胧诗',g:'中国现当代诗',lang:'zh',kind:'menglong'},
+ daoyou:{n:'打油诗',g:'中国现当代诗',lang:'zh',kind:'line',lens:[7,7,7,7]},
+ zhhaiku:{n:'中文俳句',g:'中国现当代诗',lang:'zh',kind:'line',lens:[5,7,5]},
+ haiku:{n:'俳句（日文 5-7-5）',g:'东亚短诗',lang:'zh',kind:'line',lens:[5,7,5]},
+ tanka:{n:'短歌（5-7-5-7-7）',g:'东亚短诗',lang:'zh',kind:'line',lens:[5,7,5,7,7]},
+ enfree:{n:'英文自由诗',g:'西方诗歌',lang:'en',kind:'en',lines:6},
+ ensonnet:{n:'英文十四行诗',g:'西方诗歌',lang:'en',kind:'en',lines:14},
+ limerick:{n:'五行打油诗（Limerick）',g:'西方诗歌',lang:'en',kind:'limerick',lines:5},
+ enhaiku:{n:'英文俳句',g:'西方诗歌',lang:'en',kind:'en',lines:3},
+ ode:{n:'颂歌（Ode）',g:'西方诗歌',lang:'en',kind:'en',lines:8}
+};
+var FORM_ORDER=['中国古典诗','宋词 · 小令','宋词 · 中调','宋词 · 长调','元曲','中国现当代诗','东亚短诗','西方诗歌'];
+
+/* ================= 画风：5 类 20 种（参数化） ================= */
+/* mode: ink水墨 / flat平涂 / line线描 / wash晕染 / dab点彩 / geo几何 / neon霓虹 / pixel像素 */
+var STYLES={
+ ink:{n:'水墨',g:'中国绘画',mode:'ink',bg:['#f4ecd8','#e5dbc0'],pal:['#3a3530','#6b6458'],ink:'#2a2622',lw:1.6,outline:0},
+ gongbi:{n:'工笔重彩',g:'中国绘画',mode:'flat',bg:['#f7f0e2','#efe2c8'],pal:['#2e6b6b','#8a3b46','#c08a3e','#3b6ea8'],ink:'#5a3b2a',lw:1,outline:1},
+ xieyi:{n:'写意',g:'中国绘画',mode:'wash',bg:['#f2ead4','#e2d5b6'],pal:['#2a2622','#4a443c'],ink:'#22201c',lw:2.2,outline:0},
+ qinglv:{n:'青绿山水',g:'中国绘画',mode:'flat',bg:['#eef0e0','#dce6d2'],pal:['#2f7d6e','#4a9a8c','#8fae6b','#3b6ea8'],ink:'#26463f',lw:1,outline:1},
+ baimiao:{n:'白描',g:'中国绘画',mode:'line',bg:['#f8f4e8','#efe9d8'],pal:['#3a3530'],ink:'#2a2622',lw:1.4,outline:0},
+ ukiyoe:{n:'浮世绘',g:'东方绘画',mode:'flat',bg:['#f2e6cf','#e6d2b0'],pal:['#2b4a6b','#b5453f','#d9a441','#3a6b5a'],ink:'#2a2320',lw:1.2,outline:1},
+ zen:{n:'禅意极简',g:'东方绘画',mode:'line',bg:['#f3f1e8','#e6e4d8'],pal:['#3a3a34'],ink:'#33332e',lw:1,outline:0},
+ oil:{n:'古典油画',g:'西方古典',mode:'flat',bg:['#2a2118','#151012'],pal:['#8a5a2b','#7a3b2e','#3b5a7a','#b89a5a'],ink:'#1a120c',lw:1.4,outline:1},
+ watercolor:{n:'水彩',g:'西方古典',mode:'wash',bg:['#f6f4ee','#e8eef0'],pal:['#5a86b8','#c76f7a','#7aa88b','#d0a45e'],ink:'#3a4a5a',lw:1,outline:0},
+ sketch:{n:'素描',g:'西方古典',mode:'line',bg:['#efece6','#ddd9d0'],pal:['#4a4640'],ink:'#3a3630',lw:1,outline:0},
+ engraving:{n:'铜版刻画',g:'西方古典',mode:'line',bg:['#eee9dc','#dcd5c4'],pal:['#22201e'],ink:'#1c1a18',lw:0.8,outline:0,hatch:1},
+ impression:{n:'印象派',g:'西方现代',mode:'dab',bg:['#e8eef2','#cddde8'],pal:['#6a9fd0','#e0a86a','#8fbf8a','#c97a8a'],ink:'#3a4a5a',lw:1,outline:0},
+ cubism:{n:'立体主义',g:'西方现代',mode:'geo',bg:['#e6e2d6','#cfc8b6'],pal:['#8a4a3a','#3a6b8a','#c19a4a','#5a7a5a'],ink:'#2a2622',lw:1.2,outline:1},
+ minimal:{n:'极简主义',g:'西方现代',mode:'geo',bg:['#f2f1ee','#e4e2dc'],pal:['#2a2a2a','#b0aaa0'],ink:'#222',lw:1,outline:0},
+ pop:{n:'波普艺术',g:'西方现代',mode:'flat',bg:['#f7e86a','#ef6fa8'],pal:['#1a1a1a','#e63b3b','#2ba8e0','#f7f05a'],ink:'#111',lw:1.4,outline:1},
+ abstract:{n:'抽象表现',g:'西方现代',mode:'wash',bg:['#201a2e','#0e0c18'],pal:['#a855f7','#3b82f6','#2dd4bf','#e8c07d'],ink:'#e8e8f0',lw:2.4,outline:0},
+ surreal:{n:'超现实',g:'西方现代',mode:'wash',bg:['#dfe6ef','#b9c9e0'],pal:['#6b5aa8','#c96f9a','#4a9aa8','#e0b45a'],ink:'#2a2440',lw:1.2,outline:0},
+ cyber:{n:'赛博朋克',g:'数字当代',mode:'neon',bg:['#160b2e','#08131f'],pal:['#ff2e88','#00e5ff','#a855f7','#e8c07d'],ink:'#00e5ff',lw:1.8,outline:0},
+ pixel:{n:'像素艺术',g:'数字当代',mode:'pixel',bg:['#101426','#080b16'],pal:['#7ad1ff','#ff7ab8','#b58aff','#ffe08a'],ink:'#0a0a12',lw:1,outline:0},
+ flat:{n:'扁平插画',g:'数字当代',mode:'flat',bg:['#e8f2f5','#cfe3ea'],pal:['#3a7d8a','#e0895a','#6ba8a0','#4a6fa8'],ink:'#264a55',lw:1,outline:0}
+};
+var STYLE_ORDER=['中国绘画','东方绘画','西方古典','西方现代','数字当代'];
+var LAYOUTS={horiz:'横排',vert:'竖排'};
+
+/* ================= 工具 ================= */
+function hash(s){var h=2166136261>>>0;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+function rng(seed){var a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
+function pick(arr,r){return arr[Math.floor(r()*arr.length)%arr.length];}
+function parseImages(theme,r){
+  var keys=[],seen={};
+  for(var ch of (theme||'')){
+    var got=THEME[ch];
+    if(got)got.forEach(function(k){if(!seen[k]){seen[k]=1;keys.push(k);}});
+    for(var k in IMG){if(IMG[k].n===ch&&!seen[k]){seen[k]=1;keys.push(k);}}
+  }
+  var all=Object.keys(IMG);
+  while(keys.length<4){var k=pick(all,r);if(!seen[k]){seen[k]=1;keys.push(k);}}
+  return keys.slice(0,6);
+}
+function N2(keys,r){var k=pick(keys,r);return pick(IMG[k].w,r);}
+var V2=['映照','萦绕','明灭','徘徊','来去','低回','相依','无言'];
+var X1=['处','时','间','来','去','还','又','里'];
+function genLine(n,mood,keys,dou,r){
+  var M=MOOD[mood],pattern;
+  if(n===2)pattern=['N']; else if(n===3)pattern=['N','V']; else if(n===4)pattern=['N','V2'];
+  else if(n===5)pattern=['N','V','N']; else if(n===6)pattern=['A','N','V','X'];
+  else if(n===7)pattern=['N','V','N','T']; else if(n===8)pattern=['N','V','N','V','N'];
+  else pattern=['N','A','V','N','T'];
+  var s='';
+  for(var p of pattern){
+    if(p==='N')s+=N2(keys,r); else if(p==='V')s+=pick(M.v,r); else if(p==='V2')s+=pick(V2,r);
+    else if(p==='A')s+=pick(M.a,r); else if(p==='T')s+=pick(M.t,r); else if(p==='X')s+=pick(X1,r);
+  }
+  if(s.length>n)s=s.slice(0,n);
+  return s;
+}
+/* 中文模板诗 */
+var MODERN_TPL=[
+ function(a,b,c,v,adj){return a+'把夜色折成两半\n一半落在'+b+'上\n一半，我替你收着。';},
+ function(a,b,c,v,adj){return '我反复梦见'+a+'\n醒来时，'+b+'\n正缓慢地'+v+'。';},
+ function(a,b,c,v,adj){return a+'不说话\n'+b+'也不说话\n只有风替我们'+v+'。';}
+];
+var PROSE_TPL=[
+ function(a,b,c,v,adj){return '黄昏的时候，'+a+'开始变得'+adj+'。它并不急着说什么，只是把影子一点点铺到'+b+'上，像一句写了很久、却始终没有寄出的信。';},
+ function(a,b,c,v,adj){return '我沿着'+b+'走了很久，'+a+'一直跟在身后。风把'+c+'吹得很轻，轻到几乎听不见——可正是这点声音，让整座夜都有了呼吸。';}
+];
+var MENGLONG_TPL=[
+ function(a,b,c,v,adj){return a+'是'+adj+'的耳朵\n贴着'+b+'的背面\n听一枚'+c+'，缓慢地'+v+'。';},
+ function(a,b,c,v,adj){return '谁把'+a+'折进'+b+'\n折痕里藏着'+c+'\n和一个不肯醒来的'+v+'。';}
+];
+/* 英文诗 */
+var EN_LINES=[
+ 'The {A} rises slowly over {B}.','I watched the {A} drift into {B},',
+ 'and all the {A} was quiet.','A {A} waits where {B} ends,',
+ 'between the {A} and the {B}.','The {A} remembers what {B} forgets,',
+ 'and falls like {A} upon {B}.','No voice, only {A} and {B},',
+ 'the {A} keeps the shape of {B}.'
+];
+var EN_COUPLET=['And still the {A} shines on,','the {B} and I, alone.'];
+var LIMERICK=[
+ 'There once was {A} by {B},',
+ 'So {A} it startled {B};',
+ 'It danced and it sang,',
+ 'Till the valley rang,',
+ 'And {A} slipped quietly home.'
+];
+function enWord(keys,r){var k=pick(keys,r);return pick(EN_W[k],r);}
+function fill(tpl,keys,r){
+  return tpl.replace(/(\b(?:The|A|the|a|an|An)\s+)?\{([AB])\}/g,function(m,art,slot){
+    var w=enWord(keys,r); if(art)w=w.replace(/^(the|a|an)\s+/i,''); return (art||'')+w;
+  });
+}
+
+/* ================= 生成诗 ================= */
+function makePoem(formId,mood,keys,seed){
+  var F=FORMS[formId],r=rng(seed),lines=[],title;
+  if(F.kind==='line'){
+    for(var i=0;i<F.lens.length;i++)lines.push(genLine(F.lens[i],mood,keys,(i===2||i===4)&&F.lens.length>=6,r));
+    title=N2(keys,r)+'·'+N2(keys,r);
+  }else if(F.kind==='tpl'||F.kind==='prose'||F.kind==='menglong'){
+    var TP=F.kind==='tpl'?MODERN_TPL:(F.kind==='prose'?PROSE_TPL:MENGLONG_TPL),tpl=pick(TP,r),M=MOOD[mood];
+    lines=tpl(N2(keys,r),N2(keys,r),N2(keys,r),pick(M.v,r),pick(M.a,r)).split('\n');
+    title=N2(keys,r)+'的独白';
+  }else if(F.kind==='limerick'){
+    lines=LIMERICK.map(function(t){return fill(t,keys,r);}); title='A Tale of '+fill('{A}',keys,r).replace(/^(the|a|an)\s+/i,'');
+  }else{ /* en */
+    for(var j=0;j<F.lines;j++)lines.push(fill(pick(EN_LINES,r),keys,r));
+    if(formId==='ensonnet'){lines.push(fill(EN_COUPLET[0],keys,r));lines.push(fill(EN_COUPLET[1],keys,r));}
+    title=fill('{A} and {B}',keys,r).replace(/^(the|a|an)\s+/i,'');
+  }
+  return {title:title,lines:lines,form:formId,formName:F.n,tag:F.g,lang:F.lang,layout:F.lang==='en'?'horiz':state.layout,mood:mood,moodName:MOOD[mood].n};
+}
+
+/* ================= 绘制：统一原语 + 画风模式 ================= */
+function bbox(pts){var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1]);});return {x0:x0,y0:y0,x1:x1,y1:y1};}
+function path(ctx,pts,close){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);if(close)ctx.closePath();}
+/* 按画风模式渲染一个形状 */
+function render(ctx,pts,S,r,opt){
+  opt=opt||{};var m=S.mode,color=opt.color||S.pal[0],bb=bbox(pts);
+  if(m==='neon'){
+    ctx.save();ctx.shadowColor=color;ctx.shadowBlur=14;ctx.strokeStyle=color;ctx.lineWidth=opt.lw||S.lw;
+    ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
+    if(!opt.open)ctx.closePath();ctx.stroke();ctx.stroke();ctx.restore();return;
+  }
+  if(m==='line'){
+    ctx.strokeStyle=color;ctx.lineWidth=opt.lw||S.lw;ctx.setLineDash(hatchOn(S)?[4,4]:[]);
+    path(ctx,pts,!opt.open);ctx.stroke();ctx.setLineDash([]);
+    if(S.hatch){ctx.save();path(ctx,pts,true);ctx.clip();ctx.strokeStyle=color;ctx.lineWidth=.6;for(var h=bb.x0;h<bb.x1;h+=7){ctx.beginPath();ctx.moveTo(h,bb.y0);ctx.lineTo(h+ (bb.y1-bb.y0),bb.y1);ctx.stroke();}ctx.restore();}
+    return;
+  }
+  if(m==='dab'){
+    var n=opt.dab||46;for(var d=0;d<n;d++){var px=bb.x0+r()*(bb.x1-bb.x0),py=bb.y0+r()*(bb.y1-bb.y0);ctx.fillStyle=S.pal[Math.floor(r()*S.pal.length)];ctx.globalAlpha=.5+r()*.4;ctx.beginPath();ctx.arc(px,py,2+r()*4,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;return;
+  }
+  if(m==='pixel'){
+    var st=14;for(var px2=bb.x0;px2<bb.x1;px2+=st)for(var py2=bb.y0;py2<bb.y1;py2+=st){if(r()>.35){ctx.fillStyle=S.pal[Math.floor(r()*S.pal.length)];ctx.fillRect(px2,py2,st-1,st-1);}}return;
+  }
+  if(m==='geo'||m==='flat'||m==='wash'||m==='ink'){
+    if(m==='ink'){
+      var g=ctx.createLinearGradient(0,bb.y0,0,bb.y1);g.addColorStop(0,color);g.addColorStop(1,'rgba(0,0,0,0.02)');ctx.fillStyle=g;
+    }else if(m==='wash'){ctx.fillStyle=color;ctx.globalAlpha=opt.alpha||.32;}
+    else ctx.fillStyle=color;
+    path(ctx,pts,true);ctx.fill();
+    if(m==='wash')ctx.globalAlpha=1;
+    if(S.outline){ctx.strokeStyle=S.ink;ctx.lineWidth=Math.max(.6,S.lw*.5);ctx.stroke();}
+    return;
+  }
+}
+function hatchOn(S){return false;}
+function bg(ctx,W,H,S,mood,r){
+  var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,S.bg[0]);g.addColorStop(1,S.bg[1]);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=MOOD[mood].tint;ctx.fillRect(0,0,W,H);
+  if(S.mode==='pixel'){ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;for(var x=0;x<W;x+=16){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(var y=0;y<H;y+=16){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}}
+  else{ctx.save();for(var i=0;i<500;i++){ctx.fillStyle='rgba(120,110,90,'+(r()*0.03)+')';ctx.fillRect(r()*W,r()*H,1.5,1.5);}ctx.restore();}
+}
+function drawScene(ctx,W,H,keys,mood,seed,styleId){
+  var S=STYLES[styleId]||STYLES.ink,r=rng(seed),has=function(k){return keys.indexOf(k)>=0;};
+  ctx.clearRect(0,0,W,H);bg(ctx,W,H,S,mood,r);
+  if(has('mountain')||keys.length<3){
+    for(var L=0;L<3;L++){var baseY=H*(0.42+L*0.06),pts=[],x=-20;pts.push([x,baseY+60]);while(x<W+20){var nx=x+70+r()*50,peak=baseY-(35+r()*55);pts.push([(x+nx)/2,peak]);pts.push([nx,baseY+(r()-.5)*20]);x=nx;}pts.push([W+20,H]);pts.push([-20,H]);render(ctx,pts,S,r,{color:S.pal[(L+0)%S.pal.length],alpha:.30+L*.08,dab:60});}
+  }
+  if(has('cloud')){for(var c=0;c<4;c++){var cx=r()*W,cy=70+r()*120;var pts2=[];for(var a=0;a<Math.PI*2;a+=.5)pts2.push([cx+Math.cos(a)*(70+r()*40),cy+Math.sin(a)*12]);render(ctx,pts2,S,r,{color:S.pal[(c+1)%S.pal.length],alpha:.18,dab:26,open:false});}}
+  if(has('water')){for(var w=0;w<10;w++){var yy=H*0.7+w*13,x0=r()*W*0.35,ln=[];for(var t=0;t<=1;t+=.2)ln.push([x0+t*(120+r()*180),yy+Math.sin(t*6+w)*4]);render(ctx,ln,S,r,{color:S.pal[(w+1)%S.pal.length],alpha:.4,dab:16,open:true,lw:1.2});}}
+  if(has('moon')){var mx=W*0.78,my=H*0.2,mr=42,mp=[];for(var a2=0;a2<Math.PI*2;a2+=.3)mp.push([mx+Math.cos(a2)*mr,my+Math.sin(a2)*mr]);
+    if(S.mode==='neon'||S.mode==='line'){render(ctx,mp,S,r,{color:S.pal[3]||S.pal[0],open:false,lw:2});}
+    else{var gg=ctx.createRadialGradient(mx,my,4,mx,my,mr*2.2);gg.addColorStop(0,S.pal[3]||'#fff3cf');gg.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(mx,my,mr*2.2,0,Math.PI*2);ctx.fill();ctx.fillStyle=S.pal[3]||'#fff3cf';ctx.beginPath();ctx.arc(mx,my,mr,0,Math.PI*2);ctx.fill();}
+  }
+  if(has('star')){ctx.fillStyle=S.pal[3]||S.pal[0];for(var s=0;s<28;s++){if(S.mode==='pixel')ctx.fillRect(r()*W,r()*H*.5,4,4);else{ctx.beginPath();ctx.arc(r()*W,r()*H*.5,r()*2+.6,0,Math.PI*2);ctx.fill();}}}
+  if(has('bamboo')){for(var b=0;b<3;b++){var bx=W*.1+b*26,top=H*(.3+r()*.1),bl=[[bx,H*.82],[bx+6,H*.55],[bx+3,top]];render(ctx,bl,S,r,{color:S.pal[(b+1)%S.pal.length],open:true,lw:2,dab:14});for(var lf=0;lf<5;lf++){var ly=top+lf*40,lxx=bx+4;render(ctx,[[lxx,ly],[lxx+28,ly-12],[lxx+50*(r()>.5?1:-1),ly-20]],S,r,{color:S.pal[(b+2)%S.pal.length],open:true,lw:1.2,dab:8});}}}
+  if(has('willow')){var wx=W*.15,wp=[[wx,H*.86],[wx-10,H*.55],[wx+20,H*.34]];render(ctx,wp,S,r,{color:S.pal[1]||S.pal[0],open:true,lw:2.4,dab:20});for(var br=0;br<10;br++){var bx2=wx+10+br*2,by=H*.36+br*10;render(ctx,[[bx2,by],[bx2+18,by+30],[bx2+6,by+75]],S,r,{color:S.pal[1]||S.pal[0],open:true,lw:1,dab:10});}}
+  if(has('flower')){var fx=W*.13,fy=H*.6;render(ctx,[[fx,H*.9],[fx+40,fy],[fx+120,fy-30]],S,r,{color:S.pal[2]||S.pal[0],open:true,lw:2,dab:20});for(var f=0;f<14;f++){var px=fx+18+r()*110,py=fy-8+(r()-.5)*70;render(ctx,[[px-4,py],[px+4,py],[px,py+4],[px,py-4]],S,r,{color:S.pal[1]||S.pal[0],dab:6});}}
+  if(has('bird')){for(var bd=0;bd<5;bd++){var x=W*(.4+r()*.45),y=H*(.16+r()*.2),sz=9;render(ctx,[[x-sz,y],[x,y-sz*.7],[x+sz,y],[x,y-sz*.2]],S,r,{color:S.pal[0],open:true,lw:1.6,dab:8});}}
+  if(has('boat')){var bx3=W*(.42+r()*.2),by2=H*.78;render(ctx,[[bx3-32,by2],[bx3+32,by2],[bx3+18,by2+14],[bx3-18,by2+14]],S,r,{color:S.pal[2]||S.pal[0]});render(ctx,[[bx3,by2],[bx3+2,by2-30]],S,r,{color:S.pal[0],open:true,lw:2,dab:6});}
+  if(has('pavilion')){var tx=W*.8,ty=H*.6;render(ctx,[[tx-26,ty],[tx,ty-16],[tx+26,ty]],S,r,{color:S.pal[0],open:true,lw:2,dab:12});render(ctx,[[tx-18,ty],[tx-18,ty+34],[tx+18,ty+34],[tx+18,ty]],S,r,{color:S.pal[0],open:true,lw:1.6,dab:10});}
+  if(has('snow')){ctx.fillStyle=S.pal[3]||'#fff';for(var sn=0;sn<60;sn++){if(S.mode==='pixel')ctx.fillRect(r()*W,r()*H*.85,3,3);else{ctx.beginPath();ctx.arc(r()*W,r()*H*.85,1+r()*2,0,Math.PI*2);ctx.fill();}}}
+  /* 题款 */
+  var light=(S.mode==='neon'||S.mode==='pixel'||S.bg[0].charAt(0)==='#');
+  var inkColor=(S.mode==='neon')?'#00e5ff':((S.mode==='flat'&&S.bg[0].charAt(0)==='#'&&parseInt(S.bg[0].slice(1,3),16)<80)?'#fff':(S.mode==='ink'||S.mode==='line'||S.mode==='flat'&&S.g==='中国绘画'?'rgba(40,34,24,.82)':'rgba(40,34,24,.72)'));
+  ctx.fillStyle=inkColor;ctx.textAlign='center';ctx.textBaseline='top';
+  var lines=(state.poem?state.poem.lines:[]).slice(0,3),en=(state.poem&&state.poem.lang==='en');
+  if(en){ctx.font='13px Georgia,serif';for(var i=0;i<lines.length;i++)ctx.fillText(lines[i].slice(0,24),W-130,26+i*20);}
+  else{ctx.font='17px KaiTi,STKaiti,serif';var tx2=W-40;for(var j=0;j<lines.length;j++){for(var k=0;k<lines[j].length;k++)ctx.fillText(lines[j][k],tx2,40+k*22);tx2-=24;}}
+  ctx.fillStyle='rgba(170,45,40,.85)';ctx.fillRect(W-56,H-88,38,38);ctx.fillStyle='#fff';ctx.font='bold 14px KaiTi,serif';ctx.textAlign='left';ctx.fillText('诗',W-46,H-82);ctx.fillText('画',W-26,H-60);
+}
+
+/* ================= 状态与交互 ================= */
+var state={poem:null,keys:[],seed:0,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0};
+function $(id){return document.getElementById(id);}
+function buildSelects(){
+  var fs=$('formSel');
+  FORM_ORDER.forEach(function(g){var og=document.createElement('optgroup');og.label=g;Object.keys(FORMS).forEach(function(id){if(FORMS[id].g!==g)return;var o=document.createElement('option');o.value=id;o.textContent=FORMS[id].n;og.appendChild(o);});fs.appendChild(og);});
+  $('formCount').textContent='('+Object.keys(FORMS).length+' 种)';
+  var ss=$('styleSel');
+  STYLE_ORDER.forEach(function(g){var og=document.createElement('optgroup');og.label=g;Object.keys(STYLES).forEach(function(id){if(STYLES[id].g!==g)return;var o=document.createElement('option');o.value=id;o.textContent=STYLES[id].n;og.appendChild(o);});ss.appendChild(og);});
+  $('styleCount').textContent='('+Object.keys(STYLES).length+' 种)';
+}
+function segBind(id,cb){$(id).addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var bs=$(id).querySelectorAll('button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');b.classList.add('on');cb(b.getAttribute('data-v'));});}
+segBind('moodSeg',function(v){state.mood=v;});
+segBind('layoutSeg',function(v){state.layout=v;if(state.poem)renderPoem(state.poem);});
+$('formSel').addEventListener('change',function(){state.form=this.value;});
+$('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem)redraw();});
+function renderPoem(p){
+  var box=$('poemBox'),dark=(S_isDark(state.style));box.className='poem-box '+(dark?'poem-canvas':'poem-paper');
+  $('poemFormTag').textContent='— '+p.formName;
+  if(p.lang==='en'){
+    box.innerHTML='<div class="poem-en"><span class="pt">'+p.title+'</span>'+p.lines.map(function(l){return '<div>'+l+'</div>';}).join('')+'</div>';
+  }else if(p.layout==='vert'){
+    // 列数越多字号越小，保证每句独立成列、横向铺开不挤在一处
+    var n=p.lines.length+1,fs=n>18?12:(n>12?14:(n>8?16:18));
+    box.innerHTML='<div class="poem-vert" style="font-size:'+fs+'px"><div class="pl pt">'+p.title+'</div>'+p.lines.map(function(l){return '<div class="pl">'+l+'</div>';}).join('')+'</div>';
+  }else{
+    box.innerHTML='<div class="poem-hlines"><span class="pt">'+p.title+'</span>'+p.lines.map(function(l){return '<span class="ln">'+l+'</span>';}).join('')+'</div>';
+  }
+}
+function S_isDark(id){var s=STYLES[id],c=s.bg[0].slice(1,3);return parseInt(c,16)<90;}
+function redraw(){drawScene($('art').getContext('2d'),800,600,state.keys,state.mood,state.seed,state.style);}
+function generate(){
+  var theme=$('theme').value.trim();
+  var baseSeed=hash(theme+'|'+state.form+'|'+state.mood+'|'+state.nonce);
+  var keys=parseImages(theme,rng(baseSeed));
+  var poem=makePoem(state.form,state.mood,keys,baseSeed);
+  var seed=hash(poem.lines.join('')+poem.title+'|'+state.style);
+  state.poem=poem;state.keys=keys;state.seed=seed;
+  renderPoem(poem);redraw();$('artEmpty').style.display='none';
+  $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('');
+  $('poemStat').innerHTML='诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
+  if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
+}
+$('genBtn').onclick=function(){state.nonce=0;generate();};
+$('regenBtn').onclick=function(){state.nonce++;generate();};
+$('theme').addEventListener('keydown',function(e){if(e.key==='Enter'){state.nonce=0;generate();}});
+$('copyPoem').onclick=function(){if(!state.poem)return;var t=poemText();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('诗已复制');},function(){toast('请手动复制');});else toast('请手动复制');};
+$('dlPoem').onclick=function(){if(!state.poem)return;dl(new Blob([poemText()],{type:'text/plain;charset=utf-8'}),'诗中有画-'+state.poem.title+'.txt');toast('诗已下载');};
+$('dlArt').onclick=function(){if(!state.poem)return;var a=document.createElement('a');a.download='诗中有画-'+state.poem.title+'-'+STYLES[state.style].n+'.png';a.href=$('art').toDataURL('image/png');document.body.appendChild(a);a.click();document.body.removeChild(a);toast('画作已下载');};
+function poemText(){var p=state.poem;return '《'+p.title+'》\n'+p.lines.join('\n')+'\n\n—— '+p.formName+' · '+p.moodName+' · 实验室 3 诗中有画';}
+function dl(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);}
+function toast(m){if(window.ENH)window.ENH.toast(m);}
+$('reportBtn').onclick=function(){
+  if(!state.poem){toast('请先生成诗与画');return;}
+  var p=state.poem,md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','','- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、'),'- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）','','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ 格律/模板生成（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）。',''].join('\n');
+  var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 诗中有画 · 实验报告</h1><img src="'+ $('art').toDataURL('image/png') +'" alt="生成的画作"><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
+  var w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}else toast('弹窗被拦截');
+  if(window.ENH)window.ENH.unlock('report');
+};
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+globalThis.__LAB3__={getPoem:function(){return state.poem;},getState:function(){return {theme:$('theme').value.trim(),form:state.form,mood:state.mood,style:state.style,layout:state.layout,keys:state.keys.slice(),seed:state.seed};},generate:generate};
+window.addEventListener('scroll',function(){var b=$('totop');if(window.scrollY>400)b.classList.add('show');else b.classList.remove('show');});
+buildSelects();
+})();
+</script>
+
+<style>
+#hwcmd-ov{position:fixed;inset:0;background:rgba(5,5,10,.72);backdrop-filter:blur(6px);z-index:200;display:none;align-items:flex-start;justify-content:center;padding-top:14vh}
+#hwcmd-ov.show{display:flex}
+#hwcmd-box{width:min(560px,92vw);background:#16161f;border:1px solid #a855f7;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.7);overflow:hidden}
+#hwcmd-in{width:100%;background:transparent;border:none;border-bottom:1px solid #26263a;color:#e8e8f0;font-size:16px;padding:16px;outline:none;box-sizing:border-box}
+#hwcmd-list{max-height:320px;overflow:auto;padding:8px}
+#hwcmd-list a{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:8px;color:#e8e8f0;font-size:13px;cursor:pointer;text-decoration:none}
+#hwcmd-list a:hover,#hwcmd-list a.sel{background:rgba(168,85,247,.18)}
+#hwcmd-list small{color:#9a9ab8;white-space:nowrap}
+#hwcmd-fab{position:fixed;right:22px;bottom:84px;z-index:90;background:linear-gradient(135deg,#a855f7,#3b82f6);color:#fff;border:none;border-radius:99px;padding:11px 16px;font-size:12px;cursor:pointer;box-shadow:0 8px 24px rgba(168,85,247,.4)}
+#hwcmd-fab:hover{filter:brightness(1.15)}
+#hwcmd-prog{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#a855f7,#2dd4bf);z-index:210;transition:width .1s}
+@media(max-width:640px){#hwcmd-fab{right:12px;bottom:76px;padding:9px 12px}}
+</style>
+<div id="hwcmd-prog"></div>
+<button id="hwcmd-fab" title="站内搜索 (Ctrl/⌘+K)">⌘K 站内搜索</button>
+<div id="hwcmd-ov"><div id="hwcmd-box"><input id="hwcmd-in" placeholder="搜索页面或章节，回车跳转…" autocomplete="off"><div id="hwcmd-list"></div></div></div>
+<script>
+(function(){
+var ITEMS=[
+/* ENH:CMD */
+ {t:'📖 课程教材 · 20 章脉络与本站实践对照',u:'atlas.html#course',d:'课程',k:'教材 人工智能通识 章节 大纲 第一篇 第二篇 王东 马少平 朱梦尧 课程坐标系 course'},
+ {t:'↗ 课程讲义原站 · Lecture V8',u:'https://zhumy.github.io/Introduction_to_Artificial_Intelligence/',d:'外链',k:'课程 讲义 教材 章节 原站 lecture 人工智能概论'},
+ {t:'🧭 知识地图 · 课程概念串联',u:'atlas.html#map',d:'扩展',k:'概念 知识图谱 地图 串联 梯度 泛化 复杂度 atlas'},
+ {t:'⏳ 确定性 vs 学习 · 对照时间轴',u:'atlas.html#timeline',d:'扩展',k:'时间轴 对照 幻方 筛法 收敛 叙事 timeline'},
+ {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
+ {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
+ {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
+ {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
+ {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
+/* /ENH:CMD */
+ {t:'首页 · 课程作业导航',u:'index.html',d:'首页',k:'首页 home index 导航'},
+ {t:'作业 3 · 人工智能应用：诗中有画',u:'homework3.html',d:'作业 3',k:'应用 诗 画 诗人 绘画 多模态 大模型 第三篇'},
+ {t:'实验室 3 · 诗中有画交互项目',u:'lab3.html',d:'实验室 3',k:'诗 画 生成 水墨 现代 线描 英文诗 意象 实验室3'},
+ {t:'作业 1 · AI 编程工具作品展示',u:'homework1.html',d:'作业 1',k:'workbuddy deepseek trae 幻方 质数 agent'},
+ {t:'实验室 1 · 幻方与质数互动实验室',u:'lab1.html',d:'实验室 1',k:'幻方 质数 互动 算法 动画 实验室1'},
+ {t:'作业 2 · MLP 学习参数的实现和可视化',u:'homework2.html',d:'作业 2',k:'MLP 对比报告 参数 可视化 训练'},
+ {t:'实验室 2 · 实时神经网络训练台',u:'lab2.html',d:'实验室 2',k:'实时 训练 交互 画数据 神经元 实验室2'},
+ {t:'↗ GitHub 仓库 · 源码 / README',u:'https://github.com/he-yikang/homework',d:'外链',k:'仓库 源码 github repository 返回仓库'}
+];
+var ov=document.getElementById('hwcmd-ov'),inp=document.getElementById('hwcmd-in'),list=document.getElementById('hwcmd-list'),sel=0,shown=[];
+function render(q){shown=ITEMS.filter(function(i){return (i.t+i.k+i.d).toLowerCase().indexOf(q.toLowerCase())>=0;});sel=0;list.innerHTML=shown.length?shown.map(function(i,n){return '<a class="'+(n===0?'sel':'')+'" href="'+i.u+'">'+i.t+'<small>'+i.d+'</small></a>';}).join(''):'<div style="color:#6f6f90;text-align:center;padding:16px;font-size:12px">没有匹配的页面或章节</div>';}
+function open(){ov.classList.add('show');inp.value='';render('');inp.focus();}
+function close(){ov.classList.remove('show');}
+document.getElementById('hwcmd-fab').onclick=open;
+ov.onclick=function(e){if(e.target===ov)close();};
+inp.addEventListener('input',function(){render(inp.value);});
+inp.addEventListener('keydown',function(e){
+ if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(shown.length-1,sel+1);}
+ else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(0,sel-1);}
+ else if(e.key==='Enter'){if(shown[sel])location.href=shown[sel].u;}
+ else if(e.key==='Escape')close();
+ var a=list.querySelectorAll('a');for(var i=0;i<a.length;i++)a[i].classList.toggle('sel',i===sel);
+});
+document.addEventListener('keydown',function(e){
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();ov.classList.contains('show')?close():open();}
+ else if(e.key==='Escape')close();
+});
+window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-window.innerHeight;document.getElementById('hwcmd-prog').style.width=(h>0?window.scrollY/h*100:0)+'%';});
+})();
+</script>
+<!-- ENH:COMMON -->
+<style>
+#enh-fab,#enh-tour-fab{position:fixed;left:18px;z-index:95;border:1px solid rgba(45,212,191,.45);background:linear-gradient(135deg,rgba(45,212,191,.16),rgba(168,85,247,.16));color:#e8e8f0;border-radius:99px;padding:9px 14px;font-size:12px;cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 6px 20px rgba(0,0,0,.4);font-family:inherit}
+#enh-fab{bottom:20px}
+#enh-tour-fab{bottom:64px;border-color:rgba(168,85,247,.5)}
+#enh-fab:hover,#enh-tour-fab:hover{filter:brightness(1.28)}
+#enh-toast{position:fixed;left:50%;bottom:30px;transform:translate(-50%,20px);z-index:260;background:#1c1c28;border:1px solid #2dd4bf;color:#e8e8f0;padding:11px 20px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.28s;box-shadow:0 12px 36px rgba(0,0,0,.6);max-width:88vw;text-align:center}
+#enh-toast.show{opacity:1;transform:translate(-50%,0)}
+#enh-panel{position:fixed;inset:0;background:rgba(5,5,10,.76);backdrop-filter:blur(7px);z-index:230;display:none;align-items:center;justify-content:center;padding:20px}
+#enh-panel.show{display:flex}
+#enh-panel .box{width:min(720px,94vw);max-height:86vh;overflow:auto;background:linear-gradient(160deg,#1c1c28,#14141e);border:1px solid #33334d;border-radius:18px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.7)}
+#enh-panel h3{margin:0 0 4px;font-size:20px;background:linear-gradient(90deg,#a855f7,#2dd4bf);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+#enh-panel .sub{color:#9a9ab8;font-size:12px;margin-bottom:16px}
+#enh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+#enh-grid a{display:block;text-decoration:none;color:#e8e8f0;border:1px solid #2c2c42;background:rgba(255,255,255,.025);border-radius:12px;padding:12px 14px;transition:.2s}
+#enh-grid a:hover{border-color:#a855f7;background:rgba(168,85,247,.12);transform:translateY(-2px)}
+#enh-grid b{display:block;font-size:13px;margin-bottom:4px}
+#enh-grid small{color:#9a9ab8;font-size:11px;line-height:1.5}
+#enh-panel .close{float:right;background:none;border:1px solid #3a3a55;color:#c8c8dd;border-radius:8px;padding:4px 11px;cursor:pointer;font-size:12px}
+#enh-panel .readme{display:block;margin-top:16px;text-align:center;color:#2dd4bf;font-size:12px;text-decoration:none}
+#enh-tourbar{position:fixed;left:50%;bottom:22px;transform:translate(-50%,120%);z-index:240;width:min(620px,92vw);background:linear-gradient(135deg,#1d1d2c,#171722);border:1px solid #a855f7;border-radius:16px;padding:15px 18px;box-shadow:0 18px 50px rgba(0,0,0,.7);transition:.35s;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+#enh-tourbar.show{transform:translate(-50%,0)}
+#enh-tourbar .tx{flex:1;min-width:200px}
+#enh-tourbar b{display:block;font-size:14px;color:#e8e8f0;margin-bottom:3px}
+#enh-tourbar small{font-size:12px;color:#9a9ab8;line-height:1.5}
+#enh-tourbar .pg{font-size:11px;color:#2dd4bf;letter-spacing:1px;white-space:nowrap}
+#enh-tourbar button{border:1px solid #3a3a55;background:rgba(255,255,255,.04);color:#e8e8f0;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+#enh-tourbar button.pri{background:linear-gradient(120deg,#a855f7,#3b82f6);border:none;color:#fff}
+.enh-hl{outline:2px solid #2dd4bf;outline-offset:6px;border-radius:10px}
+#enh-achv{margin:26px 0 4px;padding:18px 20px;border:1px solid rgba(168,85,247,.3);border-radius:16px;background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(45,212,191,.06))}
+#enh-achv .hd{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+#enh-achv h3{font-size:16px;margin:0}
+#enh-achv .ring{flex:0 0 auto}
+#enh-achv .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+#enh-achv .bd{font-size:11px;padding:5px 11px;border-radius:99px;border:1px solid #33334d;color:#6f6f90;background:rgba(255,255,255,.02)}
+#enh-achv .bd.on{color:#2dd4bf;border-color:rgba(45,212,191,.5);background:rgba(45,212,191,.1)}
+@media(max-width:640px){#enh-fab,#enh-tour-fab{left:10px;padding:8px 11px;font-size:11px}#enh-tourbar{bottom:10px}}
+</style>
+<button id="enh-fab" title="八项扩展能力">✦ 扩展能力</button>
+<button id="enh-tour-fab" title="自动导览">▶ 带我看一遍</button>
+<div id="enh-toast"></div>
+<div id="enh-panel"><div class="box">
+  <button class="close" id="enh-panel-close">关闭 ✕</button>
+  <h3>🧭 扩展能力 · 创新交互 + 课程坐标系</h3>
+  <div class="sub">原有栏目结构保持不变，以下能力作为扩展层挂在各页；点任意一项直达。</div>
+  <div id="enh-grid">
+    <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 20 章</b><small>《人工智能通识》20 章逐章对照本站实践，可搜索、筛选、标记已读，并直达讲义原文</small></a>
+    <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
+    <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>11 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
+    <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
+    <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
+    <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
+    <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
+    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成水墨画，第三篇「人工智能应用」交互项目</small></a>
+  </div>
+  <a class="readme" href="https://github.com/he-yikang/homework#enhance" target="_blank" rel="noopener">↗ 这些能力在 README 里也有完整说明与直达链接</a>
+</div></div>
+<div id="enh-tourbar"><span class="pg" id="enh-tour-pg"></span><div class="tx"><b id="enh-tour-t"></b><small id="enh-tour-d"></small></div><button id="enh-tour-skip">跳过</button><button id="enh-tour-next" class="pri">下一步 →</button></div>
+<script>
+(function(){
+'use strict';
+var KEY='hw_enh_v1', REPO='https://github.com/he-yikang/homework';
+var ACHV=[
+ {id:'magic1000',t:'百万格校验',d:'在实验室 1 跑完 1000 阶幻方极限校验'},
+ {id:'prime4',t:'四种筛法',d:'在实验室 1 完成四种质数算法竞赛'},
+ {id:'prime168',t:'168 个质数',d:'把质数上限设为 1000，找到原文那 168 个质数'},
+ {id:'spiral100',t:'螺旋全对',d:'在实验室 2 把三类螺旋数据训到 100%'},
+ {id:'custom90',t:'自己出题',d:'用自画数据集训到 90% 以上'},
+ {id:'sgdbeat',t:'SGD 也不错',d:'用 SGD 优化器把准确率训到 95% 以上'},
+ {id:'probe',t:'看见神经元',d:'点开隐藏层节点查看感受野'},
+ {id:'grad',t:'梯度显微镜',d:'采样一次逐层梯度范数'},
+ {id:'report',t:'能交的作业',d:'导出一份实验报告'},
+ {id:'challenge',t:'挑战达成',d:'完成一个分享给你的训练挑战'},
+ {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
+ {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
+ {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
+ {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'}
+];
+var state={u:{},c:[]};
+try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function toast(msg){var t=document.getElementById('enh-toast');if(!t)return;t.textContent=msg;t.className='show';clearTimeout(t._t);t._t=setTimeout(function(){t.className='';},2500);}
+function unlock(id){
+  if(state.u[id])return false;
+  var a=null;for(var i=0;i<ACHV.length;i++)if(ACHV[i].id===id)a=ACHV[i];
+  if(!a)return false;
+  state.u[id]=Date.now();save();
+  toast('🏅 成就解锁 · '+a.t+'｜'+a.d);
+  var box=document.getElementById('enh-achv');if(box)renderAchv(box);
+  return true;
+}
+function done(){var n=0;for(var i=0;i<ACHV.length;i++)if(state.u[ACHV[i].id])n++;return n;}
+var ACHV_BTN='<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button style="border:1px solid #3a3a55;background:rgba(168,85,247,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="window.ENH.exportAchv()">⬇ 导出进度</button><button style="border:1px solid #3a3a55;background:rgba(45,212,191,.12);color:#e8e8f0;border-radius:9px;padding:6px 12px;font-size:12px;cursor:pointer" onclick="document.getElementById(\'enh-imp\').click()">⬆ 导入进度</button><input id="enh-imp" type="file" accept="application/json" style="display:none" onchange="if(this.files[0])window.ENH.importAchv(this.files[0])"></div>';
+function exportAchv(){try{var data=JSON.stringify({v:1,state:state},null,2);var blob=new Blob([data],{type:'application/json'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='homework-achievements.json';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);toast('已导出探索进度');}catch(e){toast('导出失败');}}
+function importAchv(file){var r=new FileReader();r.onload=function(){try{var d=JSON.parse(r.result);if(d&&d.state){state.u=d.state.u||{};state.c=d.state.c||[];save();var box=document.getElementById('enh-achv');if(box)renderAchv(box);toast('已导入探索进度 · 解锁 '+done()+'/'+ACHV.length);}else{toast('文件格式不对');}}catch(e){toast('导入失败：格式错误');}};r.readAsText(file);}
+function renderAchv(box){
+  var n=done(),pct=n/ACHV.length,r=38,c=2*Math.PI*r;
+  var ring='<svg class="ring" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2c2c42" stroke-width="8"/><circle cx="48" cy="48" r="'+r+'" fill="none" stroke="#2dd4bf" stroke-width="8" stroke-linecap="round" stroke-dasharray="'+(c*pct).toFixed(1)+' '+c.toFixed(1)+'" transform="rotate(-90 48 48)"/><text x="48" y="45" text-anchor="middle" fill="#e8e8f0" font-size="17" font-weight="700">'+n+'/'+ACHV.length+'</text><text x="48" y="62" text-anchor="middle" fill="#9a9ab8" font-size="9">已解锁</text></svg>';
+  var bd='';for(var j=0;j<ACHV.length;j++){var a=ACHV[j];bd+='<span class="bd'+(state.u[a.id]?' on':'')+'" title="'+a.d+'">'+(state.u[a.id]?'✓ ':'🔒 ')+a.t+'</span>';}
+  box.innerHTML='<div class="hd">'+ring+'<div><h3>🏅 探索进度 · 跨页成就</h3><div class="sub" style="color:#9a9ab8;font-size:12px;margin-top:4px">在实验室里做实验会自动解锁徽章，进度保存在本机；可导出 / 导入，换设备也不丢。按 <b>▶ 带我看一遍</b> 可自动逛完整站；<b>✦ 扩展能力</b> 列出全部交互。</div></div>'+ACHV_BTN+'</div><div class="badges">'+bd+'</div>';
+}
+window.ENH={unlock:unlock,save:save,state:state,ACHV:ACHV,done:done,toast:toast,REPO:REPO,exportAchv:exportAchv,importAchv:importAchv};
+var box=document.getElementById('enh-achv');if(box)renderAchv(box);
+
+/* 扩展能力面板 */
+var panel=document.getElementById('enh-panel');
+function openPanel(){panel.className='show';}
+function closePanel(){panel.className='';}
+document.getElementById('enh-fab').onclick=openPanel;
+document.getElementById('enh-panel-close').onclick=closePanel;
+panel.onclick=function(e){if(e.target===panel)closePanel();};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closePanel();stopTour();}});
+
+/* 自动导览 */
+var TOUR={
+ 'index.html':{next:'homework1.html',steps:[
+  {t:'欢迎来到课程作业站点',d:'卡片对应各次作业与实验室，顺序为 作业 1 → 实验室 1 → 作业 2 → 实验室 2 → 作业 3 → 实验室 3。',s:'.grid'},
+  {t:'扩展层与探索进度',d:'左下角「✦ 扩展能力」随时打开八项交互；这里的进度环记录你做过的实验。',s:'#enh-achv'}]},
+ 'homework1.html':{next:'lab1.html',steps:[
+  {t:'作业 1 · AI 编程工具实践',d:'原文与三张过程截图完整保留，记录了 TRAE / DeepSeek Codex / WorkBuddy 的分工和踩坑。',s:null},
+  {t:'从作品延伸出实验室',d:'页面底部的引导卡片通往实验室 1，把当时的 Python 作品变成可以亲手调参的网页实验。',s:null}]},
+ 'lab1.html':{next:'homework2.html',steps:[
+  {t:'🔢 幻方实验室',d:'拖动阶数看三种构造算法逐格填数，实时校验幻和；「极限校验」真跑 1000 阶 100 万格。',s:'#magic'},
+  {t:'⚡ 质数实验室',d:'四种算法同场计时，逐轮播放筛法划掉倍数，默认上限 1000 正好得到原文那 168 个质数。',s:'#prime'}]},
+ 'homework2.html':{next:'lab2.html',steps:[
+  {t:'作业 2 · 训练过程回放',d:'首屏是 PyTorch 训练的逐帧回放，下面是架构对比与九张分析图。',s:'#lab'},
+  {t:'从回放走向现场训练',d:'报告里的 CTA 通往实验室 2 —— 那里不是看录像，而是在浏览器里真跑反向传播。',s:'#arch'}]},
+ 'lab2.html':{next:'homework3.html',steps:[
+  {t:'实时神经网络训练台',d:'画数据、改隐藏层、调学习率，决策边界与 loss 曲线每帧刷新。',s:'#boundary'},
+  {t:'梯度显微镜与 3D 决策空间',d:'看懂「为什么学得动」：优化轨迹、逐层梯度、可旋转的置信度曲面。',s:'#grad'},
+  {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
+ 'homework3.html':{next:'lab3.html',steps:[
+  {t:'作业 3 · 人工智能应用：诗中有画',d:'把「人工智能诗人」与「AI 绘画大师」接成一条流水线：需求 → 诗 → 画，讲清工作原理。',s:'#origin'},
+  {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
+ 'lab3.html':{next:'atlas.html',steps:[
+  {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
+  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#how'}]},
+ 'atlas.html':{next:null,steps:[
+  {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
+  {t:'📖 课程教材脉络',d:'《人工智能通识》20 章逐章对照：哪几章在本站有实验、点一下就能回讲义原文。',s:'#course'},
+  {t:'确定性 vs 学习',d:'同一条时间轴并排看幻方 / 筛法与神经网络收敛，标出共同点与那道分界。',s:'#timeline'}]}
+};
+var bar=document.getElementById('enh-tourbar'),curPage=location.pathname.split('/').pop()||'index.html';
+if(curPage===''||curPage.indexOf('.html')<0)curPage='index.html';
+var ti=0,timer=null,active=false,hl=null;
+function clearHl(){if(hl){hl.classList.remove('enh-hl');hl=null;}}
+function showStep(){
+  var conf=TOUR[curPage];if(!conf)return;
+  var st=conf.steps[ti];
+  document.getElementById('enh-tour-pg').textContent=(ti+1)+' / '+conf.steps.length;
+  document.getElementById('enh-tour-t').textContent=st.t;
+  document.getElementById('enh-tour-d').textContent=st.d;
+  var nx=document.getElementById('enh-tour-next');
+  nx.textContent=(ti===conf.steps.length-1)?(conf.next?'下一站 →':'结束导览 ✓'):'下一步 →';
+  clearHl();
+  if(st.s){var el=null;try{el=document.querySelector(st.s);}catch(e){}if(el){el.scrollIntoView({behavior:'smooth',block:'center'});hl=el;hl.classList.add('enh-hl');}}
+  else window.scrollTo({top:0,behavior:'smooth'});
+  clearTimeout(timer);
+  if(ti<conf.steps.length-1)timer=setTimeout(nextStep,4600);
+}
+function nextStep(){
+  var conf=TOUR[curPage];if(!conf)return;
+  if(ti<conf.steps.length-1){ti++;showStep();return;}
+  if(conf.next){try{sessionStorage.setItem('hw_tour','1');}catch(e){}location.href=conf.next+'?tour=1';}
+  else{stopTour();window.ENH.unlock('atlas');window.ENH.toast('🎉 导览完成，感谢观看！');}
+}
+function startTour(){active=true;ti=0;bar.className='show';showStep();}
+function stopTour(){if(!active)return;active=false;clearTimeout(timer);clearHl();bar.className='';try{sessionStorage.removeItem('hw_tour');}catch(e){}}
+document.getElementById('enh-tour-fab').onclick=startTour;
+document.getElementById('enh-tour-link').onclick=function(e){e.preventDefault();closePanel();startTour();};
+document.getElementById('enh-tour-next').onclick=nextStep;
+document.getElementById('enh-tour-skip').onclick=stopTour;
+if(/[?&]tour=1/.test(location.search)){
+  setTimeout(function(){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}startTour();},700);
+}
+window.ENH.startTour=startTour;
+window.ENH.stopTour=stopTour;
+})();
+</script>
+<!-- /ENH:COMMON -->
+</body></html>
