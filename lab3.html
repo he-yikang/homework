@@ -77,6 +77,42 @@ details p{margin-top:8px;line-height:1.75}
 code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:5px;color:var(--teal);font-size:.92em}
 .totop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;cursor:pointer;font-size:15px;box-shadow:0 6px 20px rgba(168,85,247,.4);opacity:0;transition:.3s;pointer-events:none;z-index:60}
 .totop.show{opacity:1;pointer-events:auto}
+/* ===== 我的诗集 ===== */
+.coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
+.coll-toolbar .txt{flex:0 1 auto}
+.coll-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:12px;margin-top:12px}
+.coll-card{position:relative;background:linear-gradient(160deg,#1c1c28,#14141c);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:.2s}
+.coll-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.45)}
+.coll-card .cov{aspect-ratio:4/3;background:#0b0b12;overflow:hidden;position:relative}
+.coll-card .cov img{width:100%;height:100%;object-fit:cover;display:block}
+.coll-card .cov .no{position:absolute;top:6px;left:7px;background:rgba(10,10,15,.74);color:var(--gold);font-size:10px;border-radius:6px;padding:2px 7px;letter-spacing:.5px}
+.coll-card .meta{padding:9px 10px 11px}
+.coll-card .meta b{font-size:13px;color:var(--text);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coll-card .meta .tags{font-size:10px;color:var(--teal);display:block;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.coll-card .meta .frag{font-size:11px;color:#9a8b64;display:block;margin-top:6px;line-height:1.55;height:34px;overflow:hidden;font-family:'KaiTi','STKaiti','SimSun',serif}
+.coll-card .del{position:absolute;top:6px;right:7px;background:rgba(10,10,15,.74);border:1px solid rgba(239,138,138,.5);color:#ef8a8a;border-radius:6px;width:24px;height:22px;line-height:1;font-size:13px;cursor:pointer;z-index:2}
+.coll-empty{text-align:center;color:#6f6f90;font-size:13px;padding:38px 16px;border:1px dashed var(--border);border-radius:12px;margin-top:12px}
+.coll-modal{position:fixed;inset:0;background:rgba(5,5,10,.82);backdrop-filter:blur(6px);z-index:180;display:none;align-items:flex-start;justify-content:center;padding:8vh 16px 40px;overflow:auto}
+.coll-modal.show{display:flex}
+.coll-modal-box{position:relative;width:min(900px,96vw);background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--gold);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.7);padding:22px}
+.coll-modal-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--dim);font-size:20px;cursor:pointer;z-index:3}
+.coll-modal-x:hover{color:#fff}
+.coll-modal-body{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.coll-modal-body .cm-art{width:100%;border-radius:12px;border:1px solid var(--border);display:block;aspect-ratio:4/3;object-fit:cover}
+.coll-modal-body h3{font-size:20px;color:var(--gold);margin-bottom:8px}
+.coll-modal-body .cm-poem{font-family:'KaiTi','STKaiti','SimSun',serif;font-size:17px;line-height:1.95;letter-spacing:2px;color:#f0e8d0}
+.coll-modal-body .cm-poem.en{font-family:Georgia,serif;font-size:14px;letter-spacing:0;text-align:left}
+.coll-modal-body .cm-info{font-family:system-ui,sans-serif;font-size:11px;color:#6f6f90;margin-top:14px;line-height:1.8;border-top:1px solid var(--border);padding-top:10px}
+.coll-modal-body .cm-ops{margin-top:12px;display:flex;gap:7px}
+@media(max-width:760px){.coll-modal-body{grid-template-columns:1fr}}
+@media print{
+  #collection .coll-toolbar,#collection #collPreface,#favPoem,.coll-card .del,.coll-modal,.coll-empty{display:none!important}
+  #collection{border:none;box-shadow:none;background:none}
+  .coll-grid{grid-template-columns:repeat(2,1fr)}
+  .coll-card{break-inside:avoid;border:1px solid #ccc;background:#fff}
+  .coll-card .meta b,.coll-card .meta .frag{color:#111}
+}
 </style><meta property="og:type" content="website">
 <meta property="og:title" content="实验室 3 · 诗中有画">
 <meta property="og:description" content="纯前端交互：40 种诗体（含 22 种词牌曲牌，古今中外 8 大类）、20 种画风（5 大类），输入需求生成诗与画，可切换横竖排版。">
@@ -95,7 +131,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
   <a href="homework3.html">作业 3</a>
   <a href="lab3.html" class="active">实验室 3</a>
   <span class="spacer"></span>
-  <a href="#studio">创作台</a><a href="#how">原理</a>
+  <a href="#studio">创作台</a><a href="#how">原理</a><a href="#collection" style="color:#e8c07d">📖 我的诗集</a>
   <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
 <div class="wrap" id="main-content">
@@ -175,6 +211,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
       <div class="row no-print">
         <button class="btn sm" id="copyPoem">复制诗</button>
         <button class="btn sm" id="dlPoem">下载 .txt</button>
+        <button class="btn sm" id="favPoem" style="border-color:rgba(232,192,125,.5);color:var(--gold)">♡ 收入诗集</button>
       </div>
       <div class="stat" id="poemStat" aria-live="polite"></div>
     </section>
@@ -195,6 +232,42 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <button class="btn sm" id="reportBtn">📄 实验报告</button>
         </div>
       </section>
+    </div>
+  </div>
+
+  <!-- 我的诗集 -->
+  <section class="panel" id="collection" style="max-width:1440px">
+    <h2>⑤ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
+    <p class="tip" style="margin:0 0 12px">可以创建<strong style="color:#e8e8f0">多本诗集</strong>（如「秋夜集」「现代诗选」），作品按当前选中的诗集收藏。数据保存在这台设备上（画作以缩略图留存，不占多少空间）。每本诗集可独立命名、写序言、导出打印或备份。</p>
+    <div class="coll-toolbar no-print">
+      <label style="font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px">当前诗集
+        <select id="collSel" style="min-width:160px;max-width:240px" aria-label="选择诗集"></select>
+      </label>
+      <button class="btn sm" id="collNew" style="border-color:rgba(45,212,191,.5);color:var(--teal)">＋ 新建诗集</button>
+      <button class="btn sm" id="collRename">✎ 重命名</button>
+      <button class="btn sm" id="collDelLib" style="border-color:rgba(239,110,110,.5);color:#ef8a8a">删除这本</button>
+    </div>
+    <div class="coll-toolbar no-print" style="margin-top:8px">
+      <input class="txt" id="collTitle" maxlength="40" placeholder="诗集名称，如：秋夜集" style="max-width:260px" title="新书名 / 重命名用">
+      <input class="txt" id="collAuthor" maxlength="24" placeholder="署名（可选）" style="max-width:160px">
+      <button class="btn sm" id="collSaveMeta">✎ 保存书名/署名</button>
+      <button class="btn sm" id="collExport">📖 导出诗集 .html</button>
+      <button class="btn sm" id="collPrint">🖨 打印成册</button>
+      <button class="btn sm" id="collBackup">⬇ 备份 .json</button>
+      <button class="btn sm" id="collRestore">⬆ 导入 .json</button>
+      <button class="btn sm" id="collClear" style="border-color:rgba(239,110,110,.5);color:#ef8a8a">清空这本</button>
+      <input type="file" id="collFile" accept="application/json,.json" style="display:none">
+    </div>
+    <textarea class="txt" id="collPreface" rows="2" placeholder="诗集序言（可选）：写几句作为开篇…" style="margin-top:8px;resize:vertical"></textarea>
+    <div class="coll-grid" id="collGrid"></div>
+    <div class="coll-empty" id="collEmpty">还没有收藏作品。生成一首诗后，点诗卡片下方的「♡ 收入诗集」把它收进来。</div>
+  </section>
+
+  <!-- 诗集中单首详情弹窗 -->
+  <div class="coll-modal" id="collModal" role="dialog" aria-modal="true" aria-label="诗作详情">
+    <div class="coll-modal-box">
+      <button class="coll-modal-x" id="collModalX" aria-label="关闭">✕</button>
+      <div class="coll-modal-body" id="collModalBody"></div>
     </div>
   </div>
 
@@ -672,6 +745,182 @@ $('reportBtn').onclick=function(){
   if(window.ENH)window.ENH.unlock('report');
 };
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* ================= 我的诗集 ================= */
+var COLL_KEY='hw_lab3_libs_v1', OLD_KEY='hw_lab3_collection_v1', COLL_MAX=80;
+function collId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
+function newLib(title){return {id:collId(),title:title||'我的诗集',author:'',preface:'',items:[]};}
+var libs=[newLib()], activeId=libs[0].id;
+function curLib(){for(var i=0;i<libs.length;i++)if(libs[i].id===activeId)return libs[i];return libs[0];}
+function collLoad(){
+  try{
+    var s=JSON.parse(localStorage.getItem(COLL_KEY)||'null');
+    if(s&&Array.isArray(s.libs)&&s.libs.length){
+      libs=s.libs.filter(function(L){return L&&Array.isArray(L.items);});
+      if(!libs.length)libs=[newLib()];
+      activeId=s.activeId;
+      if(!curLib()||curLib().id!==activeId)activeId=libs[0].id;
+    }else{
+      // 迁移旧版单本数据，避免老用户丢作品
+      var old=JSON.parse(localStorage.getItem(OLD_KEY)||'null');
+      if(old&&Array.isArray(old.items)){var L=newLib(old.title||'我的诗集');L.author=old.author||'';L.preface=old.preface||'';L.items=old.items;libs=[L];activeId=L.id;}
+    }
+  }catch(e){}
+}
+function collSave(){try{localStorage.setItem(COLL_KEY,JSON.stringify({libs:libs,activeId:activeId}));return true;}catch(e){toast('本机存储空间不足，无法保存，请减少收藏或删除诗集');return false;}}
+function renderLibSel(){
+  var sel=$('collSel');
+  sel.innerHTML=libs.map(function(L){return '<option value="'+L.id+'"'+(L.id===activeId?' selected':'')+'>'+esc(L.title)+'（'+L.items.length+' 首）</option>';}).join('');
+}
+/* 生成小尺寸缩略图（离线重绘 / AI 图缩放），只存缩略图避免 localStorage 超限 */
+function makeThumb(cb){
+  var c=document.createElement('canvas');c.width=480;c.height=360;var x=c.getContext('2d');
+  function done(){var u;try{u=c.toDataURL('image/jpeg',0.68);}catch(e){u='';}cb(u);}
+  if(state.mode==='ai'&&state.aiImage){
+    var im=new Image();im.onload=function(){x.drawImage(im,0,0,480,360);done();};im.onerror=function(){x.fillStyle='#0b0b12';x.fillRect(0,0,480,360);done();};im.src=state.aiImage;
+  }else if(state.poem){drawScene(x,480,360,state.keys,state.mood,state.seed,state.style);done();}
+  else done();
+}
+function favCurrent(){
+  if(!state.poem){toast('请先生成一首诗');return;}
+  var L=curLib();
+  if(L.items.length>=COLL_MAX){toast('《'+L.title+'》已满（'+COLL_MAX+' 首），请先移除一些或换一本诗集');return;}
+  var p=state.poem;
+  makeThumb(function(thumb){
+    L.items.unshift({
+      id:collId(),title:p.title,lines:p.lines.slice(),form:p.form,formName:p.formName,
+      group:(FORMS[p.form]&&FORMS[p.form].g)||'',lang:p.lang,layout:p.layout,
+      mood:p.mood,moodName:p.moodName,style:state.style,styleName:STYLES[state.style].n,
+      ai:state.mode==='ai',theme:$('theme').value.trim(),seed:state.seed,
+      thumb:thumb,time:new Date().toLocaleString('zh-CN')
+    });
+    collSave();renderColl();
+    if(window.ENH)window.ENH.unlock('anthologist');
+    toast('《'+p.title+'》已收入《'+L.title+'》');
+  });
+}
+function renderColl(){
+  var L=curLib();
+  renderLibSel();
+  $('collTitle').value=L.title;$('collAuthor').value=L.author;$('collPreface').value=L.preface;
+  $('collCount').textContent='— 共 '+libs.length+' 本 · 当前《'+L.title+'》'+L.items.length+' 首'+(L.items.length>=COLL_MAX?'（已满）':'');
+  var grid=$('collGrid'),empty=$('collEmpty');
+  if(!L.items.length){grid.innerHTML='';empty.innerHTML='《'+esc(L.title)+'》还没有作品。生成一首诗后点「♡ 收入诗集」把它收进来。';empty.style.display='block';return;}
+  empty.style.display='none';
+  grid.innerHTML=L.items.map(function(it,i){
+    return '<div class="coll-card" data-id="'+it.id+'" role="button" tabindex="0" aria-label="查看《'+esc(it.title)+'》">'
+      +'<div class="cov">'+(it.thumb?'<img src="'+it.thumb+'" alt="'+esc(it.title)+' 的画作">':'')+'<span class="no">第 '+(i+1)+' 首</span></div>'
+      +'<button class="del" data-del="'+it.id+'" title="移出诗集" aria-label="移出诗集">✕</button>'
+      +'<div class="meta"><b>《'+esc(it.title)+'》</b>'
+      +'<span class="tags">'+esc(it.formName)+' · '+esc(it.styleName)+(it.ai?' · ✦AI':'')+'</span>'
+      +'<span class="frag">'+it.lines.slice(0,3).map(esc).join('<br>')+(it.lines.length>3?'<br>…':'')+'</span></div></div>';
+  }).join('');
+}
+function collFind(id){var r=null;curLib().items.forEach(function(x){if(x.id===id)r=x;});return r;}
+function openCollItem(id){
+  var it=collFind(id);if(!it)return;
+  var en=it.lang==='en';
+  $('collModalBody').innerHTML=
+     '<div><img class="cm-art" src="'+(it.thumb||'')+'" alt="'+esc(it.title)+' 的画作">'
+    +'<div class="cm-ops"><button class="btn sm" id="cmCopy">复制诗</button><button class="btn sm" id="cmDl">下载画作</button></div></div>'
+    +'<div><h3>《'+esc(it.title)+'》</h3>'
+    +'<div class="cm-poem'+(en?' en':'')+'">'+it.lines.map(esc).join('<br>')+'</div>'
+    +'<div class="cm-info">诗体：'+esc(it.formName)+'（'+esc(it.group||'—')+'）<br>画风：'+esc(it.styleName)+'<br>情感：'+esc(it.moodName)+'<br>生成方式：'+(it.ai?'AI 实时':'离线可复现')+'<br>主题：'+esc(it.theme||'—')+'<br>收藏于：'+esc(it.time)+'</div></div>';
+  $('collModal').classList.add('show');
+  $('cmCopy').onclick=function(){var t='《'+it.title+'》\n'+it.lines.join('\n');if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('诗已复制');},function(){toast('请手动复制');});else toast('请手动复制');};
+  $('cmDl').onclick=function(){if(!it.thumb){toast('无画作');return;}var a=document.createElement('a');a.download='诗集-'+it.title+'.jpg';a.href=it.thumb;document.body.appendChild(a);a.click();document.body.removeChild(a);toast('画作已下载');};
+}
+function collBookHTML(){
+  var escB=esc,L=curLib();
+  var cover='<section class="cover"><div class="seal">诗中有画</div><h1>'+escB(L.title)+'</h1>'
+    +(L.author?'<p class="author">'+escB(L.author)+'　编</p>':'')
+    +(L.preface?'<p class="preface">'+escB(L.preface).replace(/\n/g,'<br>')+'</p>':'')
+    +'<p class="sub">共 '+L.items.length+' 首 · 生成于 '+new Date().toLocaleString('zh-CN')+'</p>'
+    +'<p class="sub">人工智能概论 · 实验室 3 · he-yikang.github.io/homework</p></section>';
+  var pages=L.items.map(function(it,i){
+    var en=it.lang==='en';
+    return '<section class="pg"><div class="art"><img src="'+(it.thumb||'')+'" alt="'+escB(it.title)+'"></div>'
+      +'<div class="txt"><div class="no">NO. '+('0'+(i+1)).slice(-2)+'</div>'
+      +'<h2>《'+escB(it.title)+'》</h2>'
+      +'<div class="poem'+(en?' en':'')+'">'+it.lines.map(escB).join('<br>')+'</div>'
+      +'<div class="meta">'+escB(it.formName)+'（'+escB(it.group||'—')+'） · '+escB(it.styleName)+' · '+escB(it.moodName)+' · '+(it.ai?'AI 实时':'离线可复现')+'<br>主题：'+escB(it.theme||'—')+'</div></div></section>';
+  }).join('');
+  return '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>'+escB(L.title)+'</title><style>'
+    +'*{box-sizing:border-box}body{margin:0;background:#0a0a0f;color:#e8e8f0;font-family:system-ui,"Microsoft YaHei",sans-serif}'
+    +'.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;border-bottom:1px solid #26263a}'
+    +'.cover .seal{font-family:"KaiTi",serif;color:#e8c07d;border:2px solid #e8c07d;border-radius:8px;padding:8px 14px;font-size:18px;letter-spacing:6px;margin-bottom:32px}'
+    +'.cover h1{font-family:"KaiTi","STKaiti",serif;font-size:52px;color:#f0e8d0;letter-spacing:8px;margin:0}'
+    +'.cover .author,.cover .preface{font-family:"KaiTi",serif;color:#c4a4f8;font-size:18px;margin-top:20px;line-height:1.9}'
+    +'.cover .sub{color:#6f6f90;font-size:12px;margin-top:14px}'
+    +'.pg{max-width:900px;margin:0 auto;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;padding:48px 32px;border-bottom:1px solid #26263a}'
+    +'.pg .art img{width:100%;border-radius:12px;border:1px solid #26263a;display:block}'
+    +'.pg .no{font-size:11px;color:#6f6f90;letter-spacing:3px;margin-bottom:10px}'
+    +'.pg h2{font-family:"KaiTi",serif;font-size:28px;color:#e8c07d;margin:0 0 18px}'
+    +'.pg .poem{font-family:"KaiTi","STKaiti","SimSun",serif;font-size:19px;line-height:2.05;letter-spacing:2px;color:#f0e8d0}'
+    +'.pg .poem.en{font-family:Georgia,serif;font-size:15px;letter-spacing:0}'
+    +'.pg .meta{font-size:11px;color:#6f6f90;line-height:1.9;margin-top:22px;border-top:1px solid #26263a;padding-top:12px}'
+    +'@media(max-width:700px){.pg{grid-template-columns:1fr}.cover h1{font-size:36px}}'
+    +'@media print{*{box-shadow:none!important}body{background:#fff;color:#111}.cover{min-height:auto;padding:22vh 24px;page-break-after:always;border:none}.cover .seal{border-color:#8a2b1f;color:#8a2b1f}.cover h1,.cover .author,.cover .preface{color:#111}.cover .sub{color:#555}.pg{page-break-after:always;min-height:auto;border:none;padding:24px}.pg h2{color:#8a2b1f}.pg .poem{color:#111}.pg .meta,.pg .no{color:#555}.pg .art img{border:1px solid #ccc}}'
+    +'</style></head><body>'+cover+pages+'<p style="text-align:center;color:#6f6f90;font-size:11px;padding:30px">—— 由 he-yikang.github.io/homework/lab3.html 生成的诗集 ——</p></body></html>';
+}
+function openBook(print){
+  if(!curLib().items.length){toast('《'+curLib().title+'》还是空的');return;}
+  var w=window.open('','_blank');
+  if(!w){toast('弹窗被拦截，请允许弹窗后重试');return;}
+  w.document.write(collBookHTML());w.document.close();
+  if(print){try{w.focus();setTimeout(function(){w.print();},600);}catch(e){}}
+  if(window.ENH)window.ENH.unlock('anthologist');
+}
+/* 事件绑定 */
+$('favPoem').addEventListener('click',favCurrent);
+$('collSel').addEventListener('change',function(){activeId=this.value;collSave();renderColl();});
+$('collNew').addEventListener('click',function(){
+  if(libs.length>=20){toast('最多创建 20 本诗集');return;}
+  var name=window.prompt('新诗集的名称：','诗集 '+(libs.length+1));
+  if(name===null)return;name=name.trim()||'诗集 '+(libs.length+1);
+  var L=newLib(name);libs.unshift(L);activeId=L.id;collSave();renderColl();toast('已创建《'+name+'》');
+});
+$('collRename').addEventListener('click',function(){
+  var L=curLib(),name=window.prompt('重命名诗集：',L.title);
+  if(name===null)return;name=name.trim();if(!name){toast('名称不能为空');return;}
+  L.title=name;collSave();renderColl();toast('已重命名为《'+name+'》');
+});
+$('collDelLib').addEventListener('click',function(){
+  if(libs.length<=1){toast('至少要保留一本诗集');return;}
+  var L=curLib();
+  if(!window.confirm('确定删除《'+L.title+'》（含 '+L.items.length+' 首作品）？此操作不可撤销，建议先备份。'))return;
+  libs=libs.filter(function(x){return x.id!==L.id;});activeId=libs[0].id;collSave();renderColl();toast('已删除《'+L.title+'》');
+});
+$('collGrid').addEventListener('click',function(e){
+  var d=e.target.closest('[data-del]');
+  if(d){var id=d.getAttribute('data-del'),L=curLib();L.items=L.items.filter(function(x){return x.id!==id;});collSave();renderColl();toast('已移出诗集');return;}
+  var c=e.target.closest('.coll-card');if(c)openCollItem(c.getAttribute('data-id'));
+});
+$('collGrid').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){var c=e.target.closest('.coll-card');if(c){e.preventDefault();openCollItem(c.getAttribute('data-id'));}}});
+$('collModalX').addEventListener('click',function(){$('collModal').classList.remove('show');});
+$('collModal').addEventListener('click',function(e){if(e.target===$('collModal'))$('collModal').classList.remove('show');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')$('collModal').classList.remove('show');});
+$('collSaveMeta').addEventListener('click',function(){var L=curLib();L.title=$('collTitle').value.trim()||L.title;L.author=$('collAuthor').value.trim();L.preface=$('collPreface').value.trim();collSave();renderColl();toast('书名与序言已保存');});
+$('collExport').addEventListener('click',function(){openBook(false);});
+$('collPrint').addEventListener('click',function(){openBook(true);});
+$('collBackup').addEventListener('click',function(){dl(new Blob([JSON.stringify({format:'lab3-libs-v1',libs:libs,activeId:activeId},null,2)],{type:'application/json;charset=utf-8'}),'我的诗集-全部备份.json');toast('全部诗集已备份（'+libs.length+' 本）');});
+$('collRestore').addEventListener('click',function(){$('collFile').click();});
+$('collFile').addEventListener('change',function(){
+  var f=this.files&&this.files[0];if(!f)return;var rd=new FileReader();
+  rd.onload=function(){try{
+    var s=JSON.parse(rd.result),incoming;
+    if(s&&Array.isArray(s.libs))incoming=s.libs.filter(function(L){return L&&Array.isArray(L.items);});
+    else if(s&&Array.isArray(s.items))incoming=[{id:collId(),title:s.title||'导入的诗集',author:s.author||'',preface:s.preface||'',items:s.items}];
+    else throw new Error('格式不对');
+    if(!incoming.length)throw new Error('没有可导入的诗集');
+    if(!window.confirm('将导入 '+incoming.length+' 本诗集（追加到现有 '+libs.length+' 本之后），确定继续？'))return;
+    incoming.forEach(function(L){L.id=collId();});
+    libs=libs.concat(incoming);activeId=incoming[0].id;collSave();renderColl();toast('已导入 '+incoming.length+' 本诗集');
+  }catch(e){toast('导入失败：'+(e.message||'文件无效'));}};
+  rd.readAsText(f);this.value='';
+});
+$('collClear').addEventListener('click',function(){var L=curLib();if(!L.items.length){toast('《'+L.title+'》已是空的');return;}if(!window.confirm('确定清空《'+L.title+'》的 '+L.items.length+' 首作品？此操作不可撤销，建议先备份。'))return;L.items=[];collSave();renderColl();toast('《'+L.title+'》已清空');});
+collLoad();renderColl();
+globalThis.__LAB3_COLL__={get:function(){return curLib();},getLibs:function(){return libs;},fav:favCurrent,bookHTML:collBookHTML,render:renderColl};
 globalThis.__LAB3__={getPoem:function(){return state.poem;},getState:function(){return {theme:$('theme').value.trim(),form:state.form,mood:state.mood,style:state.style,layout:state.layout,mode:state.mode,keys:state.keys.slice(),seed:state.seed,hasAI:!!state.aiImage};},generate:generate};
 window.addEventListener('scroll',function(){var b=$('totop');if(window.scrollY>400)b.classList.add('show');else b.classList.remove('show');});
 buildSelects();
@@ -789,7 +1038,7 @@ window.addEventListener('scroll',function(){var h=document.documentElement.scrol
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 20 章</b><small>《人工智能通识》20 章逐章对照本站实践，可搜索、筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>11 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
@@ -818,7 +1067,8 @@ var ACHV=[
  {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
- {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'}
+ {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
+ {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'}
 ];
 var state={u:{},c:[]};
 try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}

@@ -476,7 +476,7 @@ window.addEventListener('scroll',function(){
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 20 章</b><small>《人工智能通识》20 章逐章对照本站实践，可搜索、筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>11 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
@@ -505,7 +505,8 @@ var ACHV=[
  {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
- {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'}
+ {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
+ {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'}
 ];
 var state={u:{},c:[]};
 try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
