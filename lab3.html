@@ -94,7 +94,22 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .style-ref-chip{font-size:11px;color:var(--text);background:#101018;border:1px solid var(--border);border-radius:99px;padding:4px 10px;cursor:pointer;transition:.18s}
 .style-ref-chip:hover{border-color:var(--purple);color:#fff;background:rgba(168,85,247,.14)}
 .style-ref-chip.on{border-color:var(--gold);color:var(--gold);background:rgba(232,192,125,.12)}
-@media print{.img-ref-grid,.famous-list,.style-ref,.img-ref-btn,.style-ref-chip{break-inside:avoid}}
+/* ===== 格律速查 ===== */
+.meter-grid{display:grid;gap:8px}
+.meter-grp .mg-t{font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:4px}
+.meter-list{display:flex;flex-wrap:wrap;gap:5px}
+.meter-item{font-size:11px;color:var(--text);background:#101018;border:1px solid var(--border);border-radius:8px;padding:5px 8px;cursor:pointer;transition:.18s;line-height:1.35}
+.meter-item:hover{border-color:var(--teal);background:rgba(45,212,191,.1)}
+.meter-item b{color:var(--teal);font-weight:600}
+.meter-item small{display:block;color:#6f6f90;font-size:10px;margin-top:2px}
+.meter-item.on{border-color:var(--gold);background:rgba(232,192,125,.1)}
+/* ===== 绘制步骤 ===== */
+.step-list{list-style:none;margin:0;padding:0;display:grid;gap:9px}
+.step-list li{display:flex;gap:10px;align-items:flex-start}
+.step-list .sn{flex:0 0 22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.step-list li b{font-size:12px;color:var(--text);display:block}
+.step-list li small{font-size:11px;color:#6f6f90;line-height:1.5}
+@media print{.img-ref-grid,.famous-list,.style-ref,.img-ref-btn,.style-ref-chip,.meter-grid,.step-list{break-inside:avoid}}
 /* ===== 我的诗集 ===== */
 .coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
@@ -251,6 +266,13 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         </div>
       </details>
     </section>
+
+    <!-- 格律速查：用真实 FORMS 数据列出各诗体句数字数 -->
+    <section class="panel" id="meterRef">
+      <h2>⑥ 格律速查 · 诗体对照</h2>
+      <p class="tip" style="margin:0 0 10px">诗体的「格律」就是每行字数与句数的约束——这是把一句话变成诗的规则（教材<b style="color:#c4a4f8">第 10 章 · 基于知识</b>）。下表由页面真实诗体库生成，点诗体可直接选用。</p>
+      <div class="meter-grid" id="meterGrid"></div>
+    </section>
     </div>
 
     <!-- 画作 -->
@@ -272,16 +294,31 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 
       <!-- 画风图鉴：点击即时切换画风 -->
       <section class="panel" id="styleRef">
-        <h2>⑥ 画风图鉴 · 一点即换</h2>
+        <h2>⑦ 画风图鉴 · 一点即换</h2>
         <p class="tip" style="margin:0 0 10px">同一首诗，换个画风就是另一幅笔墨。点任意画风即可切换上方画作并重绘（对应教材<b style="color:#c4a4f8">第 18 章 · 多模态表示</b>）。共 20 种 / 5 类。</p>
         <div class="style-ref" id="styleRefBox"></div>
+      </section>
+
+      <!-- 一幅画的诞生：按真实 drawScene 顺序分解 -->
+      <section class="panel" id="paintSteps">
+        <h2>⑧ 一幅画是怎么画出来的</h2>
+        <p class="tip" style="margin:0 0 10px">离线画作由代码按固定顺序一层层画成（AI 模式则由文生图模型一步生成）。下面 6 步就是上方 Canvas 真实的绘制顺序——这正是「语义 → 视觉表示」的流水线。</p>
+        <ol class="step-list">
+          <li><span class="sn">1</span><div><b>铺底色</b><small>按画风色板与情感渲染整幅背景（水墨留白 / 赛博霓虹渐变…）</small></div></li>
+          <li><span class="sn">2</span><div><b>画远山</b><small>用随机折线生成层叠山峦，种子固定则形状固定</small></div></li>
+          <li><span class="sn">3</span><div><b>点云与水</b><small>椭圆弧线作云，波纹线作水，透明度叠加出层次</small></div></li>
+          <li><span class="sn">4</span><div><b>落意象</b><small>月/星/竹/柳/花/鸟/舟/亭/雪依次绘入——每个意象一套画法</small></div></li>
+          <li><span class="sn">5</span><div><b>题诗句</b><small>把诗的每行竖排写在右上角；英文诗则横排</small></div></li>
+          <li><span class="sn">6</span><div><b>钤印章</b><small>最后盖一枚红色「诗画」印，收束全图</small></div></li>
+        </ol>
+        <div class="notice" style="margin-top:12px">所有随机元素都由<b style="color:#c4a4f8">诗句哈希种子</b>驱动，所以「同诗 + 同画风 = 同一幅画」——这就是可复现（第 19 章）。</div>
       </section>
     </div>
   </div>
 
   <!-- 我的诗集 -->
   <section class="panel" id="collection" style="max-width:1440px">
-    <h2>⑦ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
+    <h2>⑨ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
     <p class="tip" style="margin:0 0 12px">可以创建<strong style="color:#e8e8f0">多本诗集</strong>（如「秋夜集」「现代诗选」），作品按当前选中的诗集收藏。数据保存在这台设备上（画作以缩略图留存，不占多少空间）。每本诗集可独立命名、写序言、导出打印或备份。</p>
     <div class="coll-toolbar no-print">
       <label style="font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px">当前诗集
@@ -661,7 +698,7 @@ segBind('modeSeg',function(v){
   if(v==='offline'){$('artAI').style.display='none';$('art').style.display='block';if(state.seed)redraw();}
   else{$('art').style.display='none';if(state.aiImage)$('artAI').style.display='block';}
 });
-$('formSel').addEventListener('change',function(){state.form=this.value;});
+$('formSel').addEventListener('change',function(){state.form=this.value;if(typeof renderMeterRef==='function')renderMeterRef();});
 $('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem)redraw();if(typeof renderStyleRef==='function')renderStyleRef();});
 function renderPoem(p){
   var box=$('poemBox'),dark=(S_isDark(state.style));box.className='poem-box '+(dark?'poem-canvas':'poem-paper');
@@ -795,6 +832,30 @@ function renderImgRef(){
     var im=IMG[k];return '<button class="img-ref-btn" data-im="'+k+'" title="把「'+esc(im.n)+'」填入主题"><b>'+esc(im.n)+'</b><small>'+esc(im.w[0])+'</small></button>';
   }).join('');
 }
+function renderMeterRef(){
+  var html=FORM_ORDER.map(function(g){
+    var ids=Object.keys(FORMS).filter(function(id){return FORMS[id].g===g;});
+    if(!ids.length)return '';
+    var chips=ids.map(function(id){
+      var F=FORMS[id];
+      var spec=F.lens?(F.lens.join('·')+'字'):(F.lines?('约'+F.lines+'行'):(F.kind==='prose'?'散文':'自由'));
+      return '<div class="meter-item'+(id===state.form?' on':'')+'" data-fid="'+id+'" role="button" tabindex="0" title="选用'+esc(F.n)+'"><b>'+esc(F.n)+'</b><small>'+esc(spec)+'</small></div>';
+    }).join('');
+    return '<div class="meter-grp"><div class="mg-t">'+esc(g)+'</div><div class="meter-list">'+chips+'</div></div>';
+  }).join('');
+  $('meterGrid').innerHTML=html;
+}
+function applyForm(id){
+  if(!FORMS[id])return;
+  state.form=id;$('formSel').value=id;renderMeterRef();
+  toast('诗体已切换为'+FORMS[id].n);
+}
+$('meterGrid').addEventListener('click',function(e){
+  var c=e.target.closest('[data-fid]');if(c)applyForm(c.getAttribute('data-fid'));
+});
+$('meterGrid').addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-fid]');if(c){e.preventDefault();applyForm(c.getAttribute('data-fid'));}}
+});
 function renderStyleRef(){
   var html=STYLE_ORDER.map(function(g){
     var items=Object.keys(STYLES).filter(function(id){return STYLES[id].g===g;});
@@ -825,7 +886,7 @@ $('styleRefBox').addEventListener('click',function(e){
 $('styleRefBox').addEventListener('keydown',function(e){
   if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-st]');if(c){e.preventDefault();applyStyle(c.getAttribute('data-st'));}}
 });
-renderImgRef();renderStyleRef();
+renderImgRef();renderMeterRef();renderStyleRef();
 /* ================= 我的诗集 ================= */
 var COLL_KEY='hw_lab3_libs_v1', OLD_KEY='hw_lab3_collection_v1', COLL_MAX=80;
 function collId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
