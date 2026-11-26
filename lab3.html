@@ -77,6 +77,24 @@ details p{margin-top:8px;line-height:1.75}
 code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:5px;color:var(--teal);font-size:.92em}
 .totop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;cursor:pointer;font-size:15px;box-shadow:0 6px 20px rgba(168,85,247,.4);opacity:0;transition:.3s;pointer-events:none;z-index:60}
 .totop.show{opacity:1;pointer-events:auto}
+/* ===== 意象速查 ===== */
+.img-ref-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.img-ref-btn{background:#101018;border:1px solid var(--border);border-radius:9px;padding:9px 2px;text-align:center;cursor:pointer;transition:.18s;color:var(--text)}
+.img-ref-btn:hover{border-color:var(--gold);background:rgba(232,192,125,.1);transform:translateY(-2px)}
+.img-ref-btn b{display:block;font-family:'KaiTi','STKaiti',serif;font-size:19px;color:var(--gold)}
+.img-ref-btn small{display:block;font-size:10px;color:#6f6f90;margin-top:3px}
+.famous-list{margin-top:10px;display:grid;gap:7px}
+.famous-list>div{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12px;border-bottom:1px dashed var(--border);padding-bottom:6px}
+.famous-list .fm{font-family:'KaiTi','STKaiti',serif;color:#d8cfae;letter-spacing:1px}
+.famous-list .fk{color:var(--teal);font-size:11px;white-space:nowrap}
+/* ===== 画风图鉴 ===== */
+.style-ref-group{margin-bottom:9px}
+.style-ref-group .sg-t{font-size:10px;color:var(--dim);letter-spacing:1px;margin-bottom:5px}
+.style-ref-chips{display:flex;flex-wrap:wrap;gap:5px}
+.style-ref-chip{font-size:11px;color:var(--text);background:#101018;border:1px solid var(--border);border-radius:99px;padding:4px 10px;cursor:pointer;transition:.18s}
+.style-ref-chip:hover{border-color:var(--purple);color:#fff;background:rgba(168,85,247,.14)}
+.style-ref-chip.on{border-color:var(--gold);color:var(--gold);background:rgba(232,192,125,.12)}
+@media print{.img-ref-grid,.famous-list,.style-ref,.img-ref-btn,.style-ref-chip{break-inside:avoid}}
 /* ===== 我的诗集 ===== */
 .coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
@@ -205,6 +223,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
     </div>
 
     <!-- 诗歌 -->
+    <div>
     <section class="panel">
       <h2>③ 人工智能诗人 <span style="font-size:11px;color:var(--gold);font-weight:400" id="poemFormTag">— 生成的诗</span></h2>
       <div class="poem-box poem-paper" id="poemBox"><div class="poem-empty">点击左侧「生成诗与画」<br>这里会出现一首为你而作的诗</div></div>
@@ -215,6 +234,24 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
       </div>
       <div class="stat" id="poemStat" aria-live="polite"></div>
     </section>
+
+    <!-- 意象速查：点击填入主题 -->
+    <section class="panel" id="imageryRef">
+      <h2>⑤ 意象速查 · 一键取材</h2>
+      <p class="tip" style="margin:0 0 10px">「意象」是诗与画共用的接口。点一个意象即可填入上方主题框，再生成就会围绕它取景。（对应教材<b style="color:#c4a4f8">第 15/16 章 · 表示</b>）</p>
+      <div class="img-ref-grid" id="imgRefGrid"></div>
+      <details style="margin-top:12px">
+        <summary>看看名诗句里藏着哪些意象</summary>
+        <div class="famous-list">
+          <div><span class="fm">空山新雨后，天气晚来秋</span><span class="fk">空山 · 秋</span></div>
+          <div><span class="fm">月落乌啼霜满天，江枫渔火对愁眠</span><span class="fk">月 · 江 · 舟</span></div>
+          <div><span class="fm">孤舟蓑笠翁，独钓寒江雪</span><span class="fk">舟 · 江 · 雪</span></div>
+          <div><span class="fm">采菊东篱下，悠然见南山</span><span class="fk">花 · 山</span></div>
+          <div><span class="fm">星垂平野阔，月涌大江流</span><span class="fk">星 · 月 · 江</span></div>
+        </div>
+      </details>
+    </section>
+    </div>
 
     <!-- 画作 -->
     <div class="col-art">
@@ -232,12 +269,19 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <button class="btn sm" id="reportBtn">📄 实验报告</button>
         </div>
       </section>
+
+      <!-- 画风图鉴：点击即时切换画风 -->
+      <section class="panel" id="styleRef">
+        <h2>⑥ 画风图鉴 · 一点即换</h2>
+        <p class="tip" style="margin:0 0 10px">同一首诗，换个画风就是另一幅笔墨。点任意画风即可切换上方画作并重绘（对应教材<b style="color:#c4a4f8">第 18 章 · 多模态表示</b>）。共 20 种 / 5 类。</p>
+        <div class="style-ref" id="styleRefBox"></div>
+      </section>
     </div>
   </div>
 
   <!-- 我的诗集 -->
   <section class="panel" id="collection" style="max-width:1440px">
-    <h2>⑤ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
+    <h2>⑦ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
     <p class="tip" style="margin:0 0 12px">可以创建<strong style="color:#e8e8f0">多本诗集</strong>（如「秋夜集」「现代诗选」），作品按当前选中的诗集收藏。数据保存在这台设备上（画作以缩略图留存，不占多少空间）。每本诗集可独立命名、写序言、导出打印或备份。</p>
     <div class="coll-toolbar no-print">
       <label style="font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px">当前诗集
@@ -618,7 +662,7 @@ segBind('modeSeg',function(v){
   else{$('art').style.display='none';if(state.aiImage)$('artAI').style.display='block';}
 });
 $('formSel').addEventListener('change',function(){state.form=this.value;});
-$('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem)redraw();});
+$('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem)redraw();if(typeof renderStyleRef==='function')renderStyleRef();});
 function renderPoem(p){
   var box=$('poemBox'),dark=(S_isDark(state.style));box.className='poem-box '+(dark?'poem-canvas':'poem-paper');
   $('poemFormTag').textContent='— '+p.formName;
@@ -745,6 +789,43 @@ $('reportBtn').onclick=function(){
   if(window.ENH)window.ENH.unlock('report');
 };
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* ================= 意象速查 / 画风图鉴 ================= */
+function renderImgRef(){
+  $('imgRefGrid').innerHTML=Object.keys(IMG).map(function(k){
+    var im=IMG[k];return '<button class="img-ref-btn" data-im="'+k+'" title="把「'+esc(im.n)+'」填入主题"><b>'+esc(im.n)+'</b><small>'+esc(im.w[0])+'</small></button>';
+  }).join('');
+}
+function renderStyleRef(){
+  var html=STYLE_ORDER.map(function(g){
+    var items=Object.keys(STYLES).filter(function(id){return STYLES[id].g===g;});
+    if(!items.length)return '';
+    return '<div class="style-ref-group"><div class="sg-t">'+esc(g)+'</div><div class="style-ref-chips">'
+      +items.map(function(id){return '<span class="style-ref-chip'+(id===state.style?' on':'')+'" data-st="'+id+'" role="button" tabindex="0" title="切换到'+esc(STYLES[id].n)+'">'+esc(STYLES[id].n)+'</span>';}).join('')
+      +'</div></div>';
+  }).join('');
+  $('styleRefBox').innerHTML=html;
+}
+function applyStyle(id){
+  if(!STYLES[id])return;
+  state.style=id;$('styleSel').value=id;
+  $('artStyleTag').textContent='— '+STYLES[id].n;
+  renderStyleRef();
+  if(state.poem&&state.mode==='offline')redraw();
+  toast('画风已切换为'+STYLES[id].n+(state.poem?'（画作已重绘）':''));
+}
+$('imgRefGrid').addEventListener('click',function(e){
+  var b=e.target.closest('[data-im]');if(!b)return;
+  var k=b.getAttribute('data-im'),word=IMG[k].w[0];
+  $('theme').value=word;$('theme').focus();
+  toast('已填入「'+word+'」，点生成即可围绕它取景');
+});
+$('styleRefBox').addEventListener('click',function(e){
+  var c=e.target.closest('[data-st]');if(c)applyStyle(c.getAttribute('data-st'));
+});
+$('styleRefBox').addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-st]');if(c){e.preventDefault();applyStyle(c.getAttribute('data-st'));}}
+});
+renderImgRef();renderStyleRef();
 /* ================= 我的诗集 ================= */
 var COLL_KEY='hw_lab3_libs_v1', OLD_KEY='hw_lab3_collection_v1', COLL_MAX=80;
 function collId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
