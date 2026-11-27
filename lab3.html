@@ -154,6 +154,21 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .img-atlas .sm-body b{color:#c4a4f8}
 .img-atlas .sm-body .sm-btn{margin-top:6px;font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
 @media print{.img-atlas{break-inside:avoid}}
+/* ===== 情感基调图谱 ===== */
+.mood-atlas{display:grid;gap:8px}
+.mood-atlas details{border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.015);overflow:hidden}
+.mood-atlas details.on{border-color:rgba(45,212,191,.45);background:rgba(45,212,191,.04)}
+.mood-atlas summary{cursor:pointer;list-style:none;padding:7px 10px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:7px}
+.mood-atlas summary::-webkit-details-marker{display:none}
+.mood-atlas summary:hover{background:rgba(45,212,191,.06)}
+.mood-atlas summary .m-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.mood-atlas summary small{font-size:10px;color:#6f6f90;margin-left:auto}
+.mood-atlas .m-body{padding:0 10px 9px;font-size:11px;color:#9a9ab8;line-height:1.7;border-top:1px solid var(--line)}
+.mood-atlas .m-body b{color:#c4a4f8}
+.mood-atlas .m-body .m-row{margin-top:4px}
+.mood-atlas .m-body .m-row span{color:#6f6f90}
+.mood-atlas .m-body .m-btn{margin-top:6px;font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
+@media print{.mood-atlas{break-inside:avoid}}
 /* ===== 我的诗集 ===== */
 .coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
@@ -278,6 +293,14 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <p><b style="color:#c4a4f8">离线</b>：词库 + 格律本地拼装、Canvas 代码作画，断网可用、同诗同画风画作固定（种子可复现）。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「规则拼装」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
         </details>
         <div class="notice">API 调用直接在浏览器发起（OpenAI 兼容接口，CORS 开放），Key 公开写在本页源码中，<b>仅供课程作业演示</b>，请勿用于生产环境。若 AI 调用失败会自动降级回离线模式。</div>
+      </section>
+
+      <!-- 情感基调：按 MOOD 真实词库 -->
+      <section class="panel" id="moodAtlas">
+        <h2>⑬ 情感基调 · 选词与取景</h2>
+        <p class="tip" style="margin:0 0 10px">情感不是一句「悲伤点」，而是三组具体选词：动词、形容词、句尾词，外加一层画面色调。下面是离线生成时真实使用的词库——点一种情感即可切换上方选项，再生成一首看看词怎么变。</p>
+        <div class="mood-atlas" id="moodAtlasGrid"></div>
+        <div class="notice" style="margin-top:12px">同一个「秋夜江边」，选「静」得到「明月照秋水」，选「愁」可能变成「寒月锁孤舟」——<b style="color:#c4a4f8">换的是表示，不只是标签</b>。这正是教材第 15/16 章「表示」的直观例子。</div>
       </section>
     </div>
 
@@ -1133,6 +1156,27 @@ function renderImgAtlas(){
       +'<div class="sm-body">'+h.d+'<br><button class="sm-btn" data-im="'+k+'">填入主题「'+esc(IMG[k].w[0])+'」→</button></div></details>';
   }).join('');
 }
+function renderMoodAtlas(){
+  $('moodAtlasGrid').innerHTML=Object.keys(MOOD).map(function(k){
+    var M=MOOD[k];
+    return '<details'+(k===state.mood?' class="on" open':'')+'><summary><span class="m-dot" style="background:'+M.tint.replace(/[\d.]+\)$/,'1)')+'"></span><b>'+esc(M.n)+'</b><small>画面色调 '+M.tint.match(/[\d.]+(?=\))/)[0]+' 透明度</small></summary>'
+      +'<div class="m-body"><div class="m-row"><span>动词</span> '+M.v.join(' · ')+'</div>'
+      +'<div class="m-row"><span>形容</span> '+M.a.join(' · ')+'</div>'
+      +'<div class="m-row"><span>句尾</span> '+M.t.join(' · ')+'</div>'
+      +'<button class="m-btn" data-mood="'+k+'">选用「'+esc(M.n)+'」→</button></div></details>';
+  }).join('');
+}
+function applyMood(k){
+  if(!MOOD[k])return;
+  state.mood=k;
+  var bs=$('moodSeg').querySelectorAll('button');
+  for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-v')===k);
+  renderMoodAtlas();
+  toast('情感已切换为「'+MOOD[k].n+'」，点生成即可换一组词');
+}
+$('moodAtlasGrid').addEventListener('click',function(e){
+  var b=e.target.closest('[data-mood]');if(b)applyMood(b.getAttribute('data-mood'));
+});
 function fillImagery(k){
   var word=IMG[k]&&IMG[k].w[0];if(!word)return;
   $('theme').value=word;$('theme').focus();
@@ -1149,7 +1193,7 @@ $('styleRefBox').addEventListener('click',function(e){
 $('styleRefBox').addEventListener('keydown',function(e){
   if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-st]');if(c){e.preventDefault();applyStyle(c.getAttribute('data-st'));}}
 });
-renderImgRef();renderMeterRef();renderStyleRef();renderImgAtlas();
+renderImgRef();renderMeterRef();renderStyleRef();renderImgAtlas();renderMoodAtlas();
 /* ================= 我的诗集 ================= */
 var COLL_KEY='hw_lab3_libs_v1', OLD_KEY='hw_lab3_collection_v1', COLL_MAX=80;
 function collId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
