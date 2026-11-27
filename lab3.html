@@ -141,6 +141,19 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .diff-imgs figure{margin:0}
 .diff-imgs img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
 .diff-imgs figcaption{font-size:11px;color:#8a8aa8;margin-top:4px}
+/* ===== 意象画法图谱 ===== */
+.img-atlas{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+@media(max-width:520px){.img-atlas{grid-template-columns:1fr}}
+.img-atlas details{border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.015);overflow:hidden}
+.img-atlas summary{cursor:pointer;list-style:none;padding:7px 10px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px}
+.img-atlas summary::-webkit-details-marker{display:none}
+.img-atlas summary:hover{background:rgba(45,212,191,.07)}
+.img-atlas summary .sm-mk{color:var(--teal);font-size:11px}
+.img-atlas summary .sm-w{font-size:10px;color:#6f6f90;margin-left:auto}
+.img-atlas .sm-body{padding:0 10px 9px;font-size:11px;color:#9a9ab8;line-height:1.65;border-top:1px solid var(--line)}
+.img-atlas .sm-body b{color:#c4a4f8}
+.img-atlas .sm-body .sm-btn{margin-top:6px;font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
+@media print{.img-atlas{break-inside:avoid}}
 /* ===== 我的诗集 ===== */
 .coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
@@ -364,6 +377,14 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <li><span class="sn">6</span><div><b>钤印章</b><small>最后盖一枚红色「诗画」印，收束全图</small></div></li>
         </ol>
         <div class="notice" style="margin-top:12px">所有随机元素都由<b style="color:#c4a4f8">诗句哈希种子</b>驱动，所以「同诗 + 同画风 = 同一幅画」——这就是可复现（第 19 章）。</div>
+      </section>
+
+      <!-- 意象画法图谱：按 drawScene 真实分支 -->
+      <section class="panel" id="imgAtlas">
+        <h2>⑫ 意象画法图谱 · 12 种取景</h2>
+        <p class="tip" style="margin:0 0 10px">每个意象在代码里都有一套专属画法——下面是上方 Canvas 真实使用的 12 种。点意象即可填入主题、换个取景重新生成；切换画风后，同一套画法会改用该画风的笔法模式重画（对应教材<b style="color:#c4a4f8">第 18 章 · 多模态表示</b>）。</p>
+        <div class="img-atlas" id="imgAtlasGrid"></div>
+        <div class="notice" style="margin-top:12px">点开任一项能看它「怎么用线条/色块画出来」——这正是把诗里的一个词变成一像素画面的最小例子：语义 → 表示 → 像素。</div>
       </section>
     </div>
   </div>
@@ -1090,11 +1111,37 @@ function applyStyle(id){
   if(state.poem&&state.mode==='offline')redraw();
   toast('画风已切换为'+STYLES[id].n+(state.poem?'（画作已重绘）':''));
 }
-$('imgRefGrid').addEventListener('click',function(e){
-  var b=e.target.closest('[data-im]');if(!b)return;
-  var k=b.getAttribute('data-im'),word=IMG[k].w[0];
+/* 意象画法图谱：说明取自 drawScene 的真实绘制分支 */
+var IMG_HOW={
+ moon:{t:'画面右上，半径约 42 的圆',d:'深色/线描画风只勾圆轮廓；其余画风用<b>径向渐变光晕</b>＋实心圆表现月色，取色板第 4 色。'},
+ mountain:{t:'三层叠嶂的折线山峦',d:'随机折线连成峰谷，自下而上三层，透明度递增（.30→.46）拉出远近；取景不足 3 个意象时自动补远山。'},
+ water:{t:'十道正弦波纹',d:'在画面下半部画 10 条带正弦起伏的横线，透明度 .4、线宽 1.2，波纹位置由种子决定。'},
+ willow:{t:'主干＋十条垂枝',d:'先画一段弯曲主干，再从上往下垂 10 条细枝，每条末端有轻微摆动，像风里的柳丝。'},
+ snow:{t:'六十点随机飞雪',d:'画面上方 85% 区域撒 60 个白点；像素画风改用 3×3 方块，其余用大小不一的圆点。'},
+ flower:{t:'花枝＋十四朵小花',d:'一段斜出的枝干上散落 14 朵四点小花，位置由种子随机，取色板第 1/2 色。'},
+ bird:{t:'五只飞鸟的折线',d:'每只用四点折线画成「人」字形的展翅剪影，分布在画面上半部右上区域。'},
+ boat:{t:'一叶扁舟＋桅杆',d:'梯形船身加一条竖桅，位置随机落在画面中下部水面上。'},
+ bamboo:{t:'三竿修竹＋竹叶',d:'三根带节的竹竿，每竿配 5 组斜向竹叶，叶长由种子决定方向。'},
+ cloud:{t:'四组椭圆云弧',d:'用椭圆弧线闭合成云团，随机分布在上半部，透明度 .18 叠出层次。'},
+ pavilion:{t:'一角亭子的屋顶与柱',d:'先画三角屋顶，再画四柱围成的亭身，固定在画面右侧中景。'},
+ star:{t:'二十八点星子',d:'上半部撒 28 个亮点；像素画风用 4×4 方块，其余用小圆点，取色板末色。'}
+};
+function renderImgAtlas(){
+  $('imgAtlasGrid').innerHTML=Object.keys(IMG).map(function(k){
+    var h=IMG_HOW[k]||{t:IMG[k].n,d:'按画风笔法绘制。'};
+    return '<details><summary><span class="sm-mk">◆</span><b>'+esc(IMG[k].n)+'</b><span class="sm-w">'+esc(h.t)+'</span></summary>'
+      +'<div class="sm-body">'+h.d+'<br><button class="sm-btn" data-im="'+k+'">填入主题「'+esc(IMG[k].w[0])+'」→</button></div></details>';
+  }).join('');
+}
+function fillImagery(k){
+  var word=IMG[k]&&IMG[k].w[0];if(!word)return;
   $('theme').value=word;$('theme').focus();
   toast('已填入「'+word+'」，点生成即可围绕它取景');
+}
+['imgRefGrid','imgAtlasGrid'].forEach(function(id){
+  $(id).addEventListener('click',function(e){
+    var b=e.target.closest('[data-im]');if(b)fillImagery(b.getAttribute('data-im'));
+  });
 });
 $('styleRefBox').addEventListener('click',function(e){
   var c=e.target.closest('[data-st]');if(c)applyStyle(c.getAttribute('data-st'));
@@ -1102,7 +1149,7 @@ $('styleRefBox').addEventListener('click',function(e){
 $('styleRefBox').addEventListener('keydown',function(e){
   if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-st]');if(c){e.preventDefault();applyStyle(c.getAttribute('data-st'));}}
 });
-renderImgRef();renderMeterRef();renderStyleRef();
+renderImgRef();renderMeterRef();renderStyleRef();renderImgAtlas();
 /* ================= 我的诗集 ================= */
 var COLL_KEY='hw_lab3_libs_v1', OLD_KEY='hw_lab3_collection_v1', COLL_MAX=80;
 function collId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
