@@ -225,6 +225,8 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
   .coll-card{break-inside:avoid;border:1px solid #ccc;background:#fff}
   .coll-card .meta b,.coll-card .meta .frag{color:#111}
 }
+/* 精品画作 */
+.art-gallery{display:none;width:100%;height:100%;object-fit:cover;border-radius:10px}
 </style><meta property="og:type" content="website">
 <meta property="og:title" content="实验室 3 · 诗中有画">
 <meta property="og:description" content="纯前端交互：40 种诗体（含 22 种词牌曲牌，古今中外 8 大类）、20 种画风（5 大类），输入需求生成诗与画，可切换横竖排版。">
@@ -263,7 +265,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <div class="seg" id="modeSeg">
             <button data-v="offline" class="on">⚙ 离线生成</button><button data-v="ai">✦ AI 实时</button>
           </div>
-          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：词库 + 格律本地生成，同一首诗画作固定、断网可用。</p>
+          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：按《唐诗三百首》学到的意象群与章法写法生成（部分内容为精选原创），同一首诗画作固定、断网可用。</p>
         </div>
         <div class="ctl">
           <label>主题 / 关键词 <span style="color:#6f6f90">如：秋夜 江边 思乡</span></label>
@@ -274,6 +276,17 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <div class="seg" id="moodSeg">
             <button data-v="jing" class="on">静</button><button data-v="bei">愁</button><button data-v="xi">喜</button><button data-v="zhuang">壮</button><button data-v="you">幽</button>
           </div>
+        </div>
+        <div class="ctl">
+          <label>题材 <span style="color:#6f6f90">《唐诗三百首》六大类</span></label>
+          <select id="subjectSel">
+            <option value="">不限 · 随主题</option>
+            <option value="山水田园">山水田园</option>
+            <option value="赠别怀远">赠别怀远</option>
+            <option value="边塞出征">边塞出征</option>
+            <option value="思妇宫怨">思妇宫怨</option>
+            <option value="咏史怀古">咏史怀古</option>
+          </select>
         </div>
         <div class="ctl">
           <label>诗体 <span style="color:#6f6f90" id="formCount"></span></label>
@@ -310,7 +323,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         </details>
         <details>
           <summary>离线 / AI 实时：两种模式</summary>
-          <p><b style="color:#c4a4f8">离线</b>：词库 + 格律本地拼装、Canvas 代码作画，断网可用、同诗同画风画作固定（种子可复现）。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「规则拼装」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
+          <p><b style="color:#c4a4f8">离线</b>：把《唐诗三百首》里学到的意象搭配、章法（起承转合／以景结情）、句法（忽如／借问／以动衬静）编成规则，按诗体套用生成；部分主题另有精选原创诗。Canvas 代码作画，断网可用、同诗同画风画作固定（种子可复现）。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「规则＋写法」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
         </details>
         <div class="notice">API 调用直接在浏览器发起（OpenAI 兼容接口，CORS 开放），Key 公开写在本页源码中，<b>仅供课程作业演示</b>，请勿用于生产环境。若 AI 调用失败会自动降级回离线模式。</div>
       </section>
@@ -830,7 +843,7 @@ var STYLE_PROMPT={
  pixel:'像素艺术，8-bit 方块构图，复古电子游戏风',
  flat:'扁平插画，简洁几何形状，明快配色，现代设计感'
 };
-var state={poem:null,keys:[],seed:0,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
+var state={poem:null,keys:[],seed:0,subject:'',form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
 function $(id){return document.getElementById(id);}
 function buildSelects(){
   var fs=$('formSel');
@@ -848,15 +861,16 @@ segBind('modeSeg',function(v){
   $('modeHint').textContent=v==='ai'?'AI 实时 · 每次不同':'离线 · 可复现';
   $('modeTip').textContent=v==='ai'
     ?'AI 模式：调用大语言模型按诗体写诗、再据诗句与画风由模型作画，每次结果都不同（需联网）。'
-    :'离线模式：词库 + 格律本地生成，同一首诗画作固定、断网可用。';
+    :'离线模式：按《唐诗三百首》学到的意象群与章法写法生成，同一首诗画作固定、断网可用。';
   $('genBtn').textContent=v==='ai'?'✦ AI 写诗作画':'✦ 生成诗与画';
   $('regenBtn').textContent=v==='ai'?'↻ AI 再写一首':'↻ 换个写法重生成';
   // 切换模式时恢复对应画布
   if(v==='offline'){$('artAI').style.display='none';$('art').style.display='block';if(state.seed)redraw();}
   else{$('art').style.display='none';if(state.aiImage)$('artAI').style.display='block';}
 });
+$('subjectSel').addEventListener('change',function(){state.subject=this.value;});
 $('formSel').addEventListener('change',function(){state.form=this.value;if(typeof renderMeterRef==='function')renderMeterRef();});
-$('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem)redraw();if(typeof renderStyleRef==='function')renderStyleRef();});
+$('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem){var gid=(GROUPS_CN.indexOf(STYLES[state.style].g)>=0)?pickGallery(state.keys):null;state.gallery=gid;if($('artGallery')){if(gid){$('artGallery').src='gallery/'+gid+'.jpg';$('artGallery').style.display='block';$('art').style.display='none';}else{$('artGallery').style.display='none';$('art').style.display='block';redraw();}}else redraw();}if(typeof renderStyleRef==='function')renderStyleRef();});
 function renderPoem(p){
   var box=$('poemBox'),dark=(S_isDark(state.style));box.className='poem-box '+(dark?'poem-canvas':'poem-paper');
   $('poemFormTag').textContent='— '+p.formName;
@@ -872,18 +886,215 @@ function renderPoem(p){
 }
 function S_isDark(id){var s=STYLES[id],c=s.bg[0].slice(1,3);return parseInt(c,16)<90;}
 function redraw(){drawScene($('art').getContext('2d'),800,600,state.keys,state.mood,state.seed,state.style);}
+/* ENH:CORPUS-BEGIN */
+/* ===== 精品诗库：原创作品，按诗体+主题+情感打分选诗 ===== */
+var CORPUS={"wujue": [["秋江", ["月落千山静", "江空一雁过", "扁舟人不语", "独钓满船秋"], ["moon", "mountain", "water", "bird", "boat"], "jing"], ["雪夜", ["寒雪封山路", "孤亭覆白襟", "无人来问渡", "唯有水声深"], ["snow", "pavilion", "mountain", "water"], "bei"]], "qijue": [["春水", ["一江春水绕青山", "柳外孤亭半掩关", "燕子不归花落尽", "斜风细雨到人间"], ["water", "mountain", "willow", "pavilion", "bird", "flower"], "jing"], ["望月", ["皓月当空照古今", "清光万里一何深", "何人共此千山夜", "独倚扁舟听水音"], ["moon", "mountain", "boat", "water"], "bei"]], "wulv": [["秋山", ["远岫浮云外", "清江落照间", "疏林藏古寺", "寒水带苍山", "雁度长空静", "舟归野渡闲", "何当携浊酒", "坐看月如环"], ["mountain", "cloud", "water", "bird", "boat", "moon"], "jing"], ["客思", ["孤舟依古岸", "寒雨入江流", "野径无人迹", "空山有暮愁", "灯前书万里", "梦里水千山", "不知今夜月", "曾照几人还"], ["boat", "water", "mountain", "moon"], "bei"]], "qilv": [["江晚", ["落日衔山江水长", "孤舟系在白云旁", "千重远岫浮烟色", "十里平芜带夕阳", "雁字横空书未就", "渔歌临水意难忘", "谁家亭上一杯酒", "与此清光共举觞"], ["mountain", "water", "boat", "cloud", "bird", "pavilion"], "zhuang"], ["秋思", ["西风一夜过江皋", "吹落梧桐满旧桥", "明月有情来照水", "孤舟无语自随潮", "瓶中残菊香犹在", "灯下寒蛩声渐遥", "欲寄相思何处是", "青山隐隐路迢迢"], ["water", "moon", "boat", "flower", "mountain"], "bei"]], "gushi": [["山行", ["朝辞白云里", "暮宿青溪边", "山路何盘盘", "流水何涓涓", "松风拂我衣", "山月照我眠"], ["cloud", "water", "mountain", "moon", "bamboo"], "you"], ["江上", ["孤舟行万里", "江水日夜深", "两岸猿声里", "千峰暮色沉", "思君不可见", "江水空悠悠"], ["boat", "water", "mountain", "moon"], "bei"]], "yuefu": [["长相思", ["江南秋水绿如天", "江北雪如盐", "相思遥在白云边", "乃在白云边", "白云飘渺千万里", "一日一回来"], ["water", "snow", "cloud", "mountain"], "bei"], ["采莲曲", ["江南采莲水满塘", "莲叶何田田", "鱼戏莲叶东西间", "日落水如烟", "舟轻人语笑声甜", "明月照江船"], ["water", "flower", "boat", "moon"], "xi"]], "rumengling": [["春晓", ["昨夜风吹疏雨", "晓来花落无数", "倚窗问东风", "却道春归何处", "留住", "留住", "且与莺花同住"], ["flower", "bird", "willow"], "bei"], ["秋夜", ["月照疏桐庭院", "雁声飞过长天", "孤灯照不眠", "问君何日归还", "归去", "归去", "一夜西风又起"], ["moon", "bird", "pavilion"], "bei"]], "yijiangnan": [["江南", ["江南春色好", "柳外莺啼风雨歇", "一江烟水绿如蓝", "长忆旧江南", "梦回长在画桥西"], ["water", "flower", "willow"], "xi"], ["秋夜", ["秋夜月如练", "千里关山同一色", "数声寒雁过疏林", "何处不关心", "一江秋水向东流"], ["moon", "water", "mountain", "bird"], "bei"]], "huanxisha": [["春游", ["柳外清风拂面来", "一江春水绕楼台", "孤帆远影几时回", "不知何处雁归来", "又是一年春色好", "月明独立小桥头"], ["water", "bird", "flower", "moon"], "jing"], ["江村", ["漠漠轻阴落杏花", "村南村北有人家", "一湾流水绕桑麻", "日暮途长途更远", "清风何处不相逢", "月明归去踏平沙"], ["flower", "water", "moon"], "xi"]], "tianjingsha": [["秋思", ["疏林暮色寒鸦", "短亭烟柳人家", "远山残照孤舟", "秋声四起", "相思人在天涯"], ["bird", "water", "willow", "mountain", "boat"], "bei"], ["江夜", ["孤舟远水寒沙", "小桥疏柳人家", "一声渔笛残霞", "月明风静", "江天万里无涯"], ["boat", "water", "willow", "moon"], "jing"]], "modern": [["月光快递", "我把月光折成信封\n寄到没有地址的地方\n风替我贴上邮票\n而你，替我收下", ["moon"], "jing"], ["空山来信", "空山不说话\n只把落叶一封封寄来\n我拆开，是去年的雨\n和一枚未干的月亮", ["mountain", "moon"], "bei"]], "prose": [["江边的下午", "江水把下午拉得很长。一只船慢慢过去，像谁在纸上轻轻划了一笔，又舍不得擦掉。我坐在岸边，看光从水面爬到石头上，再退回去——原来时间也会犹豫。", ["water", "boat"], "jing"], ["雪夜书", "雪落下来的时候，整座山都在慢慢变白，像一封写到一半的信，忽然找不到措辞。我在灯下读旧年的诗，纸上有风，有月，有一个人迟迟未归。", ["snow", "mountain", "moon"], "bei"]], "menglong": [["白昼的月", "白昼的月是一枚\n被谁遗忘的印章\n盖在山的额头\n风读不懂\n只有水，反复翻看", ["moon", "mountain", "water"], "you"], ["雨的背面", "雨落在雨的背面\n一把伞撑开另一把伞\n我在其中听见\n春天折叠的声音\n和一个没说完的黄昏", ["flower"], "you"]], "daoyou": [["加班", ["键盘敲到眼发花", "需求改了第八茬", "若问工资涨没涨", "老板说先看未来"], ["moon"], "xi"], ["减肥", ["晚饭只吃半碗饭", "夜深偷摸啃饼干", "秤上数字纹丝动", "怪它不懂我心宽"], ["moon"], "xi"]], "zhhaiku": [["秋", ["月落寒江上", "一舟载不动秋色", "风紧雁声长"], ["moon", "water", "boat", "bird"], "bei"], ["春", ["柳外雨初晴", "燕子衔来半片云", "花落在无声"], ["willow", "bird", "cloud", "flower"], "jing"]], "haiku": [["古池", ["古池秋水静", "一蛙跳入水中央", "有声清且浅"], ["water"], "jing"], ["月夜", ["月色满千山", "远山静卧白云旁", "风过不惊眠"], ["moon", "mountain", "cloud"], "jing"]], "tanka": [["春", ["落花轻且薄", "随水漂过石桥东", "春夜月如钩", "照见桥边旧题字", "又是一年春又来"], ["flower", "water", "moon"], "bei"], ["秋", ["秋风一夜起", "芦苇白头水连天", "孤舟一叶还", "遥向远山深处去", "两岸暮色满江寒"], ["boat", "water", "mountain"], "bei"]], "enfree": [["The River Remembers", "The river remembers every boat that passed,\neven the ones that never said goodbye.\nI stood on the bridge between two mountains\nand let the water speak for me.\nThe moon came out, unpaid, unasked,\nand made a second river in the sky.", ["water", "boat", "mountain", "moon"], "jing"], ["Snow Letter", "Snow fell all night on the empty pavilion.\nBy morning the hills had rewritten themselves\nin a language I almost understood.\nI wanted to send you a page,\nbut the ink kept turning into weather.", ["snow", "pavilion", "mountain"], "bei"]], "ensonnet": [["Mountain and Moon", "When evening lays its hand upon the hill,\nThe river keeps the last of borrowed light;\nA boat goes by, and everything is still\nExcept the stars that practise being night.\nThe willow leans to hear the water speak,\nThe snow remembers where the flower grew;\nWe ask the moon why some are far, some near,\nIt only answers: I have seen all too.\nSo let the wind carry what words cannot,\nAnd let the mountain hold what we forget;\nThe seasons turn, the tides return, and yet\nThe heart keeps one small lantern burning still.\nIf distance is the price of seeing far,\nI pay it gladly, under one same star.", ["mountain", "water", "boat", "moon", "willow", "snow", "flower", "star"], "jing"], ["A Winter Question", "The snow has covered every path but one,\nThe one that leads back to the year we lost.\nI keep your letter folded in my coat,\nAnd read it slowly, as the river does.\nThe moon is cold, the mountain colder still,\nThe boat is gone, the pavilion is bare;\nI ask the wind if you remember me,\nIt says: the question is the answer here.\nNo season stays, no flower holds its red,\nBut something in the quiet stays the same:\nThe way the water carries what we said,\nThe way the dark keeps one enduring flame.\nSo let it snow. Let every road be gone.\nI know the way. My heart has walked it on.", ["snow", "moon", "mountain", "boat", "pavilion", "flower", "water"], "bei"]], "limerick": [["A Boat", "There once was a boat on the sea,\nSo small it could hardly hold three;\nIt danced with the tide,\nWith the moon as its guide,\nAnd sailed to the edge of the sea.", ["boat", "water", "moon"], "xi"], ["A Moon", "There once was a moon over Spain,\nThat fell in the river like rain;\nIt shone on the hill,\nAnd the willow stood still,\nAnd never came down again.", ["moon", "water", "mountain", "willow"], "jing"]], "enhaiku": [["Dawn", "Fog on the river—\none boat slips through the willow\nwithout a sound.", ["water", "boat", "willow"], "jing"], ["Autumn", "Cold moon on the peak,\nthe last bird crosses the sky—\nwinter in one word.", ["moon", "mountain", "bird"], "bei"]], "ode": [["Ode to the Snow", "O snow, that falls without a single sound,\nAnd lays a white sheet on the sleeping hill,\nYou teach the world how to begin again:\nTo cover, and to keep, and to be still.\nThe river slows beneath your quiet weight,\nThe boat is moored, the pavilion is bare;\nEven the wind, that never ceased to speak,\nIs hushed to listen at your frozen air.\nI do not ask you to remain. You know\nThat everything you touch will melt away;\nBut while you fall, the mountain and I share\nOne brief, white, unremembered holiday.", ["snow", "mountain", "water", "boat", "pavilion"], "jing"], ["Ode to the Moon", "O patient moon, that rises every night\nAbove the same old mountains, unafraid,\nYou have seen empires build and fall away,\nAnd watched the river turn its centuries.\nThe poet sleeps; the boatman counts his oars;\nThe willow dreams of water in its sleep.\nYou ask nothing of us, and yet we look,\nAnd find our own unfinished faces there.\nTeach us to rise like you: to give our light\nTo those who never asked, who never knew\nThat we were there, that we were always there—\nTo shine, and not to need a witness too.", ["moon", "mountain", "water", "boat", "willow"], "jing"]]};
+
+function pickCorpus(form,mood,keys,nonce){
+  var pool=CORPUS[form];if(!pool||!pool.length)return null;
+  var best=null,bestScore=-1;
+  for(var i=0;i<pool.length;i++){
+    var p=pool[i],score=0;
+    // 意象标签与主题命中的个数（权重最高）
+    for(var j=0;j<p[2].length;j++)if(keys.indexOf(p[2][j])>=0)score+=3;
+    // 情感一致加权
+    if(p[3]===mood)score+=2;
+    // "换个写法"轮转：同分时按 nonce 轮换
+    score+=(i%pool.length===nonce%pool.length)?1:0;
+    if(score>bestScore){bestScore=score;best=p;}
+  }
+  return best;
+}
+function corpusToPoem(p,form){
+  var F=FORMS[form],lines=Array.isArray(p[1])?p[1]:p[1].split('\n');
+  return {title:p[0],lines:lines,form:form,formName:F.n,tag:F.g,lang:F.lang,
+          layout:F.lang==='en'?'horiz':state.layout,mood:p[3],moodName:MOOD[p[3]].n,curated:true};
+}
+/* ENH:CORPUS-END */
+/* ENH:SYSTEMATIC-BEGIN */
+/* ===== 系统性学习：题材 / 时空 / 对仗（出自《唐诗三百首》全书统计）===== */
+var SUBJECTS={"山水田园": {"keys": ["mountain", "bamboo", "cloud", "water", "pavilion"], "words": ["空山", "幽篁", "溪", "涧", "闲", "隐"], "mood": "you"}, "赠别怀远": {"keys": ["willow", "pavilion", "boat", "moon", "water"], "words": ["故人", "相送", "忆", "天涯", "客"], "mood": "bei"}, "边塞出征": {"keys": ["mountain", "snow", "bird", "star", "cloud"], "words": ["关山", "戍", "征", "烽火", "孤城"], "mood": "zhuang"}, "思妇宫怨": {"keys": ["flower", "moon", "bird", "willow", "pavilion"], "words": ["闺", "珠帘", "蛾眉", "相思", "泪"], "mood": "bei"}, "咏史怀古": {"keys": ["cloud", "water", "mountain", "pavilion", "moon"], "words": ["故国", "英雄", "遗迹", "兴亡", "古今"], "mood": "zhuang"}};
+var SPACE=["天涯", "故乡", "他乡", "客路", "江上", "山中", "人间", "关山", "万里", "千里"];
+var TIME=["春夜", "秋夜", "日暮", "清晨", "黄昏", "夜半", "十年", "经年", "明朝"];
+var ANTITHESIS={"天地": ["天", "地"], "日月": ["日", "月"], "山川": ["山", "川"], "山水": ["山", "水"], "古今": ["古", "今"], "岁月": ["岁", "月"], "南北": ["南", "北"], "东西": ["东", "西"]};
+function applySubject(keys){
+  var sub=SUBJECTS[state.subject];if(!sub)return keys;
+  var out=keys.slice();sub.keys.forEach(function(k){if(out.indexOf(k)<0)out.push(k);});
+  return out;
+}
+function addSpaceTime(s,plan,r,n){
+  // 时空坐标只替换句内成分，不增加字数（保持格律）
+  if(!/转|情|合|turn/.test(plan))return s;
+  var z=s.replace(/[，。？]/g,'');
+  if(state.subject==='赠别怀远'&&z.length>=4)return z.slice(0,-2)+pick(SPACE,r).slice(0,2);
+  if(state.subject==='咏史怀古'&&z.length>=4)return z.slice(0,-2)+pick(['古今','往事','故国'],r);
+  return s;
+}
+/* ENH:SYSTEMATIC-END */
+/* ENH:CRAFT-BEGIN */
+/* ===== 《唐诗三百首》学到的意象群 / 章法 / 句法（顾青编著，中华书局）=====
+   规律：好诗不是随机拼词，而是「成法的意象搭配 + 章法句序 + 诗法句法」。
+   所有文体都先取一组共现意象群，再按该文体章法安排起承转合，最后套句法模板造句。 */
+var IMAGE_GROUPS=[[["moon", "cloud", "water", "mountain"], "月夜江行", "jing"], [["mountain", "bamboo", "pavilion", "moon"], "山居幽篁", "you"], [["water", "boat", "bird", "mountain"], "孤舟远岫", "bei"], [["willow", "flower", "bird", "water"], "春江柳色", "xi"], [["snow", "mountain", "pavilion", "bird"], "寒江雪霁", "bei"], [["moon", "star", "water", "boat"], "星河夜渡", "jing"], [["flower", "willow", "cloud", "rain"], "暮春烟雨", "bei"], [["mountain", "cloud", "water", "pavilion"], "空山烟雨", "you"], [["bird", "mountain", "water", "moon"], "寒山归鸟", "bei"], [["boat", "water", "willow", "flower"], "江南采莲", "xi"], [["bamboo", "water", "moon", "pavilion"], "竹里馆", "you"], [["snow", "flower", "mountain", "water"], "雪中梅", "jing"], [["moon", "water", "boat", "cloud"], "明月江舟", "jing"], [["mountain", "cloud", "water", "flower"], "白云流水", "you"], [["willow", "flower", "water", "bird"], "落花流水", "bei"], [["willow", "mountain", "water", "moon"], "秋风远山", "bei"], [["water", "cloud", "boat", "mountain"], "夜雨江舟", "bei"]];
+var CRAFT={"jue": {"n": "起承转合", "desc": "一二句正说铺景，三四句转折抒情（七绝常法，见《唐诗三百首》七绝题解）", "plan": ["起·景", "承·景", "转·情", "合·意"]}, "wujue": {"n": "以景结情", "desc": "前句叙事写景，末句以景收束、情在景中（如《鹿柴》返景入深林）", "plan": ["景", "景", "动", "景结情"]}, "lv": {"n": "对仗铺陈", "desc": "首联点题，中二联对仗，尾联收束（律诗正格）", "plan": ["起", "对", "对", "对", "对", "转", "合"]}, "ci": {"n": "铺叙含蓄", "desc": "上片铺景叙事，下片转折言情，末句含蓄不尽（词的常法）", "plan": ["铺", "铺", "铺", "转", "情", "含蓄"]}, "qu": {"n": "白描直陈", "desc": "以口语白描取景，句句可见，末句点破（元曲本色）", "plan": ["白描", "白描", "白描", "点破"]}, "modern": {"n": "意象叠加", "desc": "具体物象并置，不用抽象抒情，让物象自己说话（现代诗承唐诗意象之法）", "plan": ["物象", "物象", "转折", "留白"]}, "en": {"n": "Image + Turn", "desc": "Concrete images first, then a volta (turn) at the end — the same craft as Tang jue", "plan": ["image", "image", "image", "turn"]}};
+var TANG={"5": ["{I}不见人", "{I}{V}{I}", "但闻{I}声", "独坐{I}中", "{I}生{I}处", "遥看{I}色", "疑是{I}间", "{I}入{I}来", "空山{V}后", "江上{V}人", "月出{I}鸟", "风静{I}闲"], "7": ["{I}{V}{I}{X}{X}", "独有{I}{V}{I}", "不见{I}空{V}人", "借问{I}何处{V}", "唯有{I}{V}{I}", "正是{I}{V}{I}时", "忽如{I}{V}{I}", "可怜{I}{V}{I}", "最是{I}{V}{I}处", "一{V}{I}{V}{I}", "无数{I}{V}{I}"], "3": ["{I}何处", "问{I}", "见{I}", "{I}无声"], "4": ["{I}{V}{I}", "空{I}寂寂", "{I}独{V}", "{I}在{I}"], "2": ["{I}", "{V}{I}", "{I}{X}"]};
+var SHORT={"2": ["{I}", "{I}{V}", "{D}"], "3": ["{I}{V}", "{I}{X}", "{V}{I}"], "4": ["{I}{V}{I}", "{I}{D}{X}", "{A}{V}"]};
+var S5=["{I}{V}{I}", "{I}{D}{V}{I}", "{I}{V}{I}{X}", "{A}{V}{I}{X}", "{I}{I}{V}{I}"];
+var S7=["{I}{V}{I}{X}{X}", "{I}{D}{V}{I}{X}", "{I}{V}{I}，{I}{V}{I}", "{A}{I}{V}{I}{X}", "{I}{X}{V}{I}{X}{X}"];
+var T5=["借问{I}在何处", "不见{I}空{V}人", "唯有{I}{V}时", "此{I}何时{V}"];
+var T7=["借问{I}何处{V}", "不知{I}几时{V}", "唯有{I}伴{I}归", "此情可待成追忆"];
+var REDUP=["苍苍", "茫茫", "悠悠", "潺潺", "渺渺", "萧萧", "霏霏", "寂寂", "迟迟", "脉脉"];
+var CVERB={"jing": ["照", "映", "临", "绕", "浮", "栖", "落", "入", "渡", "生"], "bei": ["冷", "寒", "锁", "断", "泣", "掩", "没", "孤", "暗", "怨"], "xi": ["拂", "涨", "笑", "明", "暖", "发", "归", "还", "开", "满"], "zhuang": ["卷", "横", "吞", "涌", "连", "开", "落", "射", "断", "过"], "you": ["隐", "藏", "深", "度", "漏", "凝", "覆", "翳", "闲", "静"]};
+
+function craftKey(k,r){return k&&IMG[k]?pick(IMG[k].w,r):'青山';}
+function craftVerb(mood,r){var vs=CVERB[mood]||CVERB.jing;return pick(vs,r);}
+/* 按目标字数 n 与章法位置 plan 造一句：先取意象词，再套句法，最后裁补到 n 字 */
+function craftLine(n,plan,mood,keys,r){
+  // 核心写法：按目标字数 n 组装「意象词 + 动词 + 虚词」，字数精确、句意通顺。
+  // 从 IMG 取二字词（主），一字词（辅）；动词 1 字；虚词 1 字。
+  var W2=[],W1=[],byWord={};
+  keys.forEach(function(k){if(IMG[k])IMG[k].w.forEach(function(w){
+    if(w.length===2){W2.push(w);byWord[w]=k;} else if(w.length===1)W1.push(w);
+  });});
+  if(!W2.length)W2=['青山','明月','流水','白云'];
+  var V=craftVerb(mood,r), X=pick(['处','时','间','来','去','还','又','里','上','外'],r);
+  var A=pick(MOOD[mood].a,r), D=pick(REDUP,r);
+  var A2=A.length===2?A:A.slice(0,2);
+  var isTurn=/转|情|含蓄|turn|point|合/.test(plan);
+  // 优先用唐诗成句骨架（真实句法填词），字数精确才采用
+  var tpls=TANG[String(n)]||[];
+  for(var q=0;q<Math.min(tpls.length*4,28);q++){
+    var sk=pick(tpls,r),used={},ok=true;
+    var so=sk.replace(/\{I\}/g,function(){
+      for(var z=0;z<8;z++){var w=pick(W2,r);if(!used[byWord[w]]){used[byWord[w]]=1;return w;}}
+      return pick(W2,r);
+    }).replace(/\{V\}/g,function(){return craftVerb(mood,r);})
+      .replace(/\{X\}/g,function(){return X;});
+    if((so.match(/[一-龥]/g)||[]).length===n)return so;
+  }
+  // 按字数选结构（每种结构的字面字数固定，保证精确）
+  var build;
+  if(n===1) build=function(){return pick(W1.length?W1:['山','月','水']);};
+  else if(n===2) build=function(){return pick(W2,r);};
+  else if(n===3) build=function(){return isTurn?pick(W2,r)+X:V+pick(W2,r);};
+  else if(n===4) build=function(){return pick(W2,r)+V+X;};           // 明月照处
+  else if(n===5) build=function(){return isTurn?pick(W2,r)+'何处'+X:(pick(W2,r)+V+pick(W2,r));};
+  else if(n===6) build=function(){return pick(W2,r)+V+pick(W2,r)+X;};
+  else if(n===7) build=function(){return isTurn?pick(W2,r)+'何处'+V+pick(W2,r):(pick(W2,r)+pick(W2,r)+V+pick(W2,r));};
+  else if(n===8) build=function(){return pick(W2,r)+pick(W2,r)+V+pick(W2,r)+X;};
+  else build=function(){ // 9字及以上：二字词铺陈 + 动词 + 虚词收尾
+    var s='',need=n;
+    while(need>3){s+=pick(W2,r);need-=2;}
+    if(need===3)s+=V+pick(W2,r); else if(need===2)s+=pick(W2,r); else if(need===1)s+=X;
+    return s;
+  };
+  var out=build();
+  // 字数保险：多裁少补（补一字虚词）
+  var got=(out.match(/[一-龥]/g)||[]).length;
+  if(got>n) out=out.slice(0,n);
+  while((out.match(/[一-龥]/g)||[]).length<n) out+=pick(['处','时','间','来','去','还','又','里','上','外','声','影']);
+  return addSpaceTime(out,plan,r,n);
+}
+/* 按文体章法生成整首诗；所有文体都走「意象群→章法→句法」 */
+function craftPoem(formId,mood,themeKeys,seed){
+  var F=FORMS[formId],r=rng(seed),keys=themeKeys.slice(),lines=[],title='';
+  // 取一组共现意象群（唐诗成法搭配），与原主题意象合并
+  var grp=pick(IMAGE_GROUPS,r)[0];
+  grp.forEach(function(k){if(keys.indexOf(k)<0)keys.push(k);});
+  keys=applySubject(keys);
+  keys=applySubject(keys);
+  var craftKind=F.kind==='line'?(F.lens.length>=6?'lv':'jue'):(F.kind==='en'||F.kind==='limerick'?'en':'modern');
+  var plan=CRAFT[craftKind].plan;
+  if(F.kind==='line'){
+    for(var i=0;i<F.lens.length;i++){
+      var p=plan[i%plan.length],ln;
+      // 律诗（五律/七律）中二联对仗：用「天地/日月/山川」等词对构造字数相等的两句
+      if((formId==='wulv'||formId==='qilv')&&(i===2||i===4)){
+        var ap=pick(Object.keys(ANTITHESIS),r),pair=ANTITHESIS[ap],V=craftVerb(mood,r),I=craftKey(pick(keys,r),r);
+        var need=F.lens[i],left=pair[0]+V+I,right=pair[1]+V+I;
+        while(left.length<need)left+='山';while(right.length<need)right+='水';
+        ln=left.slice(0,need)+'，'+right.slice(0,need);
+      }else{
+        // 相邻句不同骨架：重试避开与上一句相同的前两字
+        var prev=i?lines[i-1].slice(0,2):'';
+        for(var z=0;z<6;z++){ln=craftLine(F.lens[i],p,mood,keys,r);if(ln.slice(0,2)!==prev)break;}
+      }
+      lines.push(ln);
+    }
+    title=craftKey(pick(keys,r),r)+'·'+craftKey(pick(keys,r),r);
+  }else if(F.kind==='limerick'){
+    lines=LIMERICK.map(function(t){return fill(t,keys,r);});
+    title='A Tale of '+fill('{A}',keys,r).replace(/^(the|a|an)\s+/i,'');
+  }else if(F.kind==='en'){
+    for(var j=0;j<F.lines;j++){
+      var w1=enWord(keys,r).replace(/^(the|a|an)\s+/i,''),w2=enWord(keys,r).replace(/^(the|a|an)\s+/i,'');
+      if(w2.toLowerCase()===w1.toLowerCase())w2='river';
+      var plural=/s$/i.test(w1)&&!/ss$/i.test(w1);
+      var verb=pick(plural?['fade','wait','return','fall','float']:['fades','waits','returns','falls','floats'],r);
+      var enLine='The '+w1+' '+verb+' where the '+w2+' ends.';
+      lines.push(enLine);
+    }
+    if(formId==='ensonnet')lines.push(fill(EN_COUPLET[0],keys,r),fill(EN_COUPLET[1],keys,r));
+    title=fill('{A} and {B}',keys,r).replace(/^(the|a|an)\s+/i,'');
+  }else{
+    // 现代诗/散文诗/朦胧诗：用意象群的物象叠加，章法用「铺—转—留白」
+    var a=craftKey(pick(keys,r),r),b2=craftKey(pick(keys,r),r),c=craftKey(pick(keys,r),r),v=craftVerb(mood,r);
+    if(F.kind==='prose'){
+      lines=['当'+a+'遇上'+b2+'，'+c+'便'+v+'了起来。','我站在它们之间，听见'+a+'与'+b2+'的低语——',
+             '像一句写了很久、始终没有寄出的信。','而'+c+'，替我收着。'].join('\n').split('\n');
+    }else if(F.kind==='menglong'){
+      lines=[a+'是'+pick(MOOD[mood].a,r)+'的耳朵','贴着'+b2+'的背面','听一枚'+c+'，缓慢地'+v+'。'].join('\n').split('\n');
+    }else{
+      lines=[a+'把夜色折成两半','一半落在'+b2+'上','一半，我替你收着。','远处，'+c+'正缓慢地'+v+'。'].join('\n').split('\n');
+    }
+    title=a+'的独白';
+  }
+  return {title:title,lines:lines,form:formId,formName:F.n,tag:F.g,lang:F.lang,
+          layout:F.lang==='en'?'horiz':state.layout,mood:mood,moodName:MOOD[mood].n,crafted:true};
+}
+/* ENH:CRAFT-END */
+/* ENH:GALLERY-BEGIN */
+/* ===== 精品画库：6 张中国画（对应《唐诗三百首》意象群）===== */
+var GALLERY={"autumn_river": {"n": "秋夜江舟", "keys": ["moon", "water", "boat", "bird", "mountain"]}, "bamboo_moon": {"n": "空山幽篁", "keys": ["bamboo", "pavilion", "mountain", "moon", "cloud"]}, "spring_willow": {"n": "春江柳色", "keys": ["willow", "flower", "bird", "water", "cloud"]}, "snow_river": {"n": "寒江雪霁", "keys": ["snow", "pavilion", "mountain", "water", "bird"]}, "flower_moon": {"n": "花间明月", "keys": ["flower", "moon", "cloud", "water"]}, "starry_ferry": {"n": "星河夜渡", "keys": ["star", "moon", "boat", "water", "mountain"]}};
+var GROUPS_CN=['中国绘画','东方绘画'];
+function pickGallery(keys){
+  var best=null,bestScore=0;
+  Object.keys(GALLERY).forEach(function(id){
+    var g=GALLERY[id],score=0;
+    g.keys.forEach(function(k){if(keys.indexOf(k)>=0)score++;});
+    if(score>bestScore){bestScore=score;best=id;}
+  });
+  return bestScore>=2?best:null;
+}
+/* ENH:GALLERY-END */
 /* ---------- 离线生成（原逻辑） ---------- */
 function generateOffline(){
   var theme=$('theme').value.trim();
   var baseSeed=hash(theme+'|'+state.form+'|'+state.mood+'|'+state.nonce);
   var keys=parseImages(theme,rng(baseSeed));
-  var poem=makePoem(state.form,state.mood,keys,baseSeed);
+  // 优先用精品库（诗体硬约束 + 主题/情感打分）；未收录诗体回退到原模板拼装
+  var picked=pickCorpus(state.form,state.mood,keys,state.nonce);
+  var poem=picked?corpusToPoem(picked,state.form):craftPoem(state.form,state.mood,keys,baseSeed);
   var seed=hash(poem.lines.join('')+poem.title+'|'+state.style);
   state.poem=poem;state.keys=keys;state.seed=seed;state.aiImage=null;
+  // 精品画库：中国绘画/东方绘画画风且主题匹配时，展示对应 AI 精选画作；否则用 Canvas
+  var gid=(GROUPS_CN.indexOf(STYLES[state.style].g)>=0)?pickGallery(keys):null;
+  state.gallery=gid;
   renderPoem(poem);
-  $('artAI').style.display='none';$('art').style.display='block';redraw();$('artEmpty').style.display='none';
-  $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('');
-  $('poemStat').innerHTML='诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
+  if(gid){
+    if(!$('artGallery')){
+      var im=document.createElement('img');im.id='artGallery';im.className='art-gallery';
+      im.alt='精选中国画：'+GALLERY[gid].n;$('art').parentNode.appendChild(im);
+    }
+    $('artGallery').src='gallery/'+gid+'.jpg';$('artGallery').style.display='block';
+    $('art').style.display='none';
+  }else{
+    if($('artGallery'))$('artGallery').style.display='none';
+    $('art').style.display='block';redraw();
+  }
+  $('artAI').style.display='none';$('artEmpty').style.display='none';
+  $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('')+(picked?'<span class="chip" style="color:#2dd4bf">精选原创</span>':(poem.crafted?'<span class="chip" style="color:#c4a4f8">唐诗写法</span>':''))+(gid?'<span class="chip" style="color:#e8c07d">精选画作</span>':'');
+  $('poemStat').innerHTML=(picked?'<b style="color:#2dd4bf">精选原创</b> · ':(poem.crafted?'<b style="color:#a855f7">唐诗写法</b> · ':''))+'诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
   if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
 }
 /* ---------- AI 实时生成 ---------- */
