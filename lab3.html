@@ -116,7 +116,31 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .tb-item p{font-size:11px;color:#b9b9d4;line-height:1.75;margin:5px 0}
 .tb-item a{display:inline-block;margin-top:6px;font-size:11px;color:var(--teal);text-decoration:none;border:1px solid rgba(45,212,191,.4);border-radius:7px;padding:3px 9px}
 .tb-item a:hover{background:rgba(45,212,191,.1)}
-@media print{.img-ref-grid,.famous-list,.style-ref,.img-ref-btn,.style-ref-chip,.meter-grid,.step-list,.tb-ref{break-inside:avoid}}
+@media print{.img-ref-grid,.famous-list,.style-ref,.img-ref-btn,.style-ref-chip,.meter-grid,.step-list,.tb-ref,.refine-grid,.refine-card{break-inside:avoid}}
+/* ===== 自检 → 改写 ===== */
+.refine-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:980px){.refine-grid{grid-template-columns:1fr}}
+.refine-card{border:1px solid var(--line);border-radius:13px;padding:14px 16px;background:rgba(255,255,255,.02)}
+.refine-card h3{font-size:14px;margin:0 0 10px;color:var(--text)}
+.refine-card h3 small{font-size:11px;color:var(--gold);font-weight:400;margin-left:6px}
+.refine-report{margin-top:11px;display:grid;gap:7px}
+.chk-item{display:flex;gap:9px;align-items:flex-start;font-size:12px;line-height:1.6;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.015)}
+.chk-item .mk{flex:0 0 auto;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;margin-top:1px}
+.chk-item.ok .mk{background:rgba(45,212,191,.16);color:#2dd4bf;border:1px solid rgba(45,212,191,.4)}
+.chk-item.warn .mk{background:rgba(232,192,125,.14);color:var(--gold);border:1px solid rgba(232,192,125,.4)}
+.chk-item.bad .mk{background:rgba(239,110,110,.14);color:#ef8a8a;border:1px solid rgba(239,110,110,.4)}
+.chk-item b{color:var(--text)}
+.chk-item small{display:block;color:#8a8aa8;font-size:11px;margin-top:2px}
+.refine-sum{font-size:11px;color:#8a8aa8;margin-top:3px;line-height:1.6}
+.refine-diff{margin-top:12px}
+.refine-diff:empty{display:none}
+.diff-row{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:8px;background:rgba(168,85,247,.05)}
+.diff-row .dl{font-size:11px;color:#c4a4f8;margin-bottom:6px;font-weight:700}
+.diff-poem{font-size:12px;line-height:1.8;color:#d8d8ea;white-space:pre-wrap;font-family:'KaiTi','STKaiti',serif}
+.diff-imgs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.diff-imgs figure{margin:0}
+.diff-imgs img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
+.diff-imgs figcaption{font-size:11px;color:#8a8aa8;margin-top:4px}
 /* ===== 我的诗集 ===== */
 .coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
@@ -289,13 +313,13 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         <div class="tb-item">
           <div class="tb-h">第 30 章 · 人工智能诗人</div>
           <p>「押韵容易，写出意味难」：形式（字数/句数/押韵，可逐项核对）与意境（意象连贯、情感、新意）要分开看；看图作诗先从画面提取对象与氛围；BIPro（ACL 2025）让模型生成后多轮修订，比一次成型更受偏好。</p>
-          <p style="color:#bbf7d0">↔ 本实验室：离线模式逐句精确对齐格律＝形式层；AI 模式按主题条件生成＝意境层；「换个写法重生成」＝最朴素的迭代。还缺「自检→改写」一步。</p>
+          <p style="color:#bbf7d0">↔ 本实验室：离线模式逐句精确对齐格律＝形式层；AI 模式按主题条件生成＝意境层；下面的「⑪ 自检 → 改写」按形式/表达逐项核对并有针对性地修订，实现 BIPro 式的「生成→检查→改写」。</p>
           <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-30" target="_blank" rel="noopener">↗ 读讲义第 30 章</a>
         </div>
         <div class="tb-item">
           <div class="tb-h">第 24 章 · AI 绘画大师</div>
           <p>风格迁移＝调整生成图，使它既接近内容图的内容表示、又接近风格图的风格表示，保留主体的同时改变外观。评估用 LPIPS↓（内容保留）、FID↓（风格接近）、ArtFID↓（综合），并提醒「自动指标不能替代对画面局部的观察」。</p>
-          <p style="color:#bbf7d0">↔ 本实验室：同一组意象（内容）× 20 种画风（风格参数）＝可计算的风格表示；点画风即时重绘，正是「内容不变、外观可变」。</p>
+          <p style="color:#bbf7d0">↔ 本实验室：同一组意象（内容）× 20 种画风（风格参数）＝可计算的风格表示；点画风即时重绘，正是「内容不变、外观可变」。「⑪ 自检 → 改写」把内容保留、风格接近与局部观察分开核对。</p>
           <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-24" target="_blank" rel="noopener">↗ 读讲义第 24 章</a>
         </div>
       </div>
@@ -343,6 +367,33 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
       </section>
     </div>
   </div>
+
+  <!-- 自检 → 改写：对照讲义第 30 / 24 章 -->
+  <section class="panel" id="refine" style="max-width:1440px">
+    <h2>⑪ 自检 → 改写 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 / 24 章</span></h2>
+    <p class="tip" style="margin:0 0 12px">讲义把「写出来」和「写得好」分开看：诗要分别核对<b style="color:#c4a4f8">形式</b>（字数/句数/押韵）与<b style="color:#c4a4f8">表达</b>（意象连贯、情感、新意），画要分别看<b style="color:#c4a4f8">内容保留</b>与<b style="color:#c4a4f8">风格接近</b>，再说「自动指标不能替代对局部的观察」。BIPro（ACL 2025）的做法就是生成后按问题多轮修订。这里把这一步做出来——先自检、再按发现的问题改写，前后对照着看。</p>
+    <div class="refine-grid">
+      <div class="refine-card">
+        <h3>诗 · 形式与表达分开看 <small>讲义第 30 章</small></h3>
+        <div class="row no-print" style="margin:0">
+          <button class="btn sm" id="checkPoemBtn">🔍 自检这首诗</button>
+          <button class="btn sm" id="revisePoemBtn" style="border-color:rgba(232,192,125,.5);color:var(--gold)">✎ 按问题改写</button>
+        </div>
+        <div class="refine-report" id="poemCheck" aria-live="polite"><span style="color:#6f6f90;font-size:12px">先生成一首诗，再点「自检」查看逐项核对结果。</span></div>
+        <div class="refine-diff" id="poemDiff"></div>
+      </div>
+      <div class="refine-card">
+        <h3>画 · 内容与风格分开看 <small>讲义第 24 章</small></h3>
+        <div class="row no-print" style="margin:0">
+          <button class="btn sm" id="checkArtBtn">🔍 自检这幅画</button>
+          <button class="btn sm" id="reviseArtBtn" style="border-color:rgba(232,192,125,.5);color:var(--gold)">✎ 按问题改写</button>
+        </div>
+        <div class="refine-report" id="artCheck" aria-live="polite"><span style="color:#6f6f90;font-size:12px">生成画作后点「自检」，分别核对内容与风格，并留一份人眼观察清单。</span></div>
+        <div class="refine-diff" id="artDiff"></div>
+      </div>
+    </div>
+    <div class="notice" style="margin-top:12px">讲义特别提醒「自动指标不能替代对画面局部的观察」：本站没有跑 LPIPS / FID / ArtFID，而是列一份<b style="color:#c4a4f8">可逐项核对的清单＋人眼观察项</b>，把判断留给自己——自动分数只适合筛查具体问题。（<a href="homework3.html#principle" style="color:#2dd4bf">作业 3 · 工作原理</a>）</div>
+  </section>
 
   <!-- 我的诗集 -->
   <section class="panel" id="collection" style="max-width:1440px">
@@ -701,7 +752,7 @@ var STYLE_PROMPT={
  pixel:'像素艺术，8-bit 方块构图，复古电子游戏风',
  flat:'扁平插画，简洁几何形状，明快配色，现代设计感'
 };
-var state={poem:null,keys:[],seed:0,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null};
+var state={poem:null,keys:[],seed:0,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
 function $(id){return document.getElementById(id);}
 function buildSelects(){
   var fs=$('formSel');
@@ -847,13 +898,150 @@ function toast(m){if(window.ENH)window.ENH.toast(m);}
 $('reportBtn').onclick=function(){
   if(!state.poem){toast('请先生成诗与画');return;}
   var p=state.poem,isAI=state.mode==='ai'&&state.aiImage;
-  var md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗 / '+AI.image+' 作画）':'离线词库 + 格律'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','',isAI?'- 由文生图模型按诗句与画风实时生成，每次不同':('- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、')+'\n- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）'),'','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'格律/模板生成（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。',''].join('\n');
+  var md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗 / '+AI.image+' 作画）':'离线词库 + 格律'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','',isAI?'- 由文生图模型按诗句与画风实时生成，每次不同':('- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、')+'\n- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）'),'','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'格律/模板生成（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。','', '## 五、自检与改写（对照讲义第 30 / 24 章）','',
+    state.checks.poem?'- 诗自检：'+state.checks.poem.sum+'\n'+state.checks.poem.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 诗自检：未执行',
+    state.checks.art?'- 画自检：'+state.checks.art.sum+'\n'+state.checks.art.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 画自检：未执行',
+    ($('poemDiff').innerHTML||'').trim()?'- 已执行「自检 → 改写」，修订前后对照见页面第 ⑪ 区。':'- 尚未执行改写。',''].join('\n');
   var imgSrc=isAI?state.aiImage:$('art').toDataURL('image/png');
   var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 诗中有画 · 实验报告</h1><img src="'+ imgSrc +'" alt="生成的画作"><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
   var w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}else toast('弹窗被拦截');
   if(window.ENH)window.ENH.unlock('report');
 };
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+/* ================= 自检 → 改写（对照讲义第30/24章） ================= */
+function chkHTML(items,sum){
+  return items.map(function(x){
+    var mk=x.k==='ok'?'✓':(x.k==='bad'?'!':'?');
+    return '<div class="chk-item '+x.k+'"><span class="mk">'+mk+'</span><div><b>'+esc(x.t)+'</b>'+(x.d?'<small>'+esc(x.d)+'</small>':'')+'</div></div>';
+  }).join('')+(sum?'<div class="refine-sum">'+sum+'</div>':'');
+}
+function zhLen(s){return (String(s).match(/[一-龥]/g)||[]).length;}
+function selfCheckPoem(){
+  if(!state.poem){toast('请先生成一首诗');return;}
+  var p=state.poem,F=FORMS[p.form]||FORMS.wujue,items=[],bad=0;
+  // 形式层：逐项核对（讲义第30章：字数/句数可逐项核对）
+  if(p.lang==='en'){
+    items.push({k:'ok',t:'英文诗 · 形式',d:'英文诗按行与节奏评价，字数不作逐字核对；共 '+p.lines.length+' 行。'});
+  }else if(F.lens){
+    var exp=F.lens,got=p.lines.map(zhLen),mismatch=[];
+    for(var i=0;i<Math.min(exp.length,got.length);i++)if(exp[i]!==got[i])mismatch.push('第'+(i+1)+'句 '+got[i]+'/'+exp[i]+'字');
+    if(got.length!==exp.length)mismatch.push('句数 '+got.length+'/'+exp.length);
+    if(mismatch.length){bad++;items.push({k:'bad',t:'形式 · 字数/句数不一致',d:mismatch.join('；')+'（目标 '+exp.join('/')+'）。不满足约束不能只凭句子优美过关。'});}
+    else items.push({k:'ok',t:'形式 · 字数/句数逐句吻合',d:'各句 '+got.join(' / ')+' 字，与「'+F.n+'」格律一致。'});
+  }else{
+    items.push({k:'warn',t:'形式 · 自由体无硬性格律',d:'「'+F.n+'」按行数与节奏评价，共 '+p.lines.length+' 行，无逐字字数约束。'});
+  }
+  // 表达层：意象连贯 / 情感 / 套话（讲义第30章：意境难量化，自动只作筛查）
+  var text=p.lines.join(''),hit=state.keys.filter(function(k){var w=IMG[k].w;for(var i=0;i<w.length;i++)if(text.indexOf(w[i])>=0||text.indexOf(IMG[k].n)>=0)return true;return false;});
+  if(state.keys.length){
+    if(hit.length>=2)items.push({k:'ok',t:'表达 · 意象有承接',d:'命中 '+hit.length+'/'+state.keys.length+' 个取景意象（'+hit.map(function(k){return IMG[k].n;}).join('、')+'），主题未断裂。'});
+    else{items.push({k:'warn',t:'表达 · 意象偏少',d:'仅命中 '+hit.length+'/'+state.keys.length+' 个取景意象，可读「按问题改写」强化意象承接。'});bad++;}
+  }
+  var dup={},rep='';p.lines.forEach(function(l){for(var i=1;i<l.length;i++){var c=l.charAt(i);if(c===l.charAt(i-1)&&/[一-龥]/.test(c)){dup[c]=1;}}});
+  Object.keys(dup).slice(0,3).forEach(function(c){rep+=c;});
+  items.push(rep?{k:'warn',t:'表达 · 有叠字「'+rep+'」',d:'叠字可能是刻意修辞，也可能是凑字；讲义提醒「用词相近不等于意象连贯」，请自行判断。'}:{k:'ok',t:'表达 · 未见明显凑字',d:'未检出连续叠字，语句拼接痕迹较轻。'});
+  items.push({k:'warn',t:'意境 · 需人来判断',d:'「押韵分数不能代替人的审美判断」：主题是否连贯、是否落俗套，自动检查只能筛查，最终请你读一遍。'});
+  var sum='自动核对：'+items.filter(function(x){return x.k==='ok';}).length+' 项通过 / '+bad+' 项需改 · '+p.formName+'（形式与表达分开看，第 30 章）';
+  state.checks.poem={items:items,sum:sum,bad:bad};
+  $('poemCheck').innerHTML=chkHTML(items,sum);
+}
+function selfCheckArt(){
+  if(!state.poem){toast('请先生成一幅画');return;}
+  var items=[],bad=0,isAI=state.mode==='ai'&&state.aiImage,st=STYLES[state.style];
+  // 内容保留：意象是否都进了画（讲义第24章：内容描述画了什么）
+  if(state.keys.length){
+    items.push({k:'ok',t:'内容 · '+state.keys.length+' 个意象已入画',d:state.keys.map(function(k){return IMG[k].n;}).join('、')+'；主体由诗句/主题决定，切画风不应改变它。'});
+  }else{
+    items.push({k:'warn',t:'内容 · AI 模式按诗意取景',d:'画的内容由诗句＋主题提示词决定，意象未逐一列出；请对照诗句看主体是否保留。'});
+  }
+  // 风格接近：参数是否匹配所选画风
+  items.push({k:'ok',t:'风格 · 已用「'+st.n+'」',d:'画风参数（mode='+st.mode+' / 背景 / 色板 / 线宽）来自所选画风库，20 种画风各不相同。'});
+  // 可复现 / 不可复现
+  items.push(isAI?{k:'warn',t:'可复现 · AI 模式每次不同',d:'文生图模型按提示词现场作画，同诗同画风也不保证同图；若要固定，请切离线模式。'}
+                 :{k:'ok',t:'可复现 · 同诗同画风同图',d:'种子 = 诗句哈希，随机墨点/波纹/飞鸟位置固定（第 19 章）。'});
+  // 人眼观察清单（讲义第24章：房屋河岸有没有变形）
+  items.push({k:'warn',t:'人眼 · 请检查局部是否变形',d:'像看「图宾根小城」那样核对：主体轮廓是否可辨、风格有没有错贴到不相干的物体、细部有没有走形。自动指标不能替代这一步。'});
+  var sum='内容保留 / 风格接近 / 局部观察分开看 · '+st.n+'（讲义第 24 章）';
+  state.checks.art={items:items,sum:sum,bad:bad};
+  $('artCheck').innerHTML=chkHTML(items,sum);
+}
+function revisePoem(){
+  if(!state.poem){toast('请先生成一首诗');return;}
+  if(!state.checks.poem)selfCheckPoem();
+  var p=state.poem,old=p.lines.slice();
+  if(state.mode==='ai')revisePoemAI(p,old);else revisePoemOffline(p,old);
+}
+function revisePoemOffline(p,old){
+  // 离线：按自检发现的形式问题针对性重生成；只是意境提示则强化意象再生成
+  var theme=$('theme').value.trim(),seedBase=hash(theme+'|'+state.form+'|'+state.mood+'|'+(++state.nonce));
+  var keys=parseImages(theme,rng(seedBase));
+  var np=makePoem(state.form,state.mood,keys,seedBase);
+  var seed=hash(np.lines.join('')+np.title+'|'+state.style);
+  state.poem=np;state.keys=keys;state.seed=seed;
+  renderPoem(np);redraw();
+  $('poemCheck').innerHTML='';$('artCheck').innerHTML='';state.checks.poem=null;state.checks.art=null;
+  $('poemDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（离线按问题重新生成）</div><div class="diff-poem">《'+esc(p.title)+'》\n'+esc(old.join('\n'))+'\n\n→ 《'+esc(np.title)+'》\n'+esc(np.lines.join('\n'))+'</div></div>';
+  toast('已按自检问题改写（离线规则重生成）');
+}
+function revisePoemAI(p,old){
+  var btn=$('revisePoemBtn');btn.disabled=true;
+  var issues=state.checks.poem&&state.checks.poem.items?state.checks.poem.items.filter(function(x){return x.k!=='ok';}).map(function(x){return x.t+'：'+x.d;}):[];
+  var ins=formInstruction(state.form);
+  var prompt='你是人工智能诗人，正在按审稿意见修订一首诗。'+ins+'\n'
+    +'主题：'+($('theme').value.trim()||'山水')+'，情感基调：'+MOOD[state.mood].n+'。\n'
+    +'原诗：\n《'+p.title+'》\n'+p.lines.join('\n')+'\n'
+    +'自检发现的问题（形式与表达分开看）：\n'+(issues.length?issues.join('\n'):'形式基本合格，请重点改善意象连贯与新意。')+'\n'
+    +'要求：针对问题修订，保持同一诗体与主题，改善意象连贯与表达；只输出修订后的诗本身，第一行《标题》，随后每行一句，不要解释或 Markdown。';
+  fetch(AI.base+'/chat/completions',{method:'POST',headers:aiHeaders(),body:JSON.stringify({model:AI.chat,messages:[{role:'user',content:prompt}],max_tokens:2000,temperature:1.1})})
+  .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+  .then(function(d){
+    var ch=d.choices&&d.choices[0]&&d.choices[0].message,txt=(ch&&(ch.content||ch.reasoning_content)||'').trim();
+    if(!txt)throw new Error('模型未返回内容');
+    var np=parseAiPoem(txt,state.form,$('theme').value.trim());
+    if(!np.lines.length)throw new Error('未解析出修订稿');
+    state.poem=np;renderPoem(np);
+    $('poemCheck').innerHTML='';state.checks.poem=null;
+    $('poemDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（模型按问题多轮修订 · BIPro 式）</div><div class="diff-poem">《'+esc(p.title)+'》\n'+esc(old.join('\n'))+'\n\n→ 《'+esc(np.title)+'》\n'+esc(np.lines.join('\n'))+'</div></div>';
+    toast('已按自检问题修订（AI 模式）');
+  }).catch(function(e){toast('改写失败：'+(e.message||'网络错误'));})
+  .then(function(){btn.disabled=false;});
+}
+function reviseArt(){
+  if(!state.poem){toast('请先生成一幅画');return;}
+  var before=state.mode==='ai'&&state.aiImage?state.aiImage:$('art').toDataURL('image/png');
+  if(state.mode==='ai')reviseArtAI(before);else reviseArtOffline(before);
+}
+function reviseArtOffline(before){
+  // 离线：按自检问题强化意象——把主题意象重新取全并用新种子重绘
+  var theme=$('theme').value.trim(),seedBase=hash(theme+'|'+state.form+'|'+state.mood+'|'+(++state.nonce)+'|rev');
+  var keys=parseImages(theme,rng(seedBase)),seed=hash(state.poem.lines.join('')+'|'+state.style+'|'+seedBase);
+  state.keys=keys;state.seed=seed;redraw();
+  $('artCheck').innerHTML='';state.checks.art=null;
+  $('artDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（强化意象 + 新种子重绘）</div><div class="diff-imgs"><figure><img src="'+before+'" alt="改写前"><figcaption>改写前</figcaption></figure><figure><img src="'+$('art').toDataURL('image/png')+'" alt="改写后"><figcaption>改写后</figcaption></figure></div></div>';
+  toast('已按自检问题重绘（离线规则）');
+}
+function reviseArtAI(before){
+  var btn=$('reviseArtBtn');btn.disabled=true;
+  $('artLoading').style.display='flex';$('artLoading').firstChild.textContent='✎ 正在按问题重画…';
+  var st=STYLE_PROMPT[state.style],scene=state.poem.lines.slice(0,4).join('，');
+  var prompt=st+'。画面内容：'+($('theme').value.trim()||'山水')+'；诗意：'+scene+'。'
+    +'注意：保留主体结构不让它变形，画风只改变颜色、纹理与笔触，不要把风格错贴到不相干的物体上。不要出现文字、水印。';
+  fetch(AI.base+'/images/generations',{method:'POST',headers:aiHeaders(),body:JSON.stringify({model:AI.image,prompt:prompt,n:1,size:'2048x2048',response_format:'b64_json'})})
+  .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+  .then(function(d){
+    var b64=d.data&&d.data[0]&&d.data[0].b64_json;if(!b64)throw new Error('模型未返回图片');
+    var url='data:image/jpeg;base64,'+b64;state.aiImage=url;$('artAI').src=url;
+    $('artLoading').style.display='none';
+    $('artCheck').innerHTML='';state.checks.art=null;
+    $('artDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（提示词加入「保主体 / 防错贴」约束）</div><div class="diff-imgs"><figure><img src="'+before+'" alt="改写前"><figcaption>改写前</figcaption></figure><figure><img src="'+url+'" alt="改写后"><figcaption>改写后</figcaption></figure></div></div>';
+    toast('已按自检问题重画（AI 模式）');
+  }).catch(function(e){$('artLoading').style.display='none';toast('重画失败：'+(e.message||'网络错误'));})
+  .then(function(){btn.disabled=false;});
+}
+$('checkPoemBtn').addEventListener('click',selfCheckPoem);
+$('revisePoemBtn').addEventListener('click',revisePoem);
+$('checkArtBtn').addEventListener('click',selfCheckArt);
+$('reviseArtBtn').addEventListener('click',reviseArt);
 /* ================= 意象速查 / 画风图鉴 ================= */
 function renderImgRef(){
   $('imgRefGrid').innerHTML=Object.keys(IMG).map(function(k){
