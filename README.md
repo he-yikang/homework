@@ -317,7 +317,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 |:--|:--|:--|:--|
 | A | 梯度与优化显微镜 | [实验室 2 · #grad](https://he-yikang.github.io/homework/lab2.html#grad) | 在 loss 等高线上拖动初始点，并排看 SGD / Momentum / Adam 三条优化轨迹；采样逐层梯度范数；一键演示学习率过小停滞、合适收敛、过大发散 |
 | B | 课程知识地图 | [知识地图 · #map](https://he-yikang.github.io/homework/atlas.html#map) | 把「确定性算法 → 复杂度 → 数据 → 模型容量 → 梯度下降 → 泛化」串成可点击概念图，节点直接跳到对应实验室的具体控件 |
-| C | 跨页成就进度 | [首页 · #enh-achv](https://he-yikang.github.io/homework/#enh-achv) | 15 枚徽章与进度环，做实验自动解锁，进度存本机；把四个孤立页面绑成一个可探索的整体 |
+| C | 跨页成就进度 | [首页 · #enh-achv](https://he-yikang.github.io/homework/#enh-achv) | 16 枚徽章与进度环，做实验自动解锁，进度存本机；把四个孤立页面绑成一个可探索的整体 |
 | D | 自动导览 | 任一页左下角 **▶ 带我看一遍** | 自动滚动、高亮当前模块、同步旁白字幕，按四栏顺序讲完整站并跨页续播，可随时跳过 |
 | E | 一键实验报告 | [实验室 2 · #report](https://he-yikang.github.io/homework/lab2.html#report) / [实验室 1 · #report](https://he-yikang.github.io/homework/lab1.html#report) | 把当前参数、曲线、决策边界与自动判读的结论排版成可打印的页面，或复制成 Markdown 贴进作业文档 |
 | F | 挑战链接 | [实验室 2 · #challenge](https://he-yikang.github.io/homework/lab2.html#challenge) | 把自画数据集、目标准确率与参数上限打包成一个链接发给同学，达标解锁徽章并记录最少参数 / 最少轮数 |

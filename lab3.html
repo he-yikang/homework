@@ -169,6 +169,26 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .mood-atlas .m-body .m-row span{color:#6f6f90}
 .mood-atlas .m-body .m-btn{margin-top:6px;font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
 @media print{.mood-atlas{break-inside:avoid}}
+/* ===== 盲评擂台 ===== */
+.blind-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.blind-score{font-size:12px;color:var(--gold)}
+.blind-hint{font-size:11px;color:#6f6f90}
+.blind-arena{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:860px){.blind-arena{grid-template-columns:1fr}}
+.blind-card{border:1px solid var(--line);border-radius:12px;padding:14px;background:rgba(255,255,255,.02);display:flex;flex-direction:column;gap:10px}
+.blind-card .bc-tag{font-size:11px;color:#c4a4f8;letter-spacing:1px}
+.blind-card .bc-poem{font-family:'KaiTi','STKaiti',serif;font-size:15px;line-height:1.9;color:#e8e8f0;white-space:pre-wrap;flex:1}
+.blind-card.picked{border-color:rgba(45,212,191,.6);box-shadow:0 0 0 1px rgba(45,212,191,.25)}
+.blind-card.right{border-color:rgba(45,212,191,.75)}
+.blind-card.wrong{border-color:rgba(239,110,110,.6)}
+.blind-card button{width:100%}
+.blind-result{margin-top:12px;display:grid;gap:8px}
+.blind-verdict{font-size:13px;font-weight:700;padding:9px 12px;border-radius:9px;border:1px solid var(--line)}
+.blind-verdict.good{color:#2dd4bf;border-color:rgba(45,212,191,.4);background:rgba(45,212,191,.06)}
+.blind-verdict.bad{color:#ef8a8a;border-color:rgba(239,110,110,.4);background:rgba(239,110,110,.06)}
+.blind-why{font-size:12px;color:#b9b9d4;line-height:1.75}
+.blind-why b{color:#c4a4f8}
+@media print{.blind-arena,.blind-card{break-inside:avoid}}
 /* ===== 我的诗集 ===== */
 .coll-toolbar{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
 .coll-toolbar .btn{width:auto;margin-top:0;flex:0 0 auto}
@@ -411,6 +431,20 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
       </section>
     </div>
   </div>
+
+  <!-- 盲评擂台：对照讲义第30章「读者盲评」 -->
+  <section class="panel" id="blindTest" style="max-width:1440px">
+    <h2>⑭ 盲评擂台 · 哪首更符合讲义标准 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 章</span></h2>
+    <p class="tip" style="margin:0 0 12px">讲义第 30 章讲「机器写诗如何评估」时说：让读者<b style="color:#c4a4f8">不知道作者是谁</b>，再比较几首诗；形式（字数/句数）可逐项核对，意象与情感是否连贯要结合读者判断。这里把两首打乱给你盲选——一首格律合格、一首被刻意在形式或表达上动了手脚，选完揭晓并逐项核对。</p>
+    <div class="blind-bar no-print">
+      <button class="btn sm primary" id="blindNew">⚔ 开一场盲评</button>
+      <span class="blind-score" id="blindScore">连胜 0 · 最佳 0</span>
+      <span class="blind-hint">主题取上方输入框，诗体取上方下拉</span>
+    </div>
+    <div class="blind-arena" id="blindArena"><span style="color:#6f6f90;font-size:12px">点「开一场盲评」，两首诗会并排出现（顺序随机）。</span></div>
+    <div class="blind-result" id="blindResult" aria-live="polite"></div>
+    <div class="notice" style="margin-top:12px">注意：这里比的不是「哪首更美」，而是讲义说的<b style="color:#c4a4f8">可检验条件是否都满足</b>——字数句数、主题意象、有没有凑字。美感没有统一分数，正如讲义强调的「押韵分数不能代替人的审美判断」。</div>
+  </section>
 
   <!-- 自检 → 改写：对照讲义第 30 / 24 章 -->
   <section class="panel" id="refine" style="max-width:1440px">
@@ -1086,6 +1120,75 @@ $('checkPoemBtn').addEventListener('click',selfCheckPoem);
 $('revisePoemBtn').addEventListener('click',revisePoem);
 $('checkArtBtn').addEventListener('click',selfCheckArt);
 $('reviseArtBtn').addEventListener('click',reviseArt);
+/* ================= 盲评擂台（对照讲义第30章） ================= */
+var blind={a:null,b:null,right:null,picked:null,streak:0,best:0,rounds:0,defect:''};
+function blindScoreSave(){try{localStorage.setItem('hw_lab3_blind_v1',JSON.stringify({streak:blind.streak,best:blind.best,rounds:blind.rounds}));}catch(e){}}
+function blindScoreLoad(){try{var s=JSON.parse(localStorage.getItem('hw_lab3_blind_v1')||'null');if(s){blind.streak=s.streak||0;blind.best=s.best||0;blind.rounds=s.rounds||0;}}catch(e){}}
+function blindScoreUI(){$('blindScore').textContent='连胜 '+blind.streak+' · 最佳 '+blind.best+' · 已评 '+blind.rounds+' 场';}
+/* 造一首「合格版」：复用真实词库与格律 */
+function blindGood(){
+  var theme=$('theme').value.trim()||'秋夜江边',seed=hash(theme+'|'+state.form+'|'+state.mood+'|blind|'+Date.now());
+  var keys=parseImages(theme,rng(seed));
+  return {poem:makePoem(state.form,state.mood,keys,seed),keys:keys};
+}
+/* 造「动手脚版」：形式层改字数、表达层塞无关意象，只改一处，便于逐项核对 */
+function blindBad(good,r){
+  var p={title:good.poem.title,lines:good.poem.lines.slice(),form:good.poem.form,formName:good.poem.formName,lang:good.poem.lang,layout:good.poem.layout,mood:good.poem.mood,moodName:good.poem.moodName},F=FORMS[p.form];
+  var defectType=r()<.5?'form':'expr';
+  if(defectType==='form'&&F.lens&&F.lens.length){
+    var i=Math.floor(r()*F.lens.length),line=p.lines[i]||'',exp=F.lens[i];
+    if(zhLen(line)>2){ // 删一个中文字，制造字数不符
+      var m=line.match(/[一-龥]/g),idx=line.indexOf(m[Math.floor(r()*m.length)]);
+      p.lines[i]=line.slice(0,idx)+line.slice(idx+1);
+      return {poem:p,defect:'form',detail:'第 '+(i+1)+' 句只有 '+zhLen(p.lines[i])+' 字，格律要求 '+exp+' 字——形式层不合格。'};
+    }
+  }
+  // 表达层：把某句里的意象词换成明显无关的词（用当前取景外的意象）
+  var all=Object.keys(IMG),outside=all.filter(function(k){return good.keys.indexOf(k)<0;});
+  var k=outside.length?outside[Math.floor(r()*outside.length)]:'flower',word=IMG[k].w[0]||IMG[k].n;
+  var li=Math.min(1,p.lines.length-1),old=p.lines[li];
+  p.lines[li]=word+old.slice(Math.min(word.length,old.length-1));
+  return {poem:p,defect:'expr',detail:'第 '+(li+1)+' 句换成与主题取景无关的「'+word+'」，意象衔接断裂——表达层不合格。'};
+}
+function blindNew(){
+  var r=rng(hash('blind'+Date.now()+Math.random()));
+  var good=blindGood(),bad=blindBad(good,r);
+  // 随机决定 A/B 谁是合格版
+  var rightIsA=r()<.5;
+  blind.a=rightIsA?good.poem:bad.poem;
+  blind.b=rightIsA?bad.poem:good.poem;
+  blind.right=rightIsA?'A':'B';
+  blind.defect=bad.detail;
+  blind.picked=null;
+  $('blindResult').innerHTML='';
+  var card=function(side){
+    var p=side==='A'?blind.a:blind.b;
+    return '<div class="blind-card" id="blindCard'+side+'"><div class="bc-tag">'+side+' · '+p.formName+' · '+p.moodName+'</div>'
+      +'<div class="bc-poem">《'+esc(p.title)+'》\n'+esc(p.lines.join('\n'))+'</div>'
+      +'<button class="btn sm" data-pick="'+side+'">我选 '+side+' 更合格</button></div>';
+  };
+  $('blindArena').innerHTML=card('A')+card('B');
+}
+function blindPick(side){
+  if(!blind.a||blind.picked)return;
+  blind.picked=side;blind.rounds++;
+  var win=side===blind.right;
+  if(win){blind.streak++;if(blind.streak>blind.best)blind.best=blind.streak;}else blind.streak=0;
+  blindScoreSave();blindScoreUI();
+  if(blind.streak>=3&&window.ENH)window.ENH.unlock('blindjudge');
+  $('blindCard'+side).classList.add('picked',win?'right':'wrong');
+  $('blindCard'+blind.right).classList.add('right');
+  // 禁用选择
+  var bs=$('blindArena').querySelectorAll('[data-pick]');for(var i=0;i<bs.length;i++)bs[i].disabled=true;
+  $('blindResult').innerHTML='<div class="blind-verdict '+(win?'good':'bad')+'">'+(win?'✓ 判对了！':'✗ 判错了')+'　合格版是 '+blind.right+'。连胜 '+blind.streak+'。</div>'
+    +'<div class="blind-why">这道题动手脚的地方：<b>'+esc(blind.defect)+'</b><br>讲义第 30 章把评估拆成两层：形式（字数、句数、押韵、格律逐项核对）与内容（主题/意象/情绪是否连贯、是否套用拼接）。两版用的是同一组意象与同一个诗体，差别只在这<b>一处可检验的条件</b>——这正是自动筛查能抓到的具体问题。</div>';
+}
+$('blindNew').addEventListener('click',blindNew);
+$('blindArena').addEventListener('click',function(e){
+  var b=e.target.closest('[data-pick]');if(b)blindPick(b.getAttribute('data-pick'));
+});
+blindScoreLoad();blindScoreUI();
+globalThis.__LAB3_BLIND__={newRound:blindNew,pick:blindPick,getState:function(){return {a:blind.a,b:blind.b,right:blind.right,picked:blind.picked,defect:blind.defect,streak:blind.streak};},makeGood:blindGood,makeBad:blindBad};
 /* ================= 意象速查 / 画风图鉴 ================= */
 function renderImgRef(){
   $('imgRefGrid').innerHTML=Object.keys(IMG).map(function(k){
@@ -1405,6 +1508,7 @@ var ITEMS=[
  {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
  {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
  {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'⚔ 盲评擂台 · 哪首诗更合格',u:'lab3.html#blindTest',d:'扩展',k:'盲评 擂台 格律 评估 对比 连胜 两首诗 读者判断 第30章'},
  {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
  {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
 /* /ENH:CMD */
@@ -1487,13 +1591,14 @@ window.addEventListener('scroll',function(){var h=document.documentElement.scrol
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 36 章</b><small>《人工智能通识》36 章逐章对照本站实践（含第三篇「人工智能应用」），可搜索、按篇筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>16 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
     <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
     <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
-    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成水墨画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html#blindTest"><b>J · 盲评擂台</b><small>按讲义第 30 章的读者盲评法，两首打乱的诗选哪首格律合格，揭晓后逐项核对、连胜计分</small></a>
   </div>
   <a class="readme" href="https://github.com/he-yikang/homework#enhance" target="_blank" rel="noopener">↗ 这些能力在 README 里也有完整说明与直达链接</a>
 </div></div>
@@ -1517,7 +1622,8 @@ var ACHV=[
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
  {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
- {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'}
+ {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'},
+ {id:'blindjudge',t:'盲评慧眼',d:'在实验室 3 的盲评擂台连胜 3 场'}
 ];
 var state={u:{},c:[]};
 try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
@@ -1577,7 +1683,8 @@ var TOUR={
   {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
  'lab3.html':{next:'atlas.html',steps:[
   {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
-  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#how'}]},
+  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#styleRef'},
+  {t:'盲评擂台 · 哪首更合格',d:'讲义第 30 章让读者不知道作者是谁再比较：两首打乱的诗盲选，揭晓后按形式与表达逐项核对。',s:'#blindTest'}]},
  'atlas.html':{next:null,steps:[
   {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
   {t:'📖 课程教材脉络',d:'《人工智能通识》36 章逐章对照（含第三篇人工智能应用）：哪几章在本站有实验、点一下就能回讲义原文。',s:'#course'},

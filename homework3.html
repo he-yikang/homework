@@ -235,6 +235,7 @@ var ITEMS=[
  {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
  {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
  {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'⚔ 盲评擂台 · 哪首诗更合格',u:'lab3.html#blindTest',d:'扩展',k:'盲评 擂台 格律 评估 对比 连胜 两首诗 读者判断 第30章'},
  {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
  {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
 /* /ENH:CMD */
@@ -317,13 +318,14 @@ window.addEventListener('scroll',function(){var h=document.documentElement.scrol
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 36 章</b><small>《人工智能通识》36 章逐章对照本站实践（含第三篇「人工智能应用」），可搜索、按篇筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>16 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
     <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
     <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
-    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成水墨画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html#blindTest"><b>J · 盲评擂台</b><small>按讲义第 30 章的读者盲评法，两首打乱的诗选哪首格律合格，揭晓后逐项核对、连胜计分</small></a>
   </div>
   <a class="readme" href="https://github.com/he-yikang/homework#enhance" target="_blank" rel="noopener">↗ 这些能力在 README 里也有完整说明与直达链接</a>
 </div></div>
@@ -347,7 +349,8 @@ var ACHV=[
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
  {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
- {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'}
+ {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'},
+ {id:'blindjudge',t:'盲评慧眼',d:'在实验室 3 的盲评擂台连胜 3 场'}
 ];
 var state={u:{},c:[]};
 try{var s=JSON.parse(localStorage.getItem(KEY)||'{}');if(s&&typeof s==='object'){state.u=s.u||{};state.c=s.c||[];}}catch(e){}
@@ -407,7 +410,8 @@ var TOUR={
   {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
  'lab3.html':{next:'atlas.html',steps:[
   {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
-  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#how'}]},
+  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#styleRef'},
+  {t:'盲评擂台 · 哪首更合格',d:'讲义第 30 章让读者不知道作者是谁再比较：两首打乱的诗盲选，揭晓后按形式与表达逐项核对。',s:'#blindTest'}]},
  'atlas.html':{next:null,steps:[
   {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
   {t:'📖 课程教材脉络',d:'《人工智能通识》36 章逐章对照（含第三篇人工智能应用）：哪几章在本站有实验、点一下就能回讲义原文。',s:'#course'},
