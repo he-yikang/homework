@@ -92,7 +92,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
       <button class="mbtn" id="mapZoomIn">＋ 放大</button>
       <button class="mbtn" id="mapZoomOut">－ 缩小</button>
       <button class="mbtn" id="mapReset">重置视角</button>
-      <span style="color:#6f6f90;font-size:12px">共 8 个概念节点 · 紫框=作业 1 的确定性算法 · 青框=作业 2 的学习算法</span>
+      <span style="color:#6f6f90;font-size:12px">共 9 个概念节点 · 紫框=作业 1 的确定性算法 · 青框=作业 2 的学习算法 · 金框=第三篇「人工智能应用」</span>
     </div>
     <svg id="mapSvg" viewBox="0 0 900 430" preserveAspectRatio="xMidYMid meet">
       <defs>
@@ -104,10 +104,11 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
         <path class="lk" d="M620 92 L650 92"/><path class="lk" d="M620 268 L650 268"/>
         <path class="lk" d="M620 92 L700 170"/><path class="lk" d="M620 268 L700 170"/>
         <path class="lk" d="M800 170 L810 170"/>
+        <path class="lk" d="M470 295 L470 323" style="stroke:#e8c07d;stroke-opacity:.5"/>
       </g>
     </svg>
     <div id="mapTip"></div>
-    <p class="lead" style="margin:12px 0 0">🌱 这条链回答了课程最核心的一问：作业 1 的算法<b style="color:#e8e8f0">不需要数据、结果可复现</b>，作业 2 的算法<b style="color:#e8e8f0">没有数据就什么都不是</b>——但两者都在做迭代、都在逼近一个目标。</p>
+    <p class="lead" style="margin:12px 0 0">🌱 这条链回答了课程最核心的一问：作业 1 的算法<b style="color:#e8e8f0">不需要数据、结果可复现</b>，作业 2 的算法<b style="color:#e8e8f0">没有数据就什么都不是</b>——但两者都在做迭代、都在逼近一个目标。金框的第三篇「诗中有画」则把前两篇的<b style="color:#e8c07d">表示</b>思想用到应用上：意象既是诗的语义、也是画的指令。</p>
   </div>
 
 <!-- ENH:COURSE -->
@@ -148,20 +149,21 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 @media(max-width:640px){#course .clist{grid-template-columns:1fr}}
 </style>
 <div class="sec" id="course">
-  <h2>📖 课程教材脉络 · 20 章 ↔ 本站实践 <span class="tg">课程坐标系</span></h2>
-  <p class="lead">把课程教材的章节体系接进作业站点：每一章都标出「本站哪里能动手」，也能一键回到讲义原文。点章卡展开说明与双链，勾选「已读」记录自己的课程进度；青色左边框表示这一章在本站有对应实验，灰色章属于课程概述 / 历史部分，本站不做牵强附会。</p>
+  <h2>📖 课程教材脉络 · 36 章 ↔ 本站实践 <span class="tg">课程坐标系</span></h2>
+  <p class="lead">把课程教材的章节体系接进作业站点：每一章都标出「本站哪里能动手」，也能一键回到讲义原文。点章卡展开说明与双链，勾选「已读」记录自己的课程进度；青色左边框表示这一章在本站有对应实验，灰色章属于课程概述 / 历史部分，本站不做牵强附会。讲义 V9 新增第三篇「人工智能应用」（第 21–36 章），其中「AI 绘画大师」「人工智能诗人」正是本站作业 3「诗中有画」的案例原型。</p>
   <div class="cinfo">
     <div style="flex:1;min-width:220px">
       <div class="bk">《人工智能通识》· 人工智能概论课程教材</div>
-      <div class="mt">王东、马少平 著 · 清华大学出版社 · 2025 年 1 月 · ISBN 9787302680147<br>课程讲义 Lecture V8 · 第一、二篇 人工智能概述与基础 · 授课教师 朱梦尧 教授</div>
+      <div class="mt">王东、马少平 著 · 清华大学出版社 · 2025 年 1 月 · ISBN 9787302680147<br>课程讲义 Lecture V9 · 视觉理解与生成扩展版（含第三篇 人工智能应用）· 授课教师 朱梦尧 教授</div>
     </div>
     <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/" target="_blank" rel="noopener">↗ 打开课程讲义原站</a>
   </div>
   <div class="ctools">
     <input type="text" id="cSearch" placeholder="搜索章节 / 概念 / 本站实验…">
-    <button id="cPartAll" class="on">全部 20 章</button>
+    <button id="cPartAll" class="on">全部 36 章</button>
     <button id="cPart1">第一篇 · 概述</button>
     <button id="cPart2">第二篇 · 基础</button>
+    <button id="cPart3" style="border-color:rgba(232,192,125,.5);color:#e8c07d">第三篇 · 应用</button>
     <label><input type="checkbox" id="cOnly"> 只看有实验</label>
     <button id="cExpand">展开全部</button>
     <span class="cstat" id="cStat"></span>
@@ -193,7 +195,23 @@ var CH=[
  {n:17,p:2,t:'深度学习',tag:'深度学习',note:'作业 2 首屏是 PyTorch 训练的逐帧回放，下面有决策边界演化、隐藏层 PCA、混淆矩阵与权重分布；参数演化图里能看到分层漂移、更新幅度、梯度范数与 StepLR 台阶。',links:[['作业 2 · 训练回放','homework2.html#lab'],['🧠 现场训练','lab2.html']]},
  {n:18,p:2,t:'深度学习前沿',tag:'可视化延伸',note:'本站没有复现前沿模型。这一章对应的是**可视化方法上的延伸**：3D 置信度曲面、可拖动优化轨迹、神经元感受野热力图，用来把高维概念变成立起来看得见的东西。',links:[['🧊 3D 决策空间','lab2.html#space3d'],['🔬 梯度显微镜','lab2.html#grad']]},
  {n:19,p:2,t:'深度学习面临的挑战',tag:'梯度 / 泛化',note:'梯度消失、发散、过拟合都能在本站现场制造出来：采样逐层梯度看输入侧几乎不动，切到大学习率看 loss 爆炸，载入过拟合预设看训练集 100% 但验证集掉下去。',links:[['逐层梯度与学习率三态','lab2.html#grad'],['过拟合预设','lab2.html?preset=overfit']]},
- {n:20,p:2,t:'大模型时代',tag:'Agent 实践',note:'大模型与 Agent 如何改变写程序的方式，正是作业 1 的主题：原文里对 Agent 的思考、多次迭代与工具分工的记录，是本站与这一章最直接的连接。',links:[['作业 1 · 对 Agent 的思考','homework1.html'],['🧭 确定性 vs 学习','atlas.html#timeline']]}
+ {n:20,p:2,t:'大模型时代',tag:'Agent 实践',note:'大模型与 Agent 如何改变写程序的方式，正是作业 1 的主题：原文里对 Agent 的思考、多次迭代与工具分工的记录，是本站与这一章最直接的连接。',links:[['作业 1 · 对 Agent 的思考','homework1.html'],['🧭 确定性 vs 学习','atlas.html#timeline']]},
+ {n:21,p:3,t:'人脸识别',tag:'第三篇 · 应用',note:'讲义 V9 新增第三篇「人工智能应用」的视觉理解章节。本站作业 3「诗中有画」同样落在「语义 → 视觉表示」这条主线上，可作为应用篇的对照阅读；本章本站暂无专门实验，见讲义原文。',links:[['作业 3 · 诗中有画','homework3.html']]},
+ {n:22,p:3,t:'车牌识别',tag:'第三篇 · 应用',note:'视觉识别的典型应用（检测 + 字符识别）。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:23,p:3,t:'AI美颜',tag:'第三篇 · 应用',note:'把参考妆容迁移到本人照片，属于图像到图像的转换。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:24,p:3,t:'AI绘画大师',tag:'AI 绘画',note:'讲义讲「风格迁移：内容与表达方式」——内容描述画了什么，风格描述用怎样的颜色、纹理与笔触来画。这正是本站作业 3 的核心：实验室 3 的 20 种画风把同一组意象（月、山、水、舟…）绘成水墨、工笔、印象派、赛博朋克等完全不同笔墨，直观演示「内容不变、表示可变」。',links:[['作业 3 · 工作原理','homework3.html#principle'],['🎨 实验室 3 · 画风图鉴','lab3.html#styleRef']]},
+ {n:25,p:3,t:'AI鉴伪',tag:'第三篇 · 应用',note:'人脸识别的安全边界与准确率之外的鉴别问题。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:26,p:3,t:'语音识别',tag:'第三篇 · 应用',note:'语音到文字的转换。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:27,p:3,t:'声纹识别',tag:'第三篇 · 应用',note:'声音也能成为身份线索。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:28,p:3,t:'语音合成',tag:'第三篇 · 应用',note:'文字到语音的生成。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:29,p:3,t:'机器作家',tag:'第三篇 · 应用',note:'大语言模型在写作中的应用。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:30,p:3,t:'人工智能诗人',tag:'AI 写诗',note:'讲义讲「押韵容易，写出意味难」：诗既有字数、韵脚、平仄等可检验的形式，也有连贯意象与情感。这正是本站作业 3 的另一半——实验室 3 用 40 种诗体（含 22 种词牌的真实字数格律）离线拼装或由大模型现场写诗，把「形式约束」与「意象情感」的差别摆在一起看。',links:[['作业 3 · 诗中有画','homework3.html'],['✍️ 实验室 3 · 人工智能诗人','lab3.html#studio']]},
+ {n:31,p:3,t:'机器翻译',tag:'第三篇 · 应用',note:'跨语言的语义转换，及其为何困难。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:32,p:3,t:'围棋国手',tag:'第三篇 · 应用',note:'从极小极大搜索到 Alpha-Beta 剪枝，是「基于知识」搜索方法的巅峰案例。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:33,p:3,t:'AI游戏',tag:'第三篇 · 应用',note:'从下棋到在动态世界中行动。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:34,p:3,t:'扫地机器人',tag:'第三篇 · 应用',note:'从「会决策」到「能在现实中行动」，是感知—决策—执行的完整闭环。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:35,p:3,t:'搜索引擎',tag:'第三篇 · 应用',note:'海量网页里怎样立刻找到答案（信息检索）。本站暂无对应实验，见讲义原文。',links:[]},
+ {n:36,p:3,t:'商品推荐',tag:'第三篇 · 应用',note:'根据用户过去行为主动推荐（个性化推荐）。本站暂无对应实验，见讲义原文。',links:[]}
 ];
 var KEY='hw_course_v1',read={},open={},part=0,only=false,q='',allOpen=false;
 try{var r=JSON.parse(localStorage.getItem(KEY)||'{}');if(r&&typeof r==='object')read=r;}catch(e){}
@@ -234,12 +252,12 @@ function render(){
     };
   });
   var withExp=list.filter(function(c){return c.links.length;}).length;
-  document.getElementById('cStat').textContent='显示 '+list.length+' / 20 章 · 其中 '+withExp+' 章有本站实验';
+  document.getElementById('cStat').textContent='显示 '+list.length+' / '+CH.length+' 章 · 其中 '+withExp+' 章有本站实验';
   var n=countRead(),pct=Math.round(n/CH.length*100);
-  document.getElementById('cProg').innerHTML='📖 我的课程进度：<b style="color:#2dd4bf">'+n+' / 20 章</b> 已读 · '+pct+'% '
+  document.getElementById('cProg').innerHTML='📖 我的课程进度：<b style="color:#2dd4bf">'+n+' / '+CH.length+' 章</b> 已读 · '+pct+'% '
     +(n>=5?'· 🏅 课程坐标系徽章已解锁':'· 标记 5 章即可解锁「课程坐标系」徽章')
     +'<div class="cbar"><i style="width:'+pct+'%"></i></div>';
-  var bs=['cPartAll','cPart1','cPart2'];
+  var bs=['cPartAll','cPart1','cPart2','cPart3'];
   for(var i=0;i<bs.length;i++){var b=document.getElementById(bs[i]);if(b)b.className=(part===(i===0?0:i))?'on':'';}
   globalThis.__COURSE__={CH:CH,render:render,visible:visible,toggleRead:toggleRead,markRead:markRead,countRead:countRead,state:function(){return {part:part,only:only,q:q,read:read};}};
 }
@@ -271,6 +289,7 @@ function setPart(v){part=v;render();}
 document.getElementById('cPartAll').onclick=function(){setPart(0);};
 document.getElementById('cPart1').onclick=function(){setPart(1);};
 document.getElementById('cPart2').onclick=function(){setPart(2);};
+document.getElementById('cPart3').onclick=function(){setPart(3);};
 document.getElementById('cOnly').onclick=function(){only=!!this.checked;render();};
 document.getElementById('cExpand').onclick=function(){allOpen=!allOpen;open={};this.textContent=allOpen?'收起全部':'展开全部';render();};
 render();
@@ -389,7 +408,8 @@ var NODES=[
  {x:470,y:268,t:'前向 / 反向传播',s:'梯度如何流动',kind:1,h:'lab2.html#grad',ch:'第 15 章 · 人工神经元网络',d:'前向算出预测，反向把误差逐层拆回每个权重。梯度太小时靠输入侧的层几乎不动 —— 梯度消失。',go:'去梯度显微镜采样逐层梯度 →'},
  {x:650,y:92,t:'梯度下降与优化器',s:'SGD / Momentum / Adam',kind:1,h:'lab2.html#grad',ch:'第 13 章 · 学习方法',d:'同一条 loss 曲面，不同优化器走出的路径完全不同。拖动起点可以直观看到自适应步长怎么避开震荡。',go:'去实验室 2 对比三条轨迹 →'},
  {x:650,y:268,t:'学习率',s:'步长与稳定性',kind:1,h:'lab2.html?preset=lr',ch:'第 14 章 · 学习策略',d:'过小停滞、合适收敛、过大发散。一个标量就能决定训练是成功还是爆炸，是调参时最先该试的旋钮。',go:'去实验室 2 载入大学习率预设 →'},
- {x:820,y:170,t:'泛化与决策边界',s:'过拟合 / L2 / 曲面',kind:1,h:'lab2.html?preset=overfit',ch:'第 19 章 · 深度学习面临的挑战',d:'训练集 100% 不等于学会了。L2 正则、噪声与验证集用来判断边界是「记住」还是「概括」；3D 视图能把这张边界立起来看。',go:'去实验室 2 载入过拟合预设 →'}
+ {x:820,y:170,t:'泛化与决策边界',s:'过拟合 / L2 / 曲面',kind:1,h:'lab2.html?preset=overfit',ch:'第 19 章 · 深度学习面临的挑战',d:'训练集 100% 不等于学会了。L2 正则、噪声与验证集用来判断边界是「记住」还是「概括」；3D 视图能把这张边界立起来看。',go:'去实验室 2 载入过拟合预设 →'},
+ {x:470,y:350,t:'诗中有画',s:'语义 → 视觉表示',kind:2,h:'lab3.html',ch:'第 24 / 30 章 · AI绘画大师 / 人工智能诗人（第三篇 人工智能应用）',d:'讲义 V9 第三篇的两个案例，在作业 3 接成一条流水线：意象既是诗的语义单元，也是画的绘制指令——同一组意象换 20 种画风得到完全不同的笔墨，直观演示「内容不变、表示可变」。',go:'去实验室 3 写诗作画 →'}
 ];
 var layer=document.getElementById('mapLayer'),svg=document.getElementById('mapSvg'),tip=document.getElementById('mapTip');
 var NS='http://www.w3.org/2000/svg';
@@ -399,7 +419,7 @@ NODES.forEach(function(n){
   var g=document.createElementNS(NS,'g');g.setAttribute('class','nd');
   var r=document.createElementNS(NS,'rect');
   r.setAttribute('x',n.x-76);r.setAttribute('y',n.y-27);r.setAttribute('width',152);r.setAttribute('height',54);r.setAttribute('rx',12);
-  if(n.kind===0)r.setAttribute('stroke','#a855f7');else r.setAttribute('stroke','#2dd4bf');
+  if(n.kind===0)r.setAttribute('stroke','#a855f7');else if(n.kind===2)r.setAttribute('stroke','#e8c07d');else r.setAttribute('stroke','#2dd4bf');
   g.appendChild(r);
   var t=document.createElementNS(NS,'text');t.setAttribute('x',n.x);t.setAttribute('y',n.y-4);t.textContent=n.t;g.appendChild(t);
   var s=document.createElementNS(NS,'text');s.setAttribute('class','sub');s.setAttribute('x',n.x);s.setAttribute('y',n.y+14);s.textContent=n.s;g.appendChild(s);
