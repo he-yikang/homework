@@ -68,6 +68,7 @@
     #hw-banner .chip1 { animation: hwFloat 3.6s ease-in-out infinite; }
     #hw-banner .chip2 { animation: hwFloat 3.6s ease-in-out -1.2s infinite; }
     #hw-banner .chip3 { animation: hwFloat 3.6s ease-in-out -2.4s infinite; }
+    #hw-banner .chip4 { animation: hwFloat 3.6s ease-in-out -0.6s infinite; }
     @keyframes hwBreathA { 0%,100% { opacity:.42 } 50% { opacity:1 } }
     @keyframes hwBreathB { 0%,100% { opacity:1 } 50% { opacity:.40 } }
     @keyframes hwFlow { from { stroke-dashoffset:0 } to { stroke-dashoffset:-40 } }
@@ -115,7 +116,7 @@
   <!-- 文字 -->
   <text x="72" y="150" font-size="62" font-weight="800" fill="url(#ttl)">人工智能概论</text>
   <text x="74" y="190" font-size="16" letter-spacing="3" fill="#22d3ee">AI INTRODUCTION · COURSE PORTFOLIO</text>
-  <text x="74" y="232" font-size="22" fill="#e8e8f0">课程作业集 — AI 编程实践 × 深度学习可视化</text>
+  <text x="74" y="232" font-size="22" fill="#e8e8f0">课程作业集 — AI 编程实践 × 深度学习可视化 × 人工智能应用</text>
 
   <g font-size="15" font-weight="600">
     <g class="chip1">
@@ -127,15 +128,19 @@
       <text x="232" y="284" fill="#bfdbfe" text-anchor="middle">作业 2</text>
     </g>
     <g class="chip3">
-      <rect x="294" y="262" width="150" height="34" rx="17" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-opacity="0.5"/>
-      <text x="369" y="284" fill="#bbf7d0" text-anchor="middle">GitHub Pages</text>
+      <rect x="294" y="262" width="96" height="34" rx="17" fill="#e8c07d" fill-opacity="0.18" stroke="#e8c07d" stroke-opacity="0.55"/>
+      <text x="342" y="284" fill="#fde9c0" text-anchor="middle">作业 3</text>
+    </g>
+    <g class="chip4">
+      <rect x="404" y="262" width="150" height="34" rx="17" fill="#22c55e" fill-opacity="0.16" stroke="#22c55e" stroke-opacity="0.5"/>
+      <text x="479" y="284" fill="#bbf7d0" text-anchor="middle">GitHub Pages</text>
     </g>
   </g>
 
   <!-- 底部流光进度条 -->
-  <rect x="74" y="322" width="370" height="2" rx="1" fill="#a855f7" fill-opacity="0.18"/>
+  <rect x="74" y="322" width="480" height="2" rx="1" fill="#a855f7" fill-opacity="0.18"/>
   <rect x="74" y="322" width="120" height="2" rx="1" fill="url(#rail)">
-    <animate attributeName="x" values="74;324;74" dur="5.4s" repeatCount="indefinite"/>
+    <animate attributeName="x" values="74;434;74" dur="5.4s" repeatCount="indefinite"/>
   </rect>
 
   <!-- 斜向扫描光带 -->
