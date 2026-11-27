@@ -222,7 +222,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 ### 4. 收获与局限
 
-最大体会是第三篇的「应用」没有引入全新原理，而是把前两篇的「规则 + 表示 + 学习 + 网络结构」按需组合成一个能用的系统。也清楚实验室 3 是离线教学版——词库与模板拼装、代码绘画，规模远小于真实大模型；生成式 AI 的幻觉、偏见与版权问题（第 9 章）同样不能回避。待讲义第三篇上线后再逐条校对优化。
+最大体会是第三篇的「应用」没有引入全新原理，而是把前两篇的「规则 + 表示 + 学习 + 网络结构」按需组合成一个能用的系统。也清楚实验室 3 是离线教学版——词库与模板拼装、代码绘画，规模远小于真实大模型；生成式 AI 的幻觉、偏见与版权问题（第 9 章）同样不能回避。已对照讲义第三篇逐条校对（第 24、30 章分别对应实验室 3 的绘画与作诗模块）。
 
 ---
 
@@ -336,7 +336,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 **课程**：人工智能概论　|　**教材**：《人工智能通识》 王东、马少平 著，清华大学出版社，2025 年 1 月，ISBN 9787302680147　|　**课程讲义**：Lecture V9 · 视觉理解与生成扩展版（授课教师 朱梦尧 教授）
 
-本站此前是四件并列的作业作品；这一节把课程教材的章节体系接进来，给每一章标出「本站哪里能动手」，让作业从孤立作品变成挂在课程脉络上的实践。灰色章表示属于课程概述 / 历史部分，本站没有对应实验，只提供讲义原文入口——不做牵强附会。讲义升级到 V9 后新增第 21—36 章（视觉理解与生成扩展篇），本站暂无对应实验，同样只提供讲义原文入口。
+本站此前是四件并列的作业作品；这一节把课程教材的章节体系接进来，给每一章标出「本站哪里能动手」，让作业从孤立作品变成挂在课程脉络上的实践。灰色章表示属于课程概述 / 历史部分，本站没有对应实验，只提供讲义原文入口——不做牵强附会。第三篇（第 21—36 章，视觉理解与生成扩展篇）中，第 24、30 章分别对应作业 3 的绘画与作诗模块；其余章节本站暂无对应实验，只提供讲义原文入口。
 
 | 章 | 章节 | 本站对应实践 | 讲义原文 |
 |:--|:--|:--|:--|
@@ -360,23 +360,23 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 | 18 | 深度学习前沿 | [3D 决策空间 · 可视化延伸](https://he-yikang.github.io/homework/lab2.html#space3d) | [↗ 第 18 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-18) |
 | 19 | 深度学习面临的挑战 | [梯度消失 / 发散 / 过拟合](https://he-yikang.github.io/homework/lab2.html#grad) | [↗ 第 19 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-19) |
 | 20 | 大模型时代 | [作业 1 · 对 Agent 的思考](https://he-yikang.github.io/homework/homework1.html) | [↗ 第 20 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-20) |
-| 21 | 人脸识别 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 21 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-21) |
-| 22 | 车牌识别 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 22 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-22) |
-| 23 | AI美颜 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 23 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-23) |
-| 24 | AI绘画大师 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 24 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-24) |
-| 25 | AI鉴伪 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 25 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-25) |
-| 26 | 语音识别 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 26 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-26) |
-| 27 | 声纹识别 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 27 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-27) |
-| 28 | 语音合成 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 28 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-28) |
-| 29 | 机器作家 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 29 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-29) |
-| 30 | 人工智能诗人 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 30 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-30) |
-| 31 | 机器翻译 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 31 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-31) |
-| 32 | 围棋国手 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 32 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-32) |
-| 33 | AI游戏 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 33 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-33) |
-| 34 | 扫地机器人 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 34 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-34) |
-| 35 | 搜索引擎 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 35 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-35) |
-| 36 | 商品推荐 | 讲义新增扩展篇，本站暂无对应实验 | [↗ 第 36 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-36) |
+| 21 | 人脸识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 21 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-21) |
+| 22 | 车牌识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 22 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-22) |
+| 23 | AI美颜 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 23 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-23) |
+| 24 | AI绘画大师 | 第三篇 · 人工智能应用，对应作业 3 · AI 绘画模块 | [↗ 第 24 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-24) |
+| 25 | AI鉴伪 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 25 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-25) |
+| 26 | 语音识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 26 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-26) |
+| 27 | 声纹识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 27 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-27) |
+| 28 | 语音合成 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 28 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-28) |
+| 29 | 机器作家 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 29 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-29) |
+| 30 | 人工智能诗人 | 第三篇 · 人工智能应用，对应作业 3 · 诗人模块 | [↗ 第 30 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-30) |
+| 31 | 机器翻译 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 31 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-31) |
+| 32 | 围棋国手 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 32 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-32) |
+| 33 | AI游戏 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 33 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-33) |
+| 34 | 扫地机器人 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 34 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-34) |
+| 35 | 搜索引擎 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 35 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-35) |
+| 36 | 商品推荐 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 36 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-36) |
 
-> 第 18 章那一行是**本站的可视化延伸**，不是教材内容，因此「讲义原文」列指向课程讲义第 18 章，站内链接指向 3D 决策空间；第 21—36 章为讲义 V9 新增的视觉理解与生成扩展篇，章节名取自讲义原站，本站暂无对应实验。
+> 第 18 章那一行是**本站的可视化延伸**，不是教材内容，因此「讲义原文」列指向课程讲义第 18 章，站内链接指向 3D 决策空间；第 21—36 章属第三篇「人工智能应用 · 视觉理解与生成扩展篇」，章节名取自讲义原站，第 24、30 章对应作业 3，其余章节本站暂无对应实验。
 
 **README ↔ 网站双向关联**：[交互式章节地图](https://he-yikang.github.io/homework/atlas.html#course) 支持搜索、按篇章筛选、只看有实验的章节、展开查看双链、勾选「已读」记录进度（存本机），并把教材章节标注在[知识地图](https://he-yikang.github.io/homework/atlas.html#map)的概念节点上；五页 `Ctrl/⌘ + K` 站内搜索、左下角 **✦ 扩展能力** 面板与自动导览也都收录了课程坐标系入口。课程讲义原文全部留在原站，本站只做链接与对照，不搬运教材内容。
