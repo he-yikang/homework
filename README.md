@@ -83,7 +83,7 @@
 - [🧪 实验室 1 · 幻方与质数互动实验室](#lab1)
 - [🧪 实验室 2 · 实时神经网络训练台](#lab2)
 - [🧭 扩展模块 · 创新交互](#enhance)
-- [📖 课程教材与 36 章对照](#course)
+- [📖 课程教材与 35 章对照](#course)
 - [🧪 实验室 3 · 星算诗台](#lab3)
 
 ---
@@ -355,7 +355,7 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 
 <a id="course"></a>
 
-## 📖 课程教材与 36 章对照 · 课程坐标系
+## 📖 课程教材与 35 章对照 · 课程坐标系
 
 [在 GitHub Pages 上打开交互式章节地图 →](https://he-yikang.github.io/homework/atlas.html#course) · [↗ 打开课程讲义原站（Lecture V9）](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/)
 
@@ -388,7 +388,6 @@ AI 把整套流程快速搭了出来，但缺库、API 变动、dtype 这类“�
 | 21 | 人脸识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 21 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-21) |
 | 22 | 车牌识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 22 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-22) |
 | 23 | AI美颜 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 23 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-23) |
-| 24 | AI绘画大师 | 第三篇 · 人工智能应用，本站暂未实现，留作扩展方向 | [↗ 第 24 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-24) |
 | 25 | AI鉴伪 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 25 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-25) |
 | 26 | 语音识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 26 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-26) |
 | 27 | 声纹识别 | 第三篇 · 人工智能应用，本站暂无对应实验 | [↗ 第 27 章](https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-27) |
