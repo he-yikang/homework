@@ -232,6 +232,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 <meta property="og:description" content="纯前端交互：40 种诗体（含 22 种词牌曲牌，古今中外 8 大类）、20 种画风（5 大类），输入需求生成诗与画，可切换横竖排版。">
 <meta property="og:site_name" content="课程作业站点">
 <meta name="twitter:card" content="summary">
+<script src="poem_lib.js"></script>
 </head><body>
 <a class="skip-link" href="#main-content">跳到正文</a>
 <nav class="topnav" aria-label="主导航">
@@ -265,7 +266,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <div class="seg" id="modeSeg">
             <button data-v="offline" class="on">⚙ 离线生成</button><button data-v="ai">✦ AI 实时</button>
           </div>
-          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：按《唐诗三百首》学到的意象群与章法写法生成（部分内容为精选原创），同一首诗画作固定、断网可用。</p>
+          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：从古诗词网 18.9 万首真实诗句中按意象、题材、情感与格律排列组合重装，每次生成都不同、断网可用。</p>
         </div>
         <div class="ctl">
           <label>主题 / 关键词 <span style="color:#6f6f90">如：秋夜 江边 思乡</span></label>
@@ -323,7 +324,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         </details>
         <details>
           <summary>离线 / AI 实时：两种模式</summary>
-          <p><b style="color:#c4a4f8">离线</b>：把《唐诗三百首》里学到的意象搭配、章法（起承转合／以景结情）、句法（忽如／借问／以动衬静）编成规则，按诗体套用生成；部分主题另有精选原创诗。Canvas 代码作画，断网可用、同诗同画风画作固定（种子可复现）。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「规则＋写法」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
+          <p><b style="color:#c4a4f8">离线</b>：从古诗词网 18.9 万首真实诗词原文中，提取意象搭配、章法（起承转合／以景结情）、句法与情感用词，再按诗体格律<b>排列组合重装</b>成新诗——每句都来自真实诗句，整首是新组合，每次生成都不同；少量穿插精选原创诗，未覆盖文体回退规则生成。Canvas 代码作画，断网可用。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「检索重组」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
         </details>
         <div class="notice">API 调用直接在浏览器发起（OpenAI 兼容接口，CORS 开放），Key 公开写在本页源码中，<b>仅供课程作业演示</b>，请勿用于生产环境。若 AI 调用失败会自动降级回离线模式。</div>
       </section>
@@ -861,7 +862,7 @@ segBind('modeSeg',function(v){
   $('modeHint').textContent=v==='ai'?'AI 实时 · 每次不同':'离线 · 可复现';
   $('modeTip').textContent=v==='ai'
     ?'AI 模式：调用大语言模型按诗体写诗、再据诗句与画风由模型作画，每次结果都不同（需联网）。'
-    :'离线模式：按《唐诗三百首》学到的意象群与章法写法生成，同一首诗画作固定、断网可用。';
+    :'离线模式：从古诗词网 18.9 万首真实诗句中按意象、题材、情感与格律排列组合重装，每次生成都不同、断网可用。';
   $('genBtn').textContent=v==='ai'?'✦ AI 写诗作画':'✦ 生成诗与画';
   $('regenBtn').textContent=v==='ai'?'↻ AI 再写一首':'↻ 换个写法重生成';
   // 切换模式时恢复对应画布
@@ -892,18 +893,19 @@ var CORPUS={"wujue": [["秋江", ["月落千山静", "江空一雁过", "扁舟�
 
 function pickCorpus(form,mood,keys,nonce){
   var pool=CORPUS[form];if(!pool||!pool.length)return null;
-  var best=null,bestScore=-1;
+  var scored=[];
   for(var i=0;i<pool.length;i++){
     var p=pool[i],score=0;
     // 意象标签与主题命中的个数（权重最高）
     for(var j=0;j<p[2].length;j++)if(keys.indexOf(p[2][j])>=0)score+=3;
     // 情感一致加权
     if(p[3]===mood)score+=2;
-    // "换个写法"轮转：同分时按 nonce 轮换
-    score+=(i%pool.length===nonce%pool.length)?1:0;
-    if(score>bestScore){bestScore=score;best=p;}
+    scored.push({p:p,s:score});
   }
-  return best;
+  // 同诗体的全部精品诗按「主题/情感贴合度」降序，按 nonce 轮转取用，
+  // 保证点「生成」时换一首；规则生成另占 2/3 次数、每次 seed 不同。
+  scored.sort(function(a,b){return b.s-a.s;});
+  return scored[nonce%scored.length].p;
 }
 function corpusToPoem(p,form){
   var F=FORMS[form],lines=Array.isArray(p[1])?p[1]:p[1].split('\n');
@@ -1011,8 +1013,11 @@ function craftPoem(formId,mood,themeKeys,seed){
       // 律诗（五律/七律）中二联对仗：用「天地/日月/山川」等词对构造字数相等的两句
       if((formId==='wulv'||formId==='qilv')&&(i===2||i===4)){
         var ap=pick(Object.keys(ANTITHESIS),r),pair=ANTITHESIS[ap],V=craftVerb(mood,r),I=craftKey(pick(keys,r),r);
-        var need=F.lens[i],left=pair[0]+V+I,right=pair[1]+V+I;
-        while(left.length<need)left+='山';while(right.length<need)right+='水';
+        var need=F.lens[i],I2=craftKey(pick(keys,r),r),pad=pick(['色','影','声','痕','光','烟'],r);
+        // 用真实意象词/时空词补齐到目标字数，避免「山山山/水水水」凑字
+        var left=pair[0]+V+I,right=pair[1]+V+I2,extra;
+        extra=need-left.length;if(extra>0)left+=pick([pad,pick(SPACE,r),I2],r).slice(0,extra);
+        extra=need-right.length;if(extra>0)right+=pick([pad,pick(SPACE,r),I],r).slice(0,extra);
         ln=left.slice(0,need)+'，'+right.slice(0,need);
       }else{
         // 相邻句不同骨架：重试避开与上一句相同的前两字
@@ -1067,14 +1072,102 @@ function pickGallery(keys){
   return bestScore>=2?best:null;
 }
 /* ENH:GALLERY-END */
+/* ENH:FACTORY-BEGIN */
+/* ===== 真实要素排列组合重装：素材来自 18.9 万首古诗词原文 ===== */
+var FACTORY_READY = (typeof PL !== 'undefined');
+function plKeys(s){
+  // 句子命中的意象类（与站点 IMG 对齐 + 扩展单字意象）
+  var out = {}, w;
+  for(var k in IMG){ var ws=IMG[k].w; for(var i=0;i<ws.length;i++) if(s.indexOf(ws[i])>=0){out[k]=1;break;} }
+  var ext = PL.extraChars || {};
+  // 用 PL.scene 与 keyCN 反推单字意象
+  for(var key in PL.keyCN){
+    var ch = PL.keyCN[key];
+    if(ch && s.indexOf(ch)>=0) out[key]=1;
+  }
+  return out;
+}
+function plCandidate(n, want, r){
+  var pool = (PL.byImg[String(n)]||{}), seen = {}, arr = [], i, j, s;
+  // 优先放命中题材意象的句子
+  for(i=0;i<want.length;i++){
+    var a = pool[want[i]]||[];
+    for(j=0;j<a.length;j++){ s=a[j]; if(s.length===n && !seen[s]){seen[s]=1;arr.push(s);} }
+  }
+  var base = PL.pool[String(n)]||[];
+  for(j=0;j<base.length;j++){ s=base[j]; if(s.length===n && !seen[s]){seen[s]=1;arr.push(s);} }
+  return arr;
+}
+function plScore(s, want, mood, pos, total, prev, over, dominant, r){
+  var ks = plKeys(s), k, v = 0, hit = 0;
+  for(k in ks) if(want.indexOf(k)>=0) hit++;
+  v += 5*hit;
+  if(!Object.keys(ks).length) v -= 3;
+  if(over && dominant && ks[dominant]) v -= 7;
+  if(prev){
+    var fresh=0,same=0;
+    for(k in ks){ if(prev[k])same++; else fresh++; }
+    v += 1.2*fresh;
+    if(same && fresh===0) v -= 3;
+  }
+  var first = PL.first[String(s.length)]||[], last = PL.last[String(s.length)]||[];
+  if(pos===0 && first.indexOf(s)>=0) v += 2;
+  if(pos===total-1 && last.indexOf(s)>=0) v += 2;
+  var tint = PL.moodTint[mood]||'';
+  for(var c=0;c<s.length;c++) if(tint.indexOf(s.charAt(c))>=0) v += 1.5;
+  var rh = PL.rhyme[String(s.length)]||'';
+  if(pos%2===1 && rh.indexOf(s.charAt(s.length-1))>=0) v += 1;
+  return v + r()*3;
+}
+function factoryPoem(formId, mood, subject, themeKeys, seed){
+  if(!FACTORY_READY) return null;
+  var F = FORMS[formId];
+  if(!F || !F.lens || !F.lens.length) return null;   // modern/prose 等 tpl 类交给原逻辑
+  var r = rng(seed), lens = F.lens;
+  var want = (themeKeys && themeKeys.length) ? themeKeys : (PL.subjects[subject] || ['moon','water','mountain']);
+  var dominant = want[0], lines = [], used = {}, domCount = 0;
+  for(var i=0;i<lens.length;i++){
+    var n = lens[i], cand = plCandidate(n, want, r);
+    if(!cand.length) return null;
+    // 随机采样 60 个候选打分，兼顾质量与速度
+    var sample = [], idx, tries = Math.min(60, cand.length);
+    var tmp = cand.slice();
+    for(var t=0;t<tries;t++){ idx = Math.floor(r()*tmp.length); sample.push(tmp.splice(idx,1)[0]); }
+    var quota = Math.max(1, Math.floor(lens.length/2));
+    var over = domCount >= quota, prev = lines.length?plKeys(lines[lines.length-1]):null;
+    var best = null, bestV = -1e9;
+    for(var q=0;q<sample.length;q++){
+      var s = sample[q]; if(used[s]) continue;
+      var v = plScore(s, want, mood, i, lens.length, prev, over, dominant, r);
+      // 相邻句开头两字不重复
+      if(lines.length && s.slice(0,2)===lines[lines.length-1].slice(0,2)) v -= 4;
+      if(v>bestV){bestV=v;best=s;}
+    }
+    if(!best) best = sample[0];
+    lines.push(best); used[best]=1;
+    if(plKeys(best)[dominant]) domCount++;
+  }
+  // 标题：首句出现的二字意象词，否则用题材首字
+  var tw = '', wk;
+  for(wk in IMG){ var ws2=IMG[wk].w; for(var z=0;z<ws2.length;z++) if(lines[0].indexOf(ws2[z])>=0){tw=ws2[z];break;} if(tw)break; }
+  if(!tw) tw = PL.keyCN[want[0]]||'杂';
+  return {title:tw+'·'+F.n.slice(0,2), lines:lines, form:formId, formName:F.n,
+          tag:F.g, lang:F.lang, layout:state.layout, mood:mood, moodName:MOOD[mood].n,
+          crafted:false, factory:true};
+}
+/* ENH:FACTORY-END */
 /* ---------- 离线生成（原逻辑） ---------- */
 function generateOffline(){
   var theme=$('theme').value.trim();
   var baseSeed=hash(theme+'|'+state.form+'|'+state.mood+'|'+state.nonce);
   var keys=parseImages(theme,rng(baseSeed));
-  // 优先用精品库（诗体硬约束 + 主题/情感打分）；未收录诗体回退到原模板拼装
-  var picked=pickCorpus(state.form,state.mood,keys,state.nonce);
-  var poem=picked?corpusToPoem(picked,state.form):craftPoem(state.form,state.mood,keys,baseSeed);
+  // 量产重装：以 18.9 万首真实语料提取的句库为主力，按诗体格律排列组合（每次不同）。
+  // 精品原创诗库按 nonce 少量穿插；未覆盖诗体（现代诗/散文诗等）回退唐诗写法规则生成。
+  var picked=(state.nonce%7===0)?pickCorpus(state.form,state.mood,keys,state.nonce):null;
+  var want=PL.subjects[state.subject]||keys.slice(0,4);
+  var fp=null;
+  try{ fp=factoryPoem(state.form,state.mood,state.subject,want,baseSeed); }catch(e){ fp=null; }
+  var poem=picked?corpusToPoem(picked,state.form):(fp||craftPoem(state.form,state.mood,keys,baseSeed));
   var seed=hash(poem.lines.join('')+poem.title+'|'+state.style);
   state.poem=poem;state.keys=keys;state.seed=seed;state.aiImage=null;
   // 精品画库：中国绘画/东方绘画画风且主题匹配时，展示对应 AI 精选画作；否则用 Canvas
@@ -1093,8 +1186,8 @@ function generateOffline(){
     $('art').style.display='block';redraw();
   }
   $('artAI').style.display='none';$('artEmpty').style.display='none';
-  $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('')+(picked?'<span class="chip" style="color:#2dd4bf">精选原创</span>':(poem.crafted?'<span class="chip" style="color:#c4a4f8">唐诗写法</span>':''))+(gid?'<span class="chip" style="color:#e8c07d">精选画作</span>':'');
-  $('poemStat').innerHTML=(picked?'<b style="color:#2dd4bf">精选原创</b> · ':(poem.crafted?'<b style="color:#a855f7">唐诗写法</b> · ':''))+'诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
+  $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('')+(picked?'<span class="chip" style="color:#2dd4bf">精选原创</span>':(poem.factory?'<span class="chip" style="color:#7dd3a0">真实诗句重装</span>':(poem.crafted?'<span class="chip" style="color:#c4a4f8">唐诗写法</span>':'')))+(gid?'<span class="chip" style="color:#e8c07d">精选画作</span>':'');
+  $('poemStat').innerHTML=(picked?'<b style="color:#2dd4bf">精选原创</b> · ':(poem.factory?'<b style="color:#7dd3a0">真实诗句重装</b> · ':(poem.crafted?'<b style="color:#a855f7">唐诗写法</b> · ':'')))+'诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
   if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
 }
 /* ---------- AI 实时生成 ---------- */
@@ -1170,9 +1263,9 @@ function generateAI(){
 function generate(){
   if(state.mode==='ai')generateAI();else generateOffline();
 }
-$('genBtn').onclick=function(){state.nonce=0;generate();};
+$('genBtn').onclick=function(){state.nonce++;generate();};
 $('regenBtn').onclick=function(){state.nonce++;generate();};
-$('theme').addEventListener('keydown',function(e){if(e.key==='Enter'){state.nonce=0;generate();}});
+$('theme').addEventListener('keydown',function(e){if(e.key==='Enter'){state.nonce++;generate();}});
 $('copyPoem').onclick=function(){if(!state.poem)return;var t=poemText();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('诗已复制');},function(){toast('请手动复制');});else toast('请手动复制');};
 $('dlPoem').onclick=function(){if(!state.poem)return;dl(new Blob([poemText()],{type:'text/plain;charset=utf-8'}),'诗中有画-'+state.poem.title+'.txt');toast('诗已下载');};
 $('dlArt').onclick=function(){
@@ -1187,7 +1280,7 @@ function toast(m){if(window.ENH)window.ENH.toast(m);}
 $('reportBtn').onclick=function(){
   if(!state.poem){toast('请先生成诗与画');return;}
   var p=state.poem,isAI=state.mode==='ai'&&state.aiImage;
-  var md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗 / '+AI.image+' 作画）':'离线词库 + 格律'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','',isAI?'- 由文生图模型按诗句与画风实时生成，每次不同':('- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、')+'\n- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）'),'','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'格律/模板生成（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。','', '## 五、自检与改写（对照讲义第 30 / 24 章）','',
+  var md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗 / '+AI.image+' 作画）':'真实诗句排列组合重装'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','',isAI?'- 由文生图模型按诗句与画风实时生成，每次不同':('- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、')+'\n- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）'),'','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'真实诗句按格律排列组合重装（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。','', '## 五、自检与改写（对照讲义第 30 / 24 章）','',
     state.checks.poem?'- 诗自检：'+state.checks.poem.sum+'\n'+state.checks.poem.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 诗自检：未执行',
     state.checks.art?'- 画自检：'+state.checks.art.sum+'\n'+state.checks.art.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 画自检：未执行',
     ($('poemDiff').innerHTML||'').trim()?'- 已执行「自检 → 改写」，修订前后对照见页面第 ⑪ 区。':'- 尚未执行改写。',''].join('\n');
