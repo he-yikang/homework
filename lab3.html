@@ -852,7 +852,7 @@ var STYLE_PROMPT={
  pixel:'像素艺术，8-bit 方块构图，复古电子游戏风',
  flat:'扁平插画，简洁几何形状，明快配色，现代设计感'
 };
-var state={poem:null,keys:[],seed:0,autoSubject:'',themeChars:null,wantMain:4,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
+var state={poem:null,keys:[],seed:0,autoSubject:'',themeChars:null,wantMain:4,wantCore:[],form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
 function $(id){return document.getElementById(id);}
 function buildSelects(){
   var fs=$('formSel');
@@ -1108,34 +1108,53 @@ function plKeys(s){
   }
   return out;
 }
+/* ===== 生成调参：主题贴合 / 情感贴合 的权重与配额（可用 verify_tightness.js 扫描）=====
+   思路：候选池以「命中主题意象的句子」为主体（硬约束），情感基调在其中做择优，
+   而不是让情感句与主题句互相挤名额——这样主题与情感可以同时达标。 */
+var TUNE = {
+  imgW: 6,        // 主题意象命中权重（每命中一个意象）
+  themeW: 4.2,    // 主题字命中权重（每字，最多计 3 个字）
+  themeBonus: 6,  // 句子只要含主题字的额外加分
+  tintW: 6,       // 情感 tint 字权重（每字）
+  emoW: 24,       // 句子级情感权重（句子同时命中主题意象时）
+  emoWPlain: 2,   // 句子级情感权重（未命中主题意象时）
+  strict: 1,      // 1=候选池只收命中主题意象的句子（硬约束）
+  qCross: 48,     // 主题∩情感 交叉句配额
+  qMain: 56,      // 主题意象组配额
+  qAux: 46,       // 题材补充组配额（strict=0 时才用）
+  qRest: 60,      // 全量句池兜底上限
+  seasonPenalty: 20, // 季节矛盾扣分（主题「秋夜」却选中「春来」）
+  emoProbe: 6000, // 情感句池抽样检测交叉的数量
+  restSize: 240   // 全量句池兜底取样数
+};
 function plCandidate(n, want, r, mood){
-  var pool = (PL.byImg[String(n)]||{}), seen = {}, hit = [], rest = [], groups = [], emo = [], i, j, s;
-  // 情感句：与当前情感基调吻合的真实句，单独成组
-  var el = mood ? (emoByLen(mood)[n]||[]) : [];
-  for(i=0;i<el.length;i++){ s=el[i]; if(!seen[s]){seen[s]=1;emo.push(s);} }
-  // 命中主题意象的句子按意象分组收集：采样时各组轮转，保证每个主题意象都被覆盖
+  var pool = (PL.byImg[String(n)]||{}), seen = {}, groups = [], rest = [], cross = [], i, j, s;
+  // 主题意象组：按意象分组收集，是候选池的主体
   for(i=0;i<want.length;i++){
     var a = pool[want[i]]||[], g = [];
-    for(j=0;j<a.length;j++){ s=a[j]; if(s.length===n && !seen[s]){seen[s]=1;g.push(s);hit.push(s);} }
+    for(j=0;j<a.length;j++){ s=a[j]; if(s.length===n && !seen[s]){seen[s]=1;g.push(s);} }
     groups.push(g);
   }
+  // 主题 ∩ 情感：从情感句池随机抽样检测，交叉句最优先取用
+  // 注意：判定只看「主题意象」(core)，否则会把只命中题材补充意象的句子误当主题句
+  var core = state.wantCore || want;
+  if(mood && core.length){
+    var el = emoByLen(mood)[n]||[], tmp = el.slice(), tries = Math.min(TUNE.emoProbe, tmp.length);
+    for(i=0;i<tries;i++){
+      var pi = Math.floor(r()*tmp.length), c2 = tmp.splice(pi,1)[0];
+      var ks2 = plKeys(c2), hitAny = false;
+      for(var kk in ks2){ if(core.indexOf(kk)>=0){ hitAny=true; break; } }
+      if(hitAny) cross.push(c2);
+    }
+  }
   var base = PL.pool[String(n)]||[];
-  // 全量句池可达数十万条，只随机取一部分作备选，避免每次构建巨型数组
-  var need=240, tries=0, maxTry=base.length*2+60;
-  while(rest.length<need && tries++<maxTry){
+  // 全量句池可达数十万条，只随机取一部分作备选
+  var need=TUNE.restSize, tries2=0, maxTry=base.length*2+60;
+  while(rest.length<need && tries2++<maxTry){
     s=base[Math.floor(r()*base.length)];
     if(s && s.length===n && !seen[s]){seen[s]=1;rest.push(s);}
   }
-  // 主题 ∩ 情感 的句子：既含主题意象又合当前基调，最优候选，优先取用
-  var cross=[], emoKeep=[], tmp=emo.slice(), maxCheck=Math.min(2500,tmp.length);
-  for(i=0;i<maxCheck;i++){
-    var pi=Math.floor(r()*tmp.length), c2=tmp.splice(pi,1)[0], hitAny=false;
-    var ks2=plKeys(c2);
-    for(var kk in ks2){ if(want.indexOf(kk)>=0){hitAny=true;break;} }
-    if(hitAny) cross.push(c2); else emoKeep.push(c2);
-  }
-  emo = emoKeep.concat(tmp);
-  return {hit:hit, rest:rest, groups:groups, emo:emo, cross:cross};
+  return {rest:rest, groups:groups, cross:cross};
 }
 var PL_COMMON = null;
 function plCommonRatio(s){
@@ -1175,10 +1194,28 @@ function emoByLen(mood){
   PL_EMO_LEN[mood] = byLen;
   return byLen;
 }
+/* 季节一致性：主题的冷暖季节与句子季节相冲时扣分（如「秋夜」里冒出「春来」） */
+var SEASON_OF={'春':'warm','夏':'warm','秋':'cold','冬':'cold'};
+function seasonClash(themeChars, ks){
+  if(!themeChars) return 0;
+  var t=null, ch;
+  for(ch in SEASON_OF){ if(themeChars[ch]) t=SEASON_OF[ch]; }
+  if(!t) return 0;
+  var warm=ks.spring?1:0, cold=(ks.autumn||ks.snow)?1:0;
+  if(t==='warm' && cold) return 1;
+  if(t==='cold' && warm) return 1;
+  return 0;
+}
 function plScore(s, want, mood, pos, total, prev, over, dominant, r){
   var ks = plKeys(s), k, v = 0, hit = 0, hasWant = false;
+  var core = state.wantCore || want;      // 主题意象（不含题材补充）
   for(k in ks) if(want.indexOf(k)>=0){ hit++; hasWant=true; }
-  v += 6*hit;
+  var hasCore = false;
+  for(k in ks) if(core.indexOf(k)>=0){ hasCore=true; break; }
+  // 硬约束：主题有明确意象时，不含主题意象的句子直接淘汰
+  // （主题无法映射到意象时 core 为空，此时不启用硬约束，改由主题字主导）
+  if(TUNE.strict && core.length && !hasCore) return -1e8;
+  v += TUNE.imgW*hit;
   if(!Object.keys(ks).length) v -= 3;
   // 主题字面命中：句中直接出现用户写下的字 → 紧扣关键词（每字最多计 3 次）
   var tc = state.themeChars;
@@ -1186,12 +1223,13 @@ function plScore(s, want, mood, pos, total, prev, over, dominant, r){
     var c2 = 0;
     for(var i=0;i<s.length;i++) if(tc[s.charAt(i)]) c2++;
     if(c2>3) c2=3;
-    v += 2.6*c2;
-    if(c2) v += 3;
+    v += TUNE.themeW*c2;
+    if(c2) v += TUNE.themeBonus;
   }
   // 诗性加权：句子里的字越常见越像诗
   v += (plCommonRatio(s) - 0.92) * 14;
   v -= plBadCue(s) * 6;
+  v -= seasonClash(state.themeChars, ks) * TUNE.seasonPenalty;
   if(over && dominant && ks[dominant]) v -= 7;
   if(prev){
     var fresh=0,same=0;
@@ -1203,10 +1241,9 @@ function plScore(s, want, mood, pos, total, prev, over, dominant, r){
   if(pos===0 && first.indexOf(s)>=0) v += 2;
   if(pos===total-1 && last.indexOf(s)>=0) v += 2;
   // 情感基调：字面情绪词 tint + 句子级情感标注
-  // 句子若同时命中主题意象，情感分给满；否则只给少量，避免冲淡主题
   var tint = PL.moodTint[mood]||'';
-  for(var c=0;c<s.length;c++) if(tint.indexOf(s.charAt(c))>=0) v += 3;
-  if(emoIndex(mood)[s]) v += hasWant ? 9 : 4;
+  for(var c=0;c<s.length;c++) if(tint.indexOf(s.charAt(c))>=0) v += TUNE.tintW;
+  if(emoIndex(mood)[s]) v += hasCore ? TUNE.emoW : TUNE.emoWPlain;
   var rh = PL.rhyme[String(s.length)]||'';
   if(pos%2===1 && rh.indexOf(s.charAt(s.length-1))>=0) v += 1;
   return v + r()*3;
@@ -1221,35 +1258,42 @@ function factoryPoem(formId, mood, subject, themeKeys, seed){
   var dominant = want[0], lines = [], used = {}, domCount = 0;
   for(var i=0;i<lens.length;i++){
     var n = lens[i], cand = plCandidate(n, want, r, mood);
-    if(!cand.hit.length && !cand.rest.length) return null;
-    // 采样打分：① 主题∩情感的句子优先 ② 主题意象各组轮转
-    // ③ 其余情感句 ④ 全量句池随机补 —— 三重贴合同时生效
+    if(!cand.groups.length && !cand.rest.length) return null;
+    // 采样：① 主题∩情感的交叉句优先 ② 主题意象各组轮转
+    // ③ （非严格模式）题材补充组 ④ 主题句不足时才用全量句池兜底
     var sample = [], idx, t, gi = 0, guard = 0;
-    for(t=0;t<cand.cross.length && sample.length<22;t++){
+    for(t=0;t<cand.cross.length && sample.length<TUNE.qCross;t++){
       idx=Math.floor(r()*cand.cross.length); sample.push(cand.cross.splice(idx,1)[0]);
     }
     var mainGroups = Math.max(1, Math.min(cand.groups.length, state.wantMain||cand.groups.length));
-    while(sample.length<44 && guard++<240){
+    while(sample.length<TUNE.qMain && guard++<240){
       var g = cand.groups[gi % mainGroups];
       if(g && g.length){ idx=Math.floor(r()*g.length); sample.push(g.splice(idx,1)[0]); }
       gi++;
     }
-    for(t=0;t<cand.emo.length && sample.length<54;t++){
-      idx=Math.floor(r()*cand.emo.length); sample.push(cand.emo.splice(idx,1)[0]);
+    if(!TUNE.strict){
+      while(sample.length<TUNE.qAux && guard++<400){
+        var g2 = cand.groups[gi % cand.groups.length];
+        if(g2 && g2.length){ idx=Math.floor(r()*g2.length); sample.push(g2.splice(idx,1)[0]); }
+        gi++;
+      }
     }
-    var nRest = Math.min(60-sample.length, cand.rest.length);
-    for(t=0;t<nRest;t++){ idx=Math.floor(r()*cand.rest.length); sample.push(cand.rest.splice(idx,1)[0]); }
+    if(sample.length<TUNE.qMain){
+      var nRest = Math.min(TUNE.qRest-sample.length, cand.rest.length);
+      for(t=0;t<nRest;t++){ idx=Math.floor(r()*cand.rest.length); sample.push(cand.rest.splice(idx,1)[0]); }
+    }
     var quota = Math.max(1, Math.floor(lens.length/2));
     var over = domCount >= quota, prev = lines.length?plKeys(lines[lines.length-1]):null;
-    var best = null, bestV = -1e9;
+    var best = null, bestV = -1e9, fallback = null, fbV = -1e9;
     for(var q=0;q<sample.length;q++){
       var s = sample[q]; if(used[s]) continue;
       var v = plScore(s, want, mood, i, lens.length, prev, over, dominant, r);
       // 相邻句开头两字不重复
       if(lines.length && s.slice(0,2)===lines[lines.length-1].slice(0,2)) v -= 4;
+      if(v<-1e7){ if(v>fbV){fbV=v;fallback=s;} continue; }   // 被主题硬约束淘汰的句子
       if(v>bestV){bestV=v;best=s;}
     }
-    if(!best) best = sample[0];
+    if(!best) best = fallback || sample[0];
     lines.push(best); used[best]=1;
     if(plKeys(best)[dominant]) domCount++;
   }
@@ -1490,11 +1534,12 @@ function generateOffline(){
   var main=themeImgs(theme);
   var want=main.slice();
   state.wantMain=main.length;
+  state.wantCore=main.slice();      // 判定「是否贴题」的基准：只认主题意象
   if(state.autoSubject){
     var sk=SUBJECTS[state.autoSubject].keys;
     for(var q=0;q<sk.length && want.length<6;q++) if(want.indexOf(sk[q])<0) want.push(sk[q]);
   }
-  if(!want.length){ want=keys.slice(0,4); state.wantMain=want.length; }
+  if(!want.length){ want=keys.slice(0,4); state.wantMain=want.length; state.wantCore=[]; }
   var fp=null;
   try{ fp=factoryPoem(state.form,state.mood,state.autoSubject,want,baseSeed); }catch(e){ fp=null; }
   var poem=picked?corpusToPoem(picked,state.form):(fp||craftPoem(state.form,state.mood,keys,baseSeed));
