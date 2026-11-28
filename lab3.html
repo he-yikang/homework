@@ -286,7 +286,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 
       <!-- 情感基调：按 MOOD 真实词库 -->
       <section class="panel" id="moodAtlas">
-        <h2>⑬ 情感基调 · 选词与取景</h2>
+        <h2>③ 情感基调 · 选词与取景</h2>
         <p class="tip" style="margin:0 0 10px">情感不是一句「悲伤点」，而是三组具体选词：动词、形容词、句尾词，外加一层画面色调。下面是离线生成时真实使用的词库——点一种情感即可切换上方选项，再生成一首看看词怎么变。</p>
         <div class="mood-atlas" id="moodAtlasGrid"></div>
         <div class="notice" style="margin-top:12px">同一个「秋夜江边」，选「静」得到「明月照秋水」，选「愁」可能变成「寒月锁孤舟」——<b style="color:#c4a4f8">换的是表示，不只是标签</b>。这正是教材第 15/16 章「表示」的直观例子。</div>
@@ -296,7 +296,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
     <!-- 诗歌 -->
     <div>
     <section class="panel">
-      <h2>③ 人工智能诗人 <span style="font-size:11px;color:var(--gold);font-weight:400" id="poemFormTag">— 生成的诗</span></h2>
+      <h2>④ 人工智能诗人 <span style="font-size:11px;color:var(--gold);font-weight:400" id="poemFormTag">— 生成的诗</span></h2>
       <div class="poem-box poem-paper" id="poemBox"><div class="poem-empty">点击左侧「生成诗」<br>这里会出现一首为你而作的诗</div></div>
       <div class="row no-print">
         <button class="btn sm" id="copyPoem">复制诗</button>
@@ -333,13 +333,13 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 
     <!-- 教材对照 -->
     <section class="panel" id="textbookLink">
-      <h2>⑩ 对照教材</h2>
+      <h2>⑦ 对照教材</h2>
       <p class="tip" style="margin:0 0 10px">讲义第三篇「人工智能应用」中，有两章正是本实验室两个模块的原型。点标题直达讲义原文。</p>
       <div class="tb-ref">
         <div class="tb-item">
           <div class="tb-h">第 30 章 · 人工智能诗人</div>
           <p>「押韵容易，写出意味难」：形式（字数/句数/押韵，可逐项核对）与意境（意象连贯、情感、新意）要分开看；看图作诗先从画面提取对象与氛围；BIPro（ACL 2025）让模型生成后多轮修订，比一次成型更受偏好。</p>
-          <p style="color:#bbf7d0">↔ 本实验室：离线模式逐句精确对齐格律＝形式层；AI 模式按主题条件生成＝意境层；下面的「⑪ 自检 → 改写」按形式/表达逐项核对并有针对性地修订，实现 BIPro 式的「生成→检查→改写」。</p>
+          <p style="color:#bbf7d0">↔ 本实验室：离线模式逐句精确对齐格律＝形式层；AI 模式按主题条件生成＝意境层；下面的「⑨ 自检 → 改写」按形式/表达逐项核对并有针对性地修订，实现 BIPro 式的「生成→检查→改写」。</p>
           <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-30" target="_blank" rel="noopener">↗ 读讲义第 30 章</a>
         </div>
       </div>
@@ -351,7 +351,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 
   <!-- 盲评擂台：对照讲义第30章「读者盲评」 -->
   <section class="panel" id="blindTest" style="max-width:1440px">
-    <h2>⑭ 盲评擂台 · 哪首更符合讲义标准 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 章</span></h2>
+    <h2>⑧ 盲评擂台 · 哪首更符合讲义标准 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 章</span></h2>
     <p class="tip" style="margin:0 0 12px">讲义第 30 章讲「机器写诗如何评估」时说：让读者<b style="color:#c4a4f8">不知道作者是谁</b>，再比较几首诗；形式（字数/句数）可逐项核对，意象与情感是否连贯要结合读者判断。这里把两首打乱给你盲选——一首格律合格、一首被刻意在形式或表达上动了手脚，选完揭晓并逐项核对。</p>
     <div class="blind-bar no-print">
       <button class="btn sm primary" id="blindNew">⚔ 开一场盲评</button>
@@ -363,9 +363,9 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
     <div class="notice" style="margin-top:12px">注意：这里比的不是「哪首更美」，而是讲义说的<b style="color:#c4a4f8">可检验条件是否都满足</b>——字数句数、主题意象、有没有凑字。美感没有统一分数，正如讲义强调的「押韵分数不能代替人的审美判断」。</div>
   </section>
 
-  <!-- 自检 → 改写：对照讲义第 30 / 24 章 -->
+  <!-- 自检 → 改写：对照讲义第 30 章 -->
   <section class="panel" id="refine" style="max-width:1440px">
-    <h2>⑪ 自检 → 改写 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 / 24 章</span></h2>
+    <h2>⑨ 自检 → 改写 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 章</span></h2>
     <p class="tip" style="margin:0 0 12px">讲义把「写出来」和「写得好」分开看：诗要分别核对<b style="color:#c4a4f8">形式</b>（字数/句数/押韵）与<b style="color:#c4a4f8">表达</b>（意象连贯、情感、新意）。BIPro（ACL 2025）的做法就是生成后按问题多轮修订。这里把这一步做出来——先自检、再按发现的问题改写，前后对照着看。</p>
     <div class="refine-grid">
       <div class="refine-card">
@@ -383,7 +383,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 
   <!-- 我的诗集 -->
   <section class="panel" id="collection" style="max-width:1440px">
-    <h2>⑨ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
+    <h2>⑩ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
     <p class="tip" style="margin:0 0 12px">可以创建<strong style="color:#e8e8f0">多本诗集</strong>（如「秋夜集」「七言集」），作品按当前选中的诗集收藏。数据保存在这台设备上。每本诗集可独立命名、写序言、导出打印或备份。</p>
     <div class="coll-toolbar no-print">
       <label style="font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px">当前诗集
@@ -1137,13 +1137,13 @@ $('reportBtn').onclick=function(){
   var p=state.poem,isAI=state.mode==='ai';
   var md=['# 实验室 3 · 星算诗台 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗）':'真实诗句排列组合重装'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、意象与种子','','- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、'),'- 种子：`'+state.seed.toString(16)+'`（同主题同诗体可复现）','','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'真实诗句按格律排列组合重装（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。','', '## 五、自检与改写（对照讲义第 30 章）','',
     state.checks.poem?'- 诗自检：'+state.checks.poem.sum+'\n'+state.checks.poem.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 诗自检：未执行',
-    ($('poemDiff').innerHTML||'').trim()?'- 已执行「自检 → 改写」，修订前后对照见页面第 ⑪ 区。':'- 尚未执行改写。',''].join('\n');
+    ($('poemDiff').innerHTML||'').trim()?'- 已执行「自检 → 改写」，修订前后对照见页面第 ⑨ 区。':'- 尚未执行改写。',''].join('\n');
   var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 星算诗台 · 实验报告</h1><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
   var w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}else toast('弹窗被拦截');
   if(window.ENH)window.ENH.unlock('report');
 };
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-/* ================= 自检 → 改写（对照讲义第30/24章） ================= */
+/* ================= 自检 → 改写（对照讲义第 30 章） ================= */
 function chkHTML(items,sum){
   return items.map(function(x){
     var mk=x.k==='ok'?'✓':(x.k==='bad'?'!':'?');
