@@ -267,6 +267,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
             <button data-v="offline" class="on">⚙ 离线生成</button><button data-v="ai">✦ AI 实时</button>
           </div>
           <p class="tip" id="modeTip" style="margin-top:6px">离线模式：从古诗词网 18.9 万首真实诗句中按意象、题材、情感与格律排列组合重装，每次生成都不同、断网可用。</p>
+          <p class="tip" id="fullLibStat" style="margin-top:4px;color:#7dd3a0">全量语料加载中 <b>0%</b></p>
         </div>
         <div class="ctl">
           <label>主题 / 关键词 <span style="color:#6f6f90">如：秋夜 江边 思乡</span></label>
@@ -1098,11 +1099,30 @@ function plCandidate(n, want, r){
   for(j=0;j<base.length;j++){ s=base[j]; if(s.length===n && !seen[s]){seen[s]=1;arr.push(s);} }
   return arr;
 }
+var PL_COMMON = null;
+function plCommonRatio(s){
+  if(!PL_COMMON){
+    PL_COMMON = {};
+    var cs = PL.common || '';
+    for(var i=0;i<cs.length;i++) PL_COMMON[cs.charAt(i)] = 1;
+  }
+  if(!s.length) return 0;
+  var hit = 0;
+  for(var i=0;i<s.length;i++) if(PL_COMMON[s.charAt(i)]) hit++;
+  return hit / s.length;
+}
+// 明显非诗性的词（佛偈、官职、生僻组合）：降权而非删除
+function plBadCue(s){
+  return /(佛|僧|偈|禅|菩萨|兜率|涅槃|卿|棘|燄|箓|醮|斋醮|太守|尚书|侍郎|知府|县尉)/.test(s) ? 1 : 0;
+}
 function plScore(s, want, mood, pos, total, prev, over, dominant, r){
   var ks = plKeys(s), k, v = 0, hit = 0;
   for(k in ks) if(want.indexOf(k)>=0) hit++;
   v += 5*hit;
   if(!Object.keys(ks).length) v -= 3;
+  // 诗性加权：句子里的字越常见越像诗
+  v += (plCommonRatio(s) - 0.92) * 14;
+  v -= plBadCue(s) * 6;
   if(over && dominant && ks[dominant]) v -= 7;
   if(prev){
     var fresh=0,same=0;
@@ -1122,7 +1142,8 @@ function plScore(s, want, mood, pos, total, prev, over, dominant, r){
 function factoryPoem(formId, mood, subject, themeKeys, seed){
   if(!FACTORY_READY) return null;
   var F = FORMS[formId];
-  if(!F || !F.lens || !F.lens.length) return null;   // modern/prose 等 tpl 类交给原逻辑
+  if(!F) return null;
+  if(!F.lens || !F.lens.length) return factoryFreePoem(formId, mood, subject, themeKeys, seed);
   var r = rng(seed), lens = F.lens;
   var want = (themeKeys && themeKeys.length) ? themeKeys : (PL.subjects[subject] || ['moon','water','mountain']);
   var dominant = want[0], lines = [], used = {}, domCount = 0;
@@ -1155,7 +1176,186 @@ function factoryPoem(formId, mood, subject, themeKeys, seed){
           tag:F.g, lang:F.lang, layout:state.layout, mood:mood, moodName:MOOD[mood].n,
           crafted:false, factory:true};
 }
+/* ===== 8 种非格律体裁的语料驱动重装 =====
+   中文（现代诗/散文诗/朦胧诗）：真实句 + 真实连接词按铺—转—留白重组
+   英文（自由诗/十四行/五行打油/俳句/颂歌）：意象对由语料共现矩阵决定，
+   词表与句式骨架为站点既有（语料为古诗词，不含英文原文） */
+var FREE_SUBTAG = {
+  '山水田园':['写景','山水','田园'], '赠别怀远':['送别','离别','思乡'],
+  '边塞出征':['边塞','爱国'], '思妇宫怨':['相思','闺怨'],
+  '咏史怀古':['怀古','咏物'], '写景':['写景','山水','月亮'], '抒情':['抒情','相思']
+};
+function freePile(subject, mood, r){
+  var F = PL.free || {}, arr = [], i, t;
+  var tags = FREE_SUBTAG[subject] || [];
+  for(i=0;i<tags.length;i++) if(F.byTag && F.byTag[tags[i]]) arr = arr.concat(F.byTag[tags[i]].slice(0, 200));
+  if(F.byEmo && F.byEmo[mood]) arr = arr.concat(F.byEmo[mood].slice(0, 120));
+  var base = PL.pool['5'] || [];
+  for(i=0;i<400 && i<base.length;i++) arr.push(base[i]);
+  return arr;
+}
+function freePick(arr, n, used, r){
+  var out = [], guard = 0;
+  while(out.length < n && guard++ < 400){
+    var s = arr[Math.floor(r()*arr.length)];
+    if(!s || used[s]) continue;
+    used[s] = 1; out.push(s);
+  }
+  return out;
+}
+function factoryFreePoem(formId, mood, subject, themeKeys, seed){
+  var F = FORMS[formId];
+  if(!F || !window.PL) return null;
+  var r = rng(seed), kind = F.kind, F2 = PL.free || {};
+  var conn = (F2.connect && F2.connect.length) ? F2.connect : ['何处','不知','唯有'];
+  if(kind === 'tpl' || kind === 'prose' || kind === 'menglong'){
+    var pile = freePile(subject, mood, r), used = {}, lines, title;
+    var sents = freePick(pile, 8, used, r);
+    if(!sents.length) return null;
+    if(kind === 'prose'){
+      var longs = F2.longLines || [], body = [];
+      if(longs.length) body.push(longs[Math.floor(r()*longs.length)]);
+      body.push(sents[0] + '。');
+      if(sents[1]) body.push(conn[Math.floor(r()*conn.length)] + '，' + sents[1] + '。');
+      if(sents[2]) body.push(sents[2] + '。');
+      lines = body;
+      title = sents[0].slice(0,2) + '·散文';
+    }else if(kind === 'menglong'){
+      var a=sents[0], b=sents[1]||sents[0], c=sents[2]||a;
+      lines = [a.slice(0,2)+'是'+b.slice(0,2)+'的'+pick(['影子','回声','背面'],r),
+               '贴着'+c.slice(0,2)+'的边缘',
+               conn[Math.floor(r()*conn.length)]+'，听一枚'+a.slice(0,2)+'缓慢地'+pick(['沉','浮','暗'],r),
+               b.slice(0,2)+'不说话'];
+      title = a.slice(0,2)+'·朦胧';
+    }else{
+      lines = [sents[0], pick(['而','却','又'],r)+'，'+sents[1], sents[2]];
+      if(sents[3]) lines.push(sents[3]);
+      title = sents[0].slice(0,2)+'的独白';
+    }
+    return {title:title, lines:lines, form:formId, formName:F.n, tag:F.g, lang:'zh',
+            layout:state.layout, mood:mood, moodName:MOOD[mood].n, crafted:false, factory:true, free:true};
+  }
+  /* 英文类：意象对来自语料共现矩阵 */
+  var KEY_EN = {'moon':['the moon',0],'mountain':['the mountains',1],'water':['the river',0],
+    'willow':['the willow',0],'snow':['falling snow',0],'flower':['the blossoms',1],
+    'bird':['a lone bird',0],'boat':['a small boat',0],'bamboo':['green bamboo',0],
+    'cloud':['white clouds',1],'pavilion':['an old pavilion',0],'star':['the stars',1]};
+  var co = PL.co || [], pairs = [], i;
+  for(i=0;i<co.length;i++){ if(KEY_EN[co[i][0]] && KEY_EN[co[i][1]]) pairs.push(co[i]); }
+  if(!pairs.length) pairs = [['moon','water']];
+  var pr = pairs[Math.floor(r()*pairs.length)];
+  var A = KEY_EN[pr[0]][0], B = KEY_EN[pr[1]][0];
+  var Apl = KEY_EN[pr[0]][1], Bpl = KEY_EN[pr[1]][1];
+  // 复数主语的动词变形
+  function v3(sing, plur, isPl){ return isPl ? plur : sing; }
+  var lines = [], title;
+  if(kind === 'limerick'){
+    lines = ['There once was ' + A + ' by ' + B + ',',
+             'So ' + pr[0] + ' it startled ' + B + ';',
+             'It danced and it sang,', 'Till the valley rang,',
+             'And ' + A + ' slipped quietly home.'];
+    title = 'A Tale of ' + pr[0];
+  }else{
+    // 模板拆成「主语 + 动词 + 补语」三段，按单复数与冠词正确拼接，避免 "The the …"
+    var SK2 = [
+      ['', ' rises slowly over ', ''],
+      ['I watched ', ' drift into ', ','],
+      ['and all ', ' was quiet.', ''],
+      ['', ' waits where ', ' ends,'],
+      ['between ', ' and ', '.'],
+      ['', ' remembers what ', ' forgets,'],
+      ['and falls like ', ' upon ', '.'],
+      ['No voice, only ', ' and ', ','],
+      ['', ' keeps the shape of ', '.']
+    ];
+    var NL = F.lines || 6;
+    for(i=0;i<NL;i++){
+      var t = SK2[i % SK2.length];
+      var subjA = t[0] === '' ? A.charAt(0).toUpperCase() + A.slice(1) : A;
+      var mid = t[1];
+      // 「I watched ... drift」是 watch sb do 结构，动词必须用原形，不受主语单复数影响
+      if(t[0] === 'I watched '){
+        mid = ' drift into ';
+      }else if(/rise|wait|remember|keep/.test(mid)){
+        mid = mid.replace(' rises', ' ' + v3('rises','rise',Apl))
+                 .replace(' waits', ' ' + v3('waits','wait',Apl))
+                 .replace(' remembers', ' ' + v3('remembers','remember',Apl))
+                 .replace(' keeps', ' ' + v3('keeps','keep',Apl));
+      }
+      lines.push(t[0] + subjA + mid + B + t[2]);
+    }
+    if(formId === 'ensonnet'){ lines.push('And still ' + A + ' shines on,', 'the ' + B + ' and I, alone.'); }
+    title = pr[0].charAt(0).toUpperCase() + pr[0].slice(1) + ' and ' + pr[1];
+  }
+  return {title:title, lines:lines, form:formId, formName:F.n, tag:F.g, lang:'en', layout:'horiz',
+          mood:mood, moodName:MOOD[mood].n, crafted:false, factory:true, free:true};
+}
 /* ENH:FACTORY-END */
+/* ENH:FULLLIB-BEGIN */
+/* ===== 全量语料渐进加载：218 万真实短句，后台分片、不阻塞首屏 ===== */
+var FULL_STATE = {loaded:0, total:0, ready:false, failed:[]};
+function fullLoad(files, onDone){
+  var i = 0;
+  function step(){
+    if(i >= files.length){ onDone && onDone(); return; }
+    var f = files[i++];
+    var sc = document.createElement('script');
+    sc.src = 'poem_full/' + f + '.js';
+    sc.onload = function(){ FULL_STATE.loaded++; fullProgress(); step(); };
+    sc.onerror = function(){ FULL_STATE.failed.push(f); FULL_STATE.loaded++; fullProgress(); step(); };
+    document.head.appendChild(sc);
+  }
+  FULL_STATE.total += files.length;
+  fullProgress();
+  step();
+}
+function fullProgress(){
+  var el = document.getElementById('fullLibStat');
+  if(!el) return;
+  var pct = FULL_STATE.total ? Math.round(FULL_STATE.loaded / FULL_STATE.total * 100) : 0;
+  el.innerHTML = FULL_STATE.ready
+    ? '全量语料 <b style="color:#7dd3a0">已就绪</b> · 218 万句'
+    : '全量语料加载中 <b>' + pct + '%</b>';
+}
+function fullActivate(){
+  // 全量句库替换精简池
+  if(window.PL_FULL){
+    for(var L = 2; L <= 12; L++){
+      if(PL_FULL[L]) PL.pool[L] = PL_FULL[L].split('\n');
+    }
+  }
+  // 全量结构要素
+  var M = window.PL_META || {};
+  if(M.byImg) PL.byImg = M.byImg;
+  if(M.first) PL.first = M.first;
+  if(M.last) PL.last = M.last;
+  if(M.rhyme) PL.rhyme = M.rhyme;
+  if(M.subjects) PL.subjects = M.subjects;
+  if(M.keyCN) PL.keyCN = M.keyCN;
+  if(M.cooccur) PL.co = M.cooccur.map(function(x){return [x.a, x.b];});
+  PL.free = PL.free || {};
+  if(M.byTag) PL.free.byTag = M.byTag;
+  if(M.byEmo) PL.free.byEmo = M.byEmo;
+  if(M.longLines) PL.free.longLines = M.longLines;
+  if(M.connect) PL.free.connect = M.connect;
+  if(M.turn) PL.free.turn = M.turn;
+  if(M.skeleton) PL.skel = M.skeleton;
+  PL.isFull = true;
+  FULL_STATE.ready = true;
+  FACTORY_READY = true;
+  fullProgress();
+}
+// 优先级：先 5/7 字（占语料 65%），再其它字数，最后结构要素
+function fullBoot(){
+  if(typeof PL === 'undefined') return;
+  fullLoad(['f5','f7','f4','f3','f6','f2','f8','f9','f10','f11','f12'], function(){
+    fullLoad(['m_core','m_pos','m_tag','m_img','m_skel','m_long'], fullActivate);
+  });
+}
+// 页面空闲后启动，不拖慢首屏
+if(window.requestIdleCallback) requestIdleCallback(fullBoot, {timeout:1500});
+else setTimeout(fullBoot, 300);
+/* ENH:FULLLIB-END */
 /* ---------- 离线生成（原逻辑） ---------- */
 function generateOffline(){
   var theme=$('theme').value.trim();
