@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🧭 知识地图 · 确定性 vs 学习 · 人工智能概论课程作业</title>
 <style>
-@media print{*{box-shadow:none!important;text-shadow:none!important;background:transparent!important}body{background:#fff!important;color:#000!important}.topnav,.toc,.totop,.skip-link,#hwcmd-ov,#hwcmd-fab,.footer,.enh-tourbar,#enh-panel,.enh-note{display:none!important}a{color:#000!important;text-decoration:underline}.card,.banner{border:1px solid #ccc!important;break-inside:avoid}main,section,.wrap,.grid{max-width:100%!important}}
-.skip-link{position:absolute;left:-9999px;top:8px;z-index:300;background:#a855f7;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px}
-.skip-link:focus{left:12px}
-
 :root{--bg:#0a0a0f;--card:#16161f;--border:#26263a;--text:#e8e8f0;--dim:#9a9ab8;--purple:#a855f7;--teal:#2dd4bf}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -44,7 +40,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 #mapTip b{display:block;font-size:13px;color:var(--teal);margin-bottom:4px}
 #mapTip small{color:var(--dim)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:820px){.two{grid-template-columns:1fr}.wrap{padding:14px}.topnav{gap:4px;padding:10px 12px;flex-wrap:wrap}}
+@media(max-width:820px){.two{grid-template-columns:1fr}.wrap{padding:14px}.topnav{gap:4px;padding:10px 12px}}
 .pane{background:#101018;border:1px solid #2a2a40;border-radius:14px;padding:12px}
 .pane h3{font-size:14px;margin-bottom:8px;color:var(--text)}
 .pane canvas{width:100%;height:auto;display:block;border-radius:8px;background:#0d0d16}
@@ -55,15 +51,9 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:26px 0 8px;padding-top:18px;border-top:1px solid var(--border);color:#6f6f90;font-size:12px}
 .foot a{color:var(--teal);text-decoration:none}
 </style>
-<meta property="og:type" content="website">
-<meta property="og:title" content="🧭 知识地图 · 确定性 vs 学习 · 人工智能概论课程作业">
-<meta property="og:description" content="人工智能概论课程作业站点：作业与可交互实验室，从作品到原理的深度学习实践。">
-<meta property="og:site_name" content="课程作业站点">
-<meta name="twitter:card" content="summary">
 </head>
 <body>
-<a class="skip-link" href="#main-content">跳到正文</a>
-<nav class="topnav" aria-label="主导航">
+<nav class="topnav">
   <span class="logo">🧭 知识地图 · 课程总览</span>
   <a href="index.html">首页</a>
   <a href="atlas.html" class="active">🧭 知识地图</a>
@@ -71,14 +61,12 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
   <a href="lab1.html">实验室 1</a>
   <a href="homework2.html">作业 2</a>
   <a href="lab2.html">实验室 2</a>
-  <a href="homework3.html">作业 3</a>
-  <a href="lab3.html">实验室 3</a>
   <span class="spacer"></span>
   <span class="cur">全站总览 · 不改变四栏顺序</span>
   <a href="#map">概念图</a><a href="#course">教材脉络</a><a href="#timeline">对照时间轴</a>
   <a href="https://github.com/he-yikang/homework" target="_blank" rel="noopener" style="color:#2dd4bf;border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.10)">↗ GitHub 仓库</a>
 </nav>
-<div class="wrap" id="main-content" tabindex="-1">
+<div class="wrap">
   <div class="hero">
     <div class="badge">✦ 扩展能力 B + H · 把两次作业串成一条线</div>
     <h1>课程知识地图 · 确定性 vs 学习</h1>
@@ -92,7 +80,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
       <button class="mbtn" id="mapZoomIn">＋ 放大</button>
       <button class="mbtn" id="mapZoomOut">－ 缩小</button>
       <button class="mbtn" id="mapReset">重置视角</button>
-      <span style="color:#6f6f90;font-size:12px">共 9 个概念节点 · 紫框=作业 1 的确定性算法 · 青框=作业 2 的学习算法 · 金框=第三篇「人工智能应用」</span>
+      <span style="color:#6f6f90;font-size:12px">共 8 个概念节点 · 紫框=作业 1 的确定性算法 · 青框=作业 2 的学习算法</span>
     </div>
     <svg id="mapSvg" viewBox="0 0 900 430" preserveAspectRatio="xMidYMid meet">
       <defs>
@@ -104,11 +92,10 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
         <path class="lk" d="M620 92 L650 92"/><path class="lk" d="M620 268 L650 268"/>
         <path class="lk" d="M620 92 L700 170"/><path class="lk" d="M620 268 L700 170"/>
         <path class="lk" d="M800 170 L810 170"/>
-        <path class="lk" d="M470 295 L470 323" style="stroke:#e8c07d;stroke-opacity:.5"/>
       </g>
     </svg>
     <div id="mapTip"></div>
-    <p class="lead" style="margin:12px 0 0">🌱 这条链回答了课程最核心的一问：作业 1 的算法<b style="color:#e8e8f0">不需要数据、结果可复现</b>，作业 2 的算法<b style="color:#e8e8f0">没有数据就什么都不是</b>——但两者都在做迭代、都在逼近一个目标。金框的第三篇「诗中有画」则把前两篇的<b style="color:#e8c07d">表示</b>思想用到应用上：意象既是诗的语义、也是画的指令。</p>
+    <p class="lead" style="margin:12px 0 0">🌱 这条链回答了课程最核心的一问：作业 1 的算法<b style="color:#e8e8f0">不需要数据、结果可复现</b>，作业 2 的算法<b style="color:#e8e8f0">没有数据就什么都不是</b>——但两者都在做迭代、都在逼近一个目标。</p>
   </div>
 
 <!-- ENH:COURSE -->
@@ -169,7 +156,7 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 </style>
 <div class="sec" id="course">
   <h2>📖 课程教材脉络 · 36 章 ↔ 本站实践 <span class="tg">课程坐标系</span></h2>
-  <p class="lead">把课程教材的章节体系接进作业站点：每一章都标出「本站哪里能动手」，也能一键回到讲义原文。点章卡展开说明与双链，勾选「已读」记录自己的课程进度；青色左边框表示这一章在本站有对应实验，灰色章属于课程概述 / 历史部分，本站不做牵强附会。讲义第三篇「人工智能应用」（第 21–36 章）中，「AI 绘画大师」「人工智能诗人」正是本站作业 3「诗中有画」的案例原型。</p>
+  <p class="lead">把课程教材的章节体系接进作业站点：每一章都标出「本站哪里能动手」，也能一键回到讲义原文。点章卡展开说明与双链，勾选「已读」记录自己的课程进度；青色左边框表示这一章在本站有对应实验，灰色章属于课程概述 / 历史部分，本站不做牵强附会。讲义第三篇「人工智能应用」（第 21–36 章）中，「人工智能诗人」正是本站作业 3「星算诗台」的案例原型；「AI 绘画大师」对应教材第 24 章，本站暂未实现、留作扩展方向。</p>
   <div class="cinfo">
     <div style="flex:1;min-width:220px">
       <div class="bk">《人工智能通识》· 人工智能概论课程教材</div>
@@ -238,13 +225,13 @@ var CH=[
  {n:21,p:3,t:'人脸识别',tag:'第三篇 · 应用',note:'讲义从「从多人中找人（1:N 辨识）」与「核对两张脸是否同一人（1:1 核验）」两种任务讲起：先检测人脸、对齐预处理，再把人脸压成可比较的特征向量，最后用余弦相似度或距离设门槛判断。深度学习用卷积网络逐层学出身份表示；评估看 FMR（误匹配）与 FNMR（漏匹配），NIST 的口岸核验比较同一 FMR 下的漏拒率。本站没有对应实验，见讲义原文。',links:[]},
  {n:22,p:3,t:'车牌识别',tag:'第三篇 · 应用',note:'视觉识别的典型应用（检测 + 字符识别）。本站暂无对应实验，见讲义原文。',links:[]},
  {n:23,p:3,t:'AI美颜',tag:'第三篇 · 应用',note:'把参考妆容迁移到本人照片，属于图像到图像的转换。本站暂无对应实验，见讲义原文。',links:[]},
- {n:24,p:3,t:'AI绘画大师',tag:'AI 绘画',note:'讲义讲「风格迁移：内容与表达方式」——内容描述画了什么，风格描述用怎样的颜色、纹理与笔触来画。这正是本站作业 3 的核心：实验室 3 的 20 种画风把同一组意象（月、山、水、舟…）绘成水墨、工笔、印象派、赛博朋克等完全不同笔墨，直观演示「内容不变、表示可变」。',links:[['作业 3 · 工作原理','homework3.html#principle'],['🎨 实验室 3 · 画风图鉴','lab3.html#styleRef']]},
+ {n:24,p:3,t:'AI绘画大师',tag:'AI 绘画',note:'讲义讲「风格迁移：内容与表达方式」——内容描述画了什么，风格描述用怎样的颜色、纹理与笔触来画。这是本站尚未实现的方向：星算诗台当前只做文本侧（需求 → 诗），把同一组意象（月、山、水、舟…）再绘成完全不同笔墨的「内容不变、表示可变」，留作后续扩展。',links:[['作业 3 · 工作原理','homework3.html#principle']]},
  {n:25,p:3,t:'AI鉴伪',tag:'第三篇 · 应用',note:'人脸识别的安全边界与准确率之外的鉴别问题。本站暂无对应实验，见讲义原文。',links:[]},
  {n:26,p:3,t:'语音识别',tag:'第三篇 · 应用',note:'语音到文字的转换。本站暂无对应实验，见讲义原文。',links:[]},
  {n:27,p:3,t:'声纹识别',tag:'第三篇 · 应用',note:'声音也能成为身份线索。本站暂无对应实验，见讲义原文。',links:[]},
  {n:28,p:3,t:'语音合成',tag:'第三篇 · 应用',note:'文字到语音的生成。本站暂无对应实验，见讲义原文。',links:[]},
  {n:29,p:3,t:'机器作家',tag:'第三篇 · 应用',note:'大语言模型在写作中的应用。本站暂无对应实验，见讲义原文。',links:[]},
- {n:30,p:3,t:'人工智能诗人',tag:'AI 写诗',note:'讲义讲「押韵容易，写出意味难」：诗既有字数、韵脚、平仄等可检验的形式，也有连贯意象与情感。这正是本站作业 3 的另一半——实验室 3 用 40 种诗体（含 22 种词牌的真实字数格律）离线拼装或由大模型现场写诗，把「形式约束」与「意象情感」的差别摆在一起看。',links:[['作业 3 · 诗中有画','homework3.html'],['✍️ 实验室 3 · 人工智能诗人','lab3.html#studio']]},
+ {n:30,p:3,t:'人工智能诗人',tag:'AI 写诗',note:'讲义讲「押韵容易，写出意味难」：诗既有字数、韵脚、平仄等可检验的形式，也有连贯意象与情感。这正是本站作业 3 的核心——实验室 3（星算诗台）用 28 种诗体（含 22 种词牌的真实字数格律）从 18.9 万首真实古诗词里按主题与情感重装出诗，或由大模型现场写诗，把「形式约束」与「意象情感」的差别摆在一起看。',links:[['作业 3 · 星算诗台','homework3.html'],['✍️ 实验室 3 · 星算诗台','lab3.html#studio']]},
  {n:31,p:3,t:'机器翻译',tag:'第三篇 · 应用',note:'跨语言的语义转换，及其为何困难。本站暂无对应实验，见讲义原文。',links:[]},
  {n:32,p:3,t:'围棋国手',tag:'第三篇 · 应用',note:'从极小极大搜索到 Alpha-Beta 剪枝，是「基于知识」搜索方法的巅峰案例。本站暂无对应实验，见讲义原文。',links:[]},
  {n:33,p:3,t:'AI游戏',tag:'第三篇 · 应用',note:'从下棋到在动态世界中行动。本站暂无对应实验，见讲义原文。',links:[]},
@@ -449,7 +436,7 @@ var ITEMS=[
  {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
  {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
  {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
- {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'✨ 星算诗台 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 生成 格律 词牌 诗人 主题 情感 第三篇'},
  {t:'⚔ 盲评擂台 · 哪首诗更合格',u:'lab3.html#blindTest',d:'扩展',k:'盲评 擂台 格律 评估 对比 连胜 两首诗 读者判断 第30章'},
  {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
  {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
@@ -509,8 +496,7 @@ var NODES=[
  {x:470,y:268,t:'前向 / 反向传播',s:'梯度如何流动',kind:1,h:'lab2.html#grad',ch:'第 15 章 · 人工神经元网络',d:'前向算出预测，反向把误差逐层拆回每个权重。梯度太小时靠输入侧的层几乎不动 —— 梯度消失。',go:'去梯度显微镜采样逐层梯度 →'},
  {x:650,y:92,t:'梯度下降与优化器',s:'SGD / Momentum / Adam',kind:1,h:'lab2.html#grad',ch:'第 13 章 · 学习方法',d:'同一条 loss 曲面，不同优化器走出的路径完全不同。拖动起点可以直观看到自适应步长怎么避开震荡。',go:'去实验室 2 对比三条轨迹 →'},
  {x:650,y:268,t:'学习率',s:'步长与稳定性',kind:1,h:'lab2.html?preset=lr',ch:'第 14 章 · 学习策略',d:'过小停滞、合适收敛、过大发散。一个标量就能决定训练是成功还是爆炸，是调参时最先该试的旋钮。',go:'去实验室 2 载入大学习率预设 →'},
- {x:820,y:170,t:'泛化与决策边界',s:'过拟合 / L2 / 曲面',kind:1,h:'lab2.html?preset=overfit',ch:'第 19 章 · 深度学习面临的挑战',d:'训练集 100% 不等于学会了。L2 正则、噪声与验证集用来判断边界是「记住」还是「概括」；3D 视图能把这张边界立起来看。',go:'去实验室 2 载入过拟合预设 →'},
- {x:470,y:350,t:'诗中有画',s:'语义 → 视觉表示',kind:2,h:'lab3.html',ch:'第 24 / 30 章 · AI绘画大师 / 人工智能诗人（第三篇 人工智能应用）',d:'讲义 V9 第三篇的两个案例，在作业 3 接成一条流水线：意象既是诗的语义单元，也是画的绘制指令——同一组意象换 20 种画风得到完全不同的笔墨，直观演示「内容不变、表示可变」。',go:'去实验室 3 写诗作画 →'}
+ {x:820,y:170,t:'泛化与决策边界',s:'过拟合 / L2 / 曲面',kind:1,h:'lab2.html?preset=overfit',ch:'第 19 章 · 深度学习面临的挑战',d:'训练集 100% 不等于学会了。L2 正则、噪声与验证集用来判断边界是「记住」还是「概括」；3D 视图能把这张边界立起来看。',go:'去实验室 2 载入过拟合预设 →'}
 ];
 var layer=document.getElementById('mapLayer'),svg=document.getElementById('mapSvg'),tip=document.getElementById('mapTip');
 var NS='http://www.w3.org/2000/svg';
@@ -520,7 +506,7 @@ NODES.forEach(function(n){
   var g=document.createElementNS(NS,'g');g.setAttribute('class','nd');
   var r=document.createElementNS(NS,'rect');
   r.setAttribute('x',n.x-76);r.setAttribute('y',n.y-27);r.setAttribute('width',152);r.setAttribute('height',54);r.setAttribute('rx',12);
-  if(n.kind===0)r.setAttribute('stroke','#a855f7');else if(n.kind===2)r.setAttribute('stroke','#e8c07d');else r.setAttribute('stroke','#2dd4bf');
+  if(n.kind===0)r.setAttribute('stroke','#a855f7');else r.setAttribute('stroke','#2dd4bf');
   g.appendChild(r);
   var t=document.createElementNS(NS,'text');t.setAttribute('x',n.x);t.setAttribute('y',n.y-4);t.textContent=n.t;g.appendChild(t);
   var s=document.createElementNS(NS,'text');s.setAttribute('class','sub');s.setAttribute('x',n.x);s.setAttribute('y',n.y+14);s.textContent=n.s;g.appendChild(s);
@@ -673,13 +659,13 @@ window.addEventListener('scroll',function(){
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 36 章</b><small>《人工智能通识》36 章逐章对照本站实践（含第三篇「人工智能应用」），可搜索、按篇筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>16 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
     <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
     <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
-    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html"><b>I · 星算诗台</b><small>输入需求写诗，紧扣主题与情感，第三篇「人工智能应用」交互项目</small></a>
     <a href="lab3.html#blindTest"><b>J · 盲评擂台</b><small>按讲义第 30 章的读者盲评法，两首打乱的诗选哪首格律合格，揭晓后逐项核对、连胜计分</small></a>
     <a href="atlas.html#graph"><b>M · 知识依赖图谱</b><small>36 章按篇连成主干，跨篇虚线标先修关系，点节点直达讲义与实验</small></a>
   </div>
@@ -704,7 +690,6 @@ var ACHV=[
  {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
- {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
  {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'},
  {id:'blindjudge',t:'盲评慧眼',d:'在实验室 3 的盲评擂台连胜 3 场'}
 ];
@@ -762,11 +747,11 @@ var TOUR={
   {t:'梯度显微镜与 3D 决策空间',d:'看懂「为什么学得动」：优化轨迹、逐层梯度、可旋转的置信度曲面。',s:'#grad'},
   {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
  'homework3.html':{next:'lab3.html',steps:[
-  {t:'作业 3 · 人工智能应用：诗中有画',d:'把「人工智能诗人」与「AI 绘画大师」接成一条流水线：需求 → 诗 → 画，讲清工作原理。',s:'#origin'},
+  {t:'作业 3 · 人工智能应用：星算诗台',d:'把「人工智能诗人」做成一条可复现的流水线：需求 → 主题与情感 → 意象 → 按格律重装成诗，讲清工作原理。',s:'#origin'},
   {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
  'lab3.html':{next:'atlas.html',steps:[
-  {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
-  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#styleRef'},
+  {t:'星算诗台 · 创作台',d:'输入主题选诗体（28 种，含 22 种词牌曲牌），现场生成一首紧扣主题与情感的诗。',s:'#studio'},
+  {t:'同一主题，五种情感',d:'静/愁/喜/壮/幽任意切换，看同一主题如何写出不同情绪；主题字与情感基准同时约束选句。',s:'#refine'},
   {t:'盲评擂台 · 哪首更合格',d:'讲义第 30 章让读者不知道作者是谁再比较：两首打乱的诗盲选，揭晓后按形式与表达逐项核对。',s:'#blindTest'}]},
  'atlas.html':{next:null,steps:[
   {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},

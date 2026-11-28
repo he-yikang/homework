@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>实验室 3 · 诗中有画 · 人工智能概论课程作业</title>
+<title>实验室 3 · 星算诗台 · 人工智能概论课程作业</title>
 <style>
 .skip-link{position:absolute;left:-9999px;top:8px;z-index:300;background:#a855f7;color:#fff;padding:8px 14px;border-radius:8px;text-decoration:none;font-size:14px}
 .skip-link:focus{left:12px}
@@ -22,9 +22,9 @@ body{font-family:system-ui,'Microsoft YaHei',sans-serif;background:radial-gradie
 .hero .badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:1px;color:var(--gold);border:1px solid rgba(232,192,125,.35);background:rgba(232,192,125,.08);padding:5px 14px;border-radius:99px;margin-bottom:12px}
 .hero h1{font-size:clamp(26px,4vw,40px);letter-spacing:1px;background:linear-gradient(100deg,#fff 10%,var(--purple) 42%,var(--blue) 68%,var(--gold));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .hero p{color:var(--dim);font-size:14px;margin-top:8px}
-.grid{display:grid;grid-template-columns:320px minmax(320px,1fr) minmax(360px,500px);gap:16px;align-items:start;margin-top:18px}
-@media(max-width:1200px){.grid{grid-template-columns:300px 1fr}.col-art{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:16px}}
-@media(max-width:860px){.grid{grid-template-columns:1fr}.col-art{grid-column:auto;grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:320px minmax(320px,1fr);gap:16px;align-items:start;margin-top:18px}
+@media(max-width:1200px){.grid{grid-template-columns:300px 1fr}}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
 .panel{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.3);margin-bottom:16px}
 .panel h2{font-size:14px;letter-spacing:.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .panel h2::before{content:'';width:3px;height:15px;border-radius:3px;background:linear-gradient(var(--purple),var(--gold))}
@@ -63,9 +63,7 @@ select option{background:#101018;color:#e8e8f0;font-weight:400}
 .poem-vert .pl{white-space:nowrap;flex:0 0 auto}
 .poem-vert .pt{font-size:21px;font-weight:700;color:#8a2b1f}
 .poem-empty{color:#9a8b64;font-size:13px;text-align:center;padding-top:140px;font-family:system-ui,sans-serif;letter-spacing:0}
-.canvas-box{position:relative;border:1px solid var(--border);border-radius:12px;overflow:hidden;background:#0b0b12;aspect-ratio:4/3}
 canvas{width:100%;height:100%;display:block}
-.art-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#6f6f90;font-size:13px;text-align:center;padding:20px}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;min-height:24px}
 .chip{font-size:11px;color:var(--teal);border:1px solid rgba(45,212,191,.4);background:rgba(45,212,191,.08);border-radius:99px;padding:3px 10px}
 .stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#6f6f90}
@@ -77,7 +75,6 @@ details p{margin-top:8px;line-height:1.75}
 code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:5px;color:var(--teal);font-size:.92em}
 .totop{position:fixed;right:24px;bottom:24px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;cursor:pointer;font-size:15px;box-shadow:0 6px 20px rgba(168,85,247,.4);opacity:0;transition:.3s;pointer-events:none;z-index:60}
 .totop.show{opacity:1;pointer-events:auto}
-/* ===== 意象速查 ===== */
 .img-ref-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
 .img-ref-btn{background:#101018;border:1px solid var(--border);border-radius:9px;padding:9px 2px;text-align:center;cursor:pointer;transition:.18s;color:var(--text)}
 .img-ref-btn:hover{border-color:var(--gold);background:rgba(232,192,125,.1);transform:translateY(-2px)}
@@ -87,13 +84,6 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .famous-list>div{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12px;border-bottom:1px dashed var(--border);padding-bottom:6px}
 .famous-list .fm{font-family:'KaiTi','STKaiti',serif;color:#d8cfae;letter-spacing:1px}
 .famous-list .fk{color:var(--teal);font-size:11px;white-space:nowrap}
-/* ===== 画风图鉴 ===== */
-.style-ref-group{margin-bottom:9px}
-.style-ref-group .sg-t{font-size:10px;color:var(--dim);letter-spacing:1px;margin-bottom:5px}
-.style-ref-chips{display:flex;flex-wrap:wrap;gap:5px}
-.style-ref-chip{font-size:11px;color:var(--text);background:#101018;border:1px solid var(--border);border-radius:99px;padding:4px 10px;cursor:pointer;transition:.18s}
-.style-ref-chip:hover{border-color:var(--purple);color:#fff;background:rgba(168,85,247,.14)}
-.style-ref-chip.on{border-color:var(--gold);color:var(--gold);background:rgba(232,192,125,.12)}
 /* ===== 格律速查 ===== */
 .meter-grid{display:grid;gap:8px}
 .meter-grp .mg-t{font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:4px}
@@ -116,7 +106,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .tb-item p{font-size:11px;color:#b9b9d4;line-height:1.75;margin:5px 0}
 .tb-item a{display:inline-block;margin-top:6px;font-size:11px;color:var(--teal);text-decoration:none;border:1px solid rgba(45,212,191,.4);border-radius:7px;padding:3px 9px}
 .tb-item a:hover{background:rgba(45,212,191,.1)}
-@media print{.img-ref-grid,.famous-list,.style-ref,.img-ref-btn,.style-ref-chip,.meter-grid,.step-list,.tb-ref,.refine-grid,.refine-card{break-inside:avoid}}
+@media print{.img-ref-grid,.famous-list,.img-ref-btn,.meter-grid,.step-list,.tb-ref,.refine-grid,.refine-card{break-inside:avoid}}
 /* ===== 自检 → 改写 ===== */
 .refine-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:980px){.refine-grid{grid-template-columns:1fr}}
@@ -141,19 +131,8 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .diff-imgs figure{margin:0}
 .diff-imgs img{width:100%;border-radius:8px;border:1px solid var(--line);display:block}
 .diff-imgs figcaption{font-size:11px;color:#8a8aa8;margin-top:4px}
-/* ===== 意象画法图谱 ===== */
-.img-atlas{display:grid;grid-template-columns:1fr 1fr;gap:7px}
-@media(max-width:520px){.img-atlas{grid-template-columns:1fr}}
-.img-atlas details{border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.015);overflow:hidden}
-.img-atlas summary{cursor:pointer;list-style:none;padding:7px 10px;font-size:12px;color:var(--text);display:flex;align-items:center;gap:6px}
-.img-atlas summary::-webkit-details-marker{display:none}
-.img-atlas summary:hover{background:rgba(45,212,191,.07)}
-.img-atlas summary .sm-mk{color:var(--teal);font-size:11px}
-.img-atlas summary .sm-w{font-size:10px;color:#6f6f90;margin-left:auto}
-.img-atlas .sm-body{padding:0 10px 9px;font-size:11px;color:#9a9ab8;line-height:1.65;border-top:1px solid var(--line)}
-.img-atlas .sm-body b{color:#c4a4f8}
-.img-atlas .sm-body .sm-btn{margin-top:6px;font-size:10px;color:var(--teal);background:none;border:none;cursor:pointer;padding:0;text-decoration:underline}
-@media print{.img-atlas{break-inside:avoid}}
+@media(max-width:520px){}
+@media print{}
 /* ===== 情感基调图谱 ===== */
 .mood-atlas{display:grid;gap:8px}
 .mood-atlas details{border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.015);overflow:hidden}
@@ -211,7 +190,6 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 .coll-modal-x{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--dim);font-size:20px;cursor:pointer;z-index:3}
 .coll-modal-x:hover{color:#fff}
 .coll-modal-body{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.coll-modal-body .cm-art{width:100%;border-radius:12px;border:1px solid var(--border);display:block;aspect-ratio:4/3;object-fit:cover}
 .coll-modal-body h3{font-size:20px;color:var(--gold);margin-bottom:8px}
 .coll-modal-body .cm-poem{font-family:'KaiTi','STKaiti','SimSun',serif;font-size:17px;line-height:1.95;letter-spacing:2px;color:#f0e8d0}
 .coll-modal-body .cm-poem.en{font-family:Georgia,serif;font-size:14px;letter-spacing:0;text-align:left}
@@ -225,18 +203,17 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
   .coll-card{break-inside:avoid;border:1px solid #ccc;background:#fff}
   .coll-card .meta b,.coll-card .meta .frag{color:#111}
 }
-/* 精品画作 */
-.art-gallery{display:none;width:100%;height:100%;object-fit:cover;border-radius:10px}
+/* 诗作展示 */
 </style><meta property="og:type" content="website">
-<meta property="og:title" content="实验室 3 · 诗中有画">
-<meta property="og:description" content="纯前端交互：40 种诗体（含 22 种词牌曲牌，古今中外 8 大类）、20 种画风（5 大类），输入需求生成诗与画，可切换横竖排版。">
+<meta property="og:title" content="实验室 3 · 星算诗台">
+<meta property="og:description" content="纯前端交互：28 种诗体（含 22 种词牌曲牌），输入需求生成一首紧扣主题与情感的诗，可切换横竖排版。">
 <meta property="og:site_name" content="课程作业站点">
 <meta name="twitter:card" content="summary">
 <script src="poem_lib.js"></script>
 </head><body>
 <a class="skip-link" href="#main-content">跳到正文</a>
 <nav class="topnav" aria-label="主导航">
-  <span class="logo">实验室 3 · 诗中有画</span>
+  <span class="logo">实验室 3 · 星算诗台</span>
   <a href="index.html">首页</a>
   <a href="atlas.html">🧭 知识地图</a>
   <a href="homework1.html">作业 1</a>
@@ -252,8 +229,8 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
 <div class="wrap" id="main-content">
   <div class="hero">
     <span class="badge">✦ 第三篇 · 人工智能应用 · 纯前端离线运行</span>
-    <h1>诗中有画 · 交互实验室</h1>
-    <p>一句话需求 → 40 种诗体（含 22 种词牌）→ 20 种画风　·　可切换「离线可复现」或「AI 实时生成，每次不同」</p>
+    <h1>星算诗台 · 交互实验室</h1>
+    <p>一句话需求 → 28 种诗体（含 22 种词牌）→ 一首紧扣主题与情感的诗　·　可切换「离线可复现」或「AI 实时生成，每次不同」</p>
   </div>
 
   <div class="grid" id="studio">
@@ -284,37 +261,25 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <select id="formSel"></select>
         </div>
         <div class="ctl">
-          <label>画风 <span style="color:#6f6f90" id="styleCount"></span></label>
-          <select id="styleSel"></select>
-        </div>
-        <div class="ctl">
           <label>诗的排版</label>
           <div class="seg" id="layoutSeg">
             <button data-v="horiz" class="on">横排 · 逐行</button><button data-v="vert">竖排 · 传统</button>
           </div>
         </div>
-        <button class="btn primary" id="genBtn">✦ 生成诗与画</button>
+        <button class="btn primary" id="genBtn">✦ 生成诗</button>
         <button class="btn" id="regenBtn">↻ 换个写法重生成</button>
-        <p class="tip">主题里的字会自动匹配意象（月/山/水/柳/雪/花/鸟/舟/竹/云/亭/星）；留空则按情感随机取景。生成的诗会<b>紧扣你写的主题、关键词与情感基调</b>：主题里的字会直接进入选句，情感基调决定选哪些情绪词与句式。诗体与画风见下拉分组，可随时切换。</p>
+        <p class="tip">主题里的字会自动匹配意象（月/山/水/柳/雪/花/鸟/舟/竹/云/亭/星）；留空则按情感随机取景。生成的诗会<b>紧扣你写的主题、关键词与情感基调</b>：主题里的字会直接进入选句，情感基调决定选哪些情绪词与句式。诗体见下拉分组，可随时切换。</p>
       </section>
 
       <section class="panel" id="how">
         <h2>② 它怎么工作</h2>
         <details open>
           <summary>需求 → 诗：规则 + 意象</summary>
-          <p>先由主题匹配一组<b style="color:#c4a4f8">意象</b>（月、山、水、舟…），再按所选诗体的<b style="color:#c4a4f8">格律</b>（句数、字数、韵脚）逐句拼装；词曲用长短句模板，英文诗用英文意象词填句式。对应教材第 10 章<b>基于知识</b>的方法。</p>
-        </details>
-        <details>
-          <summary>诗 → 画：意象映射成不同笔墨</summary>
-          <p>画师从诗句读回意象，再按画风参数（色板、背景、笔法模式）绘制：水墨晕染、工笔平涂、白描勾线、印象派点彩、立体主义几何、赛博霓虹……同一个意象在不同画风下画法完全不同，这正是<b style="color:#c4a4f8">语义 → 视觉表示</b>的直观演示。</p>
-        </details>
-        <details>
-          <summary>为什么每次都一样 / 可复现</summary>
-          <p>画里所有「随机」元素都由诗句的<b style="color:#c4a4f8">哈希种子</b>决定，同一首诗、同一画风永远得到同一幅画——和作业 2「固定随机种子保证实验可复现」是一个道理（第 19 章）。</p>
+          <p>先由主题匹配一组<b style="color:#c4a4f8">意象</b>（月、山、水、舟…），再按所选诗体的<b style="color:#c4a4f8">格律</b>（句数、字数、韵脚）逐句拼装；词曲用长短句模板。对应教材第 10 章<b>基于知识</b>的方法。</p>
         </details>
         <details>
           <summary>离线 / AI 实时：两种模式</summary>
-          <p><b style="color:#c4a4f8">离线</b>：从古诗词网 18.9 万首真实诗词原文中，提取意象搭配、章法（起承转合／以景结情）、句法与情感用词，再按诗体格律<b>排列组合重装</b>成新诗——每句都来自真实诗句，整首是新组合，每次生成都不同；少量穿插精选原创诗，未覆盖文体回退规则生成。Canvas 代码作画，断网可用。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，再把诗句与画风交给文生图模型（doubao-seedream）作画，<b>每次都不同</b>。两种模式对照，正好看出「检索重组」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
+          <p><b style="color:#c4a4f8">离线</b>：从古诗词网 18.9 万首真实诗词原文中，提取意象搭配、章法（起承转合／以景结情）、句法与情感用词，再按诗体格律<b>排列组合重装</b>成新诗——每句都来自真实诗句，整首是新组合，每次生成都不同；少量穿插精选原创诗，未覆盖文体回退规则生成。纯静态前端，断网可用。<b style="color:#c4a4f8">AI 实时</b>：把诗体、主题、情感交给大语言模型（deepseek-flash）现场写诗，<b>每次都不同</b>。两种模式对照，正好看出「检索重组」与「模型生成」的差别。原理见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3</a>。</p>
         </details>
         <div class="notice">API 调用直接在浏览器发起（OpenAI 兼容接口，CORS 开放），Key 公开写在本页源码中，<b>仅供课程作业演示</b>，请勿用于生产环境。若 AI 调用失败会自动降级回离线模式。</div>
       </section>
@@ -332,11 +297,12 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
     <div>
     <section class="panel">
       <h2>③ 人工智能诗人 <span style="font-size:11px;color:var(--gold);font-weight:400" id="poemFormTag">— 生成的诗</span></h2>
-      <div class="poem-box poem-paper" id="poemBox"><div class="poem-empty">点击左侧「生成诗与画」<br>这里会出现一首为你而作的诗</div></div>
+      <div class="poem-box poem-paper" id="poemBox"><div class="poem-empty">点击左侧「生成诗」<br>这里会出现一首为你而作的诗</div></div>
       <div class="row no-print">
         <button class="btn sm" id="copyPoem">复制诗</button>
         <button class="btn sm" id="dlPoem">下载 .txt</button>
         <button class="btn sm" id="favPoem" style="border-color:rgba(232,192,125,.5);color:var(--gold)">♡ 收入诗集</button>
+        <button class="btn sm" id="reportBtn">📄 实验报告</button>
       </div>
       <div class="stat" id="poemStat" aria-live="polite"></div>
     </section>
@@ -344,7 +310,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
     <!-- 意象速查：点击填入主题 -->
     <section class="panel" id="imageryRef">
       <h2>⑤ 意象速查 · 一键取材</h2>
-      <p class="tip" style="margin:0 0 10px">「意象」是诗与画共用的接口。点一个意象即可填入上方主题框，再生成就会围绕它取景。（对应教材<b style="color:#c4a4f8">第 15/16 章 · 表示</b>）</p>
+      <p class="tip" style="margin:0 0 10px">「意象」是需求与诗句之间的接口。点一个意象即可填入上方主题框，再生成就会围绕它选句。（对应教材<b style="color:#c4a4f8">第 15/16 章 · 表示</b>）</p>
       <div class="img-ref-grid" id="imgRefGrid"></div>
       <details style="margin-top:12px">
         <summary>看看名诗句里藏着哪些意象</summary>
@@ -376,64 +342,11 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <p style="color:#bbf7d0">↔ 本实验室：离线模式逐句精确对齐格律＝形式层；AI 模式按主题条件生成＝意境层；下面的「⑪ 自检 → 改写」按形式/表达逐项核对并有针对性地修订，实现 BIPro 式的「生成→检查→改写」。</p>
           <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-30" target="_blank" rel="noopener">↗ 读讲义第 30 章</a>
         </div>
-        <div class="tb-item">
-          <div class="tb-h">第 24 章 · AI 绘画大师</div>
-          <p>风格迁移＝调整生成图，使它既接近内容图的内容表示、又接近风格图的风格表示，保留主体的同时改变外观。评估用 LPIPS↓（内容保留）、FID↓（风格接近）、ArtFID↓（综合），并提醒「自动指标不能替代对画面局部的观察」。</p>
-          <p style="color:#bbf7d0">↔ 本实验室：同一组意象（内容）× 20 种画风（风格参数）＝可计算的风格表示；点画风即时重绘，正是「内容不变、外观可变」。「⑪ 自检 → 改写」把内容保留、风格接近与局部观察分开核对。</p>
-          <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/#chapter-24" target="_blank" rel="noopener">↗ 读讲义第 24 章</a>
-        </div>
       </div>
       <div class="notice" style="margin-top:12px">讲义强调：这是<b style="color:#c4a4f8">可计算的风格表示</b>，并不等同于理解作品的审美意义；同理，格律达标也不等于写出好诗。完整对照见 <a href="homework3.html#principle" style="color:#2dd4bf">作业 3 · 工作原理</a>。</div>
     </section>
     </div>
 
-    <!-- 画作 -->
-    <div class="col-art">
-      <section class="panel">
-        <h2>④ AI 绘画大师 <span style="font-size:11px;color:var(--gold);font-weight:400" id="artStyleTag">— 水墨</span></h2>
-        <div class="canvas-box">
-          <canvas id="art" width="800" height="600"></canvas>
-          <img id="artAI" alt="AI 生成的画作" style="display:none;width:100%;height:100%;object-fit:cover">
-          <div class="art-empty" id="artEmpty">画作会随诗一起生成<br>（按诗句意象与所选画风绘制）</div>
-          <div class="art-empty" id="artLoading" style="display:none;background:rgba(10,10,15,.86);z-index:2">✦ AI 正在写诗作画…<br><small style="color:#6f6f90;margin-top:6px">首次调用约需 10–30 秒，请稍候</small></div>
-        </div>
-        <div class="chips" id="imgChips"></div>
-        <div class="row no-print" style="margin-top:10px">
-          <button class="btn sm" id="dlArt">下载画作 .png</button>
-          <button class="btn sm" id="reportBtn">📄 实验报告</button>
-        </div>
-      </section>
-
-      <!-- 画风图鉴：点击即时切换画风 -->
-      <section class="panel" id="styleRef">
-        <h2>⑦ 画风图鉴 · 一点即换</h2>
-        <p class="tip" style="margin:0 0 10px">同一首诗，换个画风就是另一幅笔墨。点任意画风即可切换上方画作并重绘（对应教材<b style="color:#c4a4f8">第 18 章 · 多模态表示</b>）。共 20 种 / 5 类。</p>
-        <div class="style-ref" id="styleRefBox"></div>
-      </section>
-
-      <!-- 一幅画的诞生：按真实 drawScene 顺序分解 -->
-      <section class="panel" id="paintSteps">
-        <h2>⑧ 一幅画是怎么画出来的</h2>
-        <p class="tip" style="margin:0 0 10px">离线画作由代码按固定顺序一层层画成（AI 模式则由文生图模型一步生成）。下面 6 步就是上方 Canvas 真实的绘制顺序——这正是「语义 → 视觉表示」的流水线。</p>
-        <ol class="step-list">
-          <li><span class="sn">1</span><div><b>铺底色</b><small>按画风色板与情感渲染整幅背景（水墨留白 / 赛博霓虹渐变…）</small></div></li>
-          <li><span class="sn">2</span><div><b>画远山</b><small>用随机折线生成层叠山峦，种子固定则形状固定</small></div></li>
-          <li><span class="sn">3</span><div><b>点云与水</b><small>椭圆弧线作云，波纹线作水，透明度叠加出层次</small></div></li>
-          <li><span class="sn">4</span><div><b>落意象</b><small>月/星/竹/柳/花/鸟/舟/亭/雪依次绘入——每个意象一套画法</small></div></li>
-          <li><span class="sn">5</span><div><b>题诗句</b><small>把诗的每行竖排写在右上角；英文诗则横排</small></div></li>
-          <li><span class="sn">6</span><div><b>钤印章</b><small>最后盖一枚红色「诗画」印，收束全图</small></div></li>
-        </ol>
-        <div class="notice" style="margin-top:12px">所有随机元素都由<b style="color:#c4a4f8">诗句哈希种子</b>驱动，所以「同诗 + 同画风 = 同一幅画」——这就是可复现（第 19 章）。</div>
-      </section>
-
-      <!-- 意象画法图谱：按 drawScene 真实分支 -->
-      <section class="panel" id="imgAtlas">
-        <h2>⑫ 意象画法图谱 · 12 种取景</h2>
-        <p class="tip" style="margin:0 0 10px">每个意象在代码里都有一套专属画法——下面是上方 Canvas 真实使用的 12 种。点意象即可填入主题、换个取景重新生成；切换画风后，同一套画法会改用该画风的笔法模式重画（对应教材<b style="color:#c4a4f8">第 18 章 · 多模态表示</b>）。</p>
-        <div class="img-atlas" id="imgAtlasGrid"></div>
-        <div class="notice" style="margin-top:12px">点开任一项能看它「怎么用线条/色块画出来」——这正是把诗里的一个词变成一像素画面的最小例子：语义 → 表示 → 像素。</div>
-      </section>
-    </div>
   </div>
 
   <!-- 盲评擂台：对照讲义第30章「读者盲评」 -->
@@ -453,7 +366,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
   <!-- 自检 → 改写：对照讲义第 30 / 24 章 -->
   <section class="panel" id="refine" style="max-width:1440px">
     <h2>⑪ 自检 → 改写 <span style="font-size:11px;color:var(--gold);font-weight:400">对照教材 · 第 30 / 24 章</span></h2>
-    <p class="tip" style="margin:0 0 12px">讲义把「写出来」和「写得好」分开看：诗要分别核对<b style="color:#c4a4f8">形式</b>（字数/句数/押韵）与<b style="color:#c4a4f8">表达</b>（意象连贯、情感、新意），画要分别看<b style="color:#c4a4f8">内容保留</b>与<b style="color:#c4a4f8">风格接近</b>，再说「自动指标不能替代对局部的观察」。BIPro（ACL 2025）的做法就是生成后按问题多轮修订。这里把这一步做出来——先自检、再按发现的问题改写，前后对照着看。</p>
+    <p class="tip" style="margin:0 0 12px">讲义把「写出来」和「写得好」分开看：诗要分别核对<b style="color:#c4a4f8">形式</b>（字数/句数/押韵）与<b style="color:#c4a4f8">表达</b>（意象连贯、情感、新意）。BIPro（ACL 2025）的做法就是生成后按问题多轮修订。这里把这一步做出来——先自检、再按发现的问题改写，前后对照着看。</p>
     <div class="refine-grid">
       <div class="refine-card">
         <h3>诗 · 形式与表达分开看 <small>讲义第 30 章</small></h3>
@@ -464,23 +377,14 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         <div class="refine-report" id="poemCheck" aria-live="polite"><span style="color:#6f6f90;font-size:12px">先生成一首诗，再点「自检」查看逐项核对结果。</span></div>
         <div class="refine-diff" id="poemDiff"></div>
       </div>
-      <div class="refine-card">
-        <h3>画 · 内容与风格分开看 <small>讲义第 24 章</small></h3>
-        <div class="row no-print" style="margin:0">
-          <button class="btn sm" id="checkArtBtn">🔍 自检这幅画</button>
-          <button class="btn sm" id="reviseArtBtn" style="border-color:rgba(232,192,125,.5);color:var(--gold)">✎ 按问题改写</button>
-        </div>
-        <div class="refine-report" id="artCheck" aria-live="polite"><span style="color:#6f6f90;font-size:12px">生成画作后点「自检」，分别核对内容与风格，并留一份人眼观察清单。</span></div>
-        <div class="refine-diff" id="artDiff"></div>
-      </div>
     </div>
-    <div class="notice" style="margin-top:12px">讲义特别提醒「自动指标不能替代对画面局部的观察」：本站没有跑 LPIPS / FID / ArtFID，而是列一份<b style="color:#c4a4f8">可逐项核对的清单＋人眼观察项</b>，把判断留给自己——自动分数只适合筛查具体问题。（<a href="homework3.html#principle" style="color:#2dd4bf">作业 3 · 工作原理</a>）</div>
+    <div class="notice" style="margin-top:12px">讲义特别提醒：自动指标只能筛查具体问题，判断仍要留给自己——本站因此不只给分数，而是列一份<b style="color:#c4a4f8">可逐项核对的清单</b>。（<a href="homework3.html#principle" style="color:#2dd4bf">作业 3 · 工作原理</a>）</div>
   </section>
 
   <!-- 我的诗集 -->
   <section class="panel" id="collection" style="max-width:1440px">
     <h2>⑨ 我的诗集 <span style="font-size:11px;color:var(--gold);font-weight:400" id="collCount">— 共 1 本 · 0 首</span></h2>
-    <p class="tip" style="margin:0 0 12px">可以创建<strong style="color:#e8e8f0">多本诗集</strong>（如「秋夜集」「现代诗选」），作品按当前选中的诗集收藏。数据保存在这台设备上（画作以缩略图留存，不占多少空间）。每本诗集可独立命名、写序言、导出打印或备份。</p>
+    <p class="tip" style="margin:0 0 12px">可以创建<strong style="color:#e8e8f0">多本诗集</strong>（如「秋夜集」「七言集」），作品按当前选中的诗集收藏。数据保存在这台设备上。每本诗集可独立命名、写序言、导出打印或备份。</p>
     <div class="coll-toolbar no-print">
       <label style="font-size:12px;color:var(--dim);display:flex;align-items:center;gap:6px">当前诗集
         <select id="collSel" style="min-width:160px;max-width:240px" aria-label="选择诗集"></select>
@@ -514,10 +418,9 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
   </div>
 
   <details class="no-print" style="max-width:1440px">
-    <summary>📖 诗体 40 种 / 画风 20 种 · 完整清单</summary>
-    <p><b style="color:#2dd4bf">诗体（8 类 40 种）</b>：中国古典诗（五绝/七绝/五律/七律/古体/乐府）；<b style="color:#e8c07d">宋词·小令</b>（如梦令/忆江南/相见欢/卜算子/采桑子/鹊桥仙/醉花阴）、<b style="color:#e8c07d">宋词·中调</b>（浣溪沙/蝶恋花/临江仙/虞美人/浪淘沙/一剪梅/青玉案/江城子）、<b style="color:#e8c07d">宋词·长调</b>（水调歌头/念奴娇/满江红/沁园春）、<b style="color:#e8c07d">元曲</b>（天净沙/山坡羊/水仙子）——共 22 种词牌曲牌，各按真实字数格律；中国现当代（自由诗/散文诗/朦胧诗/打油诗/中文俳句）、东亚短诗（俳句/短歌）、西方诗歌（英文自由诗/十四行诗/五行打油诗/英文俳句/颂歌）。</p>
-    <p><b style="color:#2dd4bf">画风（5 类 20 种）</b>：中国绘画（水墨/工笔/写意/青绿/白描）、东方绘画（浮世绘/禅意）、西方古典（油画/水彩/素描/版画）、西方现代（印象派/立体主义/极简/波普/抽象表现/超现实）、数字当代（赛博朋克/像素/扁平插画）。</p>
-    <p>用到的前两篇知识见 <a href="homework3.html#basis" style="color:#2dd4bf">作业 3 · 前两篇知识对照</a>。全部由原生 JS + Canvas 实现，断网可用。</p>
+    <summary>📖 诗体 28 种 · 完整清单</summary>
+    <p><b style="color:#2dd4bf">诗体（5 类 28 种）</b>：中国古典诗（五绝/七绝/五律/七律/古体/乐府）；<b style="color:#e8c07d">宋词·小令</b>（如梦令/忆江南/相见欢/卜算子/采桑子/鹊桥仙/醉花阴）、<b style="color:#e8c07d">宋词·中调</b>（浣溪沙/蝶恋花/临江仙/虞美人/浪淘沙/一剪梅/青玉案/江城子）、<b style="color:#e8c07d">宋词·长调</b>（水调歌头/念奴娇/满江红/沁园春）、<b style="color:#e8c07d">元曲</b>（天净沙/山坡羊/水仙子）——共 22 种词牌曲牌，各按真实字数格律。</p>
+    <p>用到的前两篇知识见 <a href="homework3.html#basis" style="color:#2dd4bf">作业 3 · 前两篇知识对照</a>。全部由原生 JS 实现，断网可用。</p>
   </details>
 </div>
 <button class="totop" id="totop" onclick="window.scrollTo({top:0,behavior:'smooth'})">Top</button>
@@ -540,20 +443,6 @@ var IMG={
  pavilion:{n:'亭',w:['孤亭','长亭','小亭','山亭','水亭']},
  star:{n:'星',w:['星河','疏星','繁星','寒星','晨星']}
 };
-var EN_W={
- moon:['the moon','a pale moon','the silver moon'],
- mountain:['the mountains','distant hills','the old peaks'],
- water:['the river','still water','the sea'],
- willow:['the willow','willow branches'],
- snow:['the snow','falling snow'],
- flower:['the blossoms','wild flowers'],
- bird:['a lone bird','the birds'],
- boat:['a small boat','the boat'],
- bamboo:['the bamboo','green bamboo'],
- cloud:['the clouds','white clouds'],
- pavilion:['the pavilion','an old pavilion'],
- star:['the stars','starlight']
-};
 var THEME={
  '春':['willow','flower','water','bird'],'夏':['bamboo','water','cloud','moon'],
  '秋':['moon','mountain','water','boat','bird'],'冬':['snow','mountain','flower','pavilion'],
@@ -575,7 +464,7 @@ var MOOD={
  you:{n:'幽',v:['隐','藏','深','度','锁','漏','凝'],a:['幽深','清寂','朦胧','苔痕','空翠'],t:['深处','不知','谁来','几重','依然'],tint:'rgba(70,130,110,.07)'}
 };
 
-/* ================= 诗体：8 类 40 种（其中词牌曲牌 22 种） ================= */
+/* ================= 诗体：5 类 28 种（其中词牌曲牌 22 种） ================= */
 var FORMS={
  wujue:{n:'五言绝句',g:'中国古典诗',lang:'zh',kind:'line',lens:[5,5,5,5]},
  qijue:{n:'七言绝句',g:'中国古典诗',lang:'zh',kind:'line',lens:[7,7,7,7]},
@@ -604,47 +493,9 @@ var FORMS={
  qinyuanchun:{n:'沁园春',g:'宋词 · 长调',lang:'zh',kind:'line',lens:[4,4,4,4,4,4,7,4,4,4,4,4,7,4,4,4,4,4,7,4,4,4,4,4,7]},
  tianjingsha:{n:'天净沙',g:'元曲',lang:'zh',kind:'line',lens:[6,6,6,4,6]},
  shanpoyang:{n:'山坡羊',g:'元曲',lang:'zh',kind:'line',lens:[4,4,7,4,4,7,3,3,7,4,4,7]},
- shuixianzi:{n:'水仙子',g:'元曲',lang:'zh',kind:'line',lens:[7,7,7,6,7,6,6,4]},
- modern:{n:'现代诗 · 自由体',g:'中国现当代诗',lang:'zh',kind:'tpl'},
- prose:{n:'散文诗',g:'中国现当代诗',lang:'zh',kind:'prose'},
- menglong:{n:'朦胧诗',g:'中国现当代诗',lang:'zh',kind:'menglong'},
- daoyou:{n:'打油诗',g:'中国现当代诗',lang:'zh',kind:'line',lens:[7,7,7,7]},
- zhhaiku:{n:'中文俳句',g:'中国现当代诗',lang:'zh',kind:'line',lens:[5,7,5]},
- haiku:{n:'俳句（日文 5-7-5）',g:'东亚短诗',lang:'zh',kind:'line',lens:[5,7,5]},
- tanka:{n:'短歌（5-7-5-7-7）',g:'东亚短诗',lang:'zh',kind:'line',lens:[5,7,5,7,7]},
- enfree:{n:'英文自由诗',g:'西方诗歌',lang:'en',kind:'en',lines:6},
- ensonnet:{n:'英文十四行诗',g:'西方诗歌',lang:'en',kind:'en',lines:14},
- limerick:{n:'五行打油诗（Limerick）',g:'西方诗歌',lang:'en',kind:'limerick',lines:5},
- enhaiku:{n:'英文俳句',g:'西方诗歌',lang:'en',kind:'en',lines:3},
- ode:{n:'颂歌（Ode）',g:'西方诗歌',lang:'en',kind:'en',lines:8}
+ shuixianzi:{n:'水仙子',g:'元曲',lang:'zh',kind:'line',lens:[7,7,7,6,7,6,6,4]}
 };
-var FORM_ORDER=['中国古典诗','宋词 · 小令','宋词 · 中调','宋词 · 长调','元曲','中国现当代诗','东亚短诗','西方诗歌'];
-
-/* ================= 画风：5 类 20 种（参数化） ================= */
-/* mode: ink水墨 / flat平涂 / line线描 / wash晕染 / dab点彩 / geo几何 / neon霓虹 / pixel像素 */
-var STYLES={
- ink:{n:'水墨',g:'中国绘画',mode:'ink',bg:['#f4ecd8','#e5dbc0'],pal:['#3a3530','#6b6458'],ink:'#2a2622',lw:1.6,outline:0},
- gongbi:{n:'工笔重彩',g:'中国绘画',mode:'flat',bg:['#f7f0e2','#efe2c8'],pal:['#2e6b6b','#8a3b46','#c08a3e','#3b6ea8'],ink:'#5a3b2a',lw:1,outline:1},
- xieyi:{n:'写意',g:'中国绘画',mode:'wash',bg:['#f2ead4','#e2d5b6'],pal:['#2a2622','#4a443c'],ink:'#22201c',lw:2.2,outline:0},
- qinglv:{n:'青绿山水',g:'中国绘画',mode:'flat',bg:['#eef0e0','#dce6d2'],pal:['#2f7d6e','#4a9a8c','#8fae6b','#3b6ea8'],ink:'#26463f',lw:1,outline:1},
- baimiao:{n:'白描',g:'中国绘画',mode:'line',bg:['#f8f4e8','#efe9d8'],pal:['#3a3530'],ink:'#2a2622',lw:1.4,outline:0},
- ukiyoe:{n:'浮世绘',g:'东方绘画',mode:'flat',bg:['#f2e6cf','#e6d2b0'],pal:['#2b4a6b','#b5453f','#d9a441','#3a6b5a'],ink:'#2a2320',lw:1.2,outline:1},
- zen:{n:'禅意极简',g:'东方绘画',mode:'line',bg:['#f3f1e8','#e6e4d8'],pal:['#3a3a34'],ink:'#33332e',lw:1,outline:0},
- oil:{n:'古典油画',g:'西方古典',mode:'flat',bg:['#2a2118','#151012'],pal:['#8a5a2b','#7a3b2e','#3b5a7a','#b89a5a'],ink:'#1a120c',lw:1.4,outline:1},
- watercolor:{n:'水彩',g:'西方古典',mode:'wash',bg:['#f6f4ee','#e8eef0'],pal:['#5a86b8','#c76f7a','#7aa88b','#d0a45e'],ink:'#3a4a5a',lw:1,outline:0},
- sketch:{n:'素描',g:'西方古典',mode:'line',bg:['#efece6','#ddd9d0'],pal:['#4a4640'],ink:'#3a3630',lw:1,outline:0},
- engraving:{n:'铜版刻画',g:'西方古典',mode:'line',bg:['#eee9dc','#dcd5c4'],pal:['#22201e'],ink:'#1c1a18',lw:0.8,outline:0,hatch:1},
- impression:{n:'印象派',g:'西方现代',mode:'dab',bg:['#e8eef2','#cddde8'],pal:['#6a9fd0','#e0a86a','#8fbf8a','#c97a8a'],ink:'#3a4a5a',lw:1,outline:0},
- cubism:{n:'立体主义',g:'西方现代',mode:'geo',bg:['#e6e2d6','#cfc8b6'],pal:['#8a4a3a','#3a6b8a','#c19a4a','#5a7a5a'],ink:'#2a2622',lw:1.2,outline:1},
- minimal:{n:'极简主义',g:'西方现代',mode:'geo',bg:['#f2f1ee','#e4e2dc'],pal:['#2a2a2a','#b0aaa0'],ink:'#222',lw:1,outline:0},
- pop:{n:'波普艺术',g:'西方现代',mode:'flat',bg:['#f7e86a','#ef6fa8'],pal:['#1a1a1a','#e63b3b','#2ba8e0','#f7f05a'],ink:'#111',lw:1.4,outline:1},
- abstract:{n:'抽象表现',g:'西方现代',mode:'wash',bg:['#201a2e','#0e0c18'],pal:['#a855f7','#3b82f6','#2dd4bf','#e8c07d'],ink:'#e8e8f0',lw:2.4,outline:0},
- surreal:{n:'超现实',g:'西方现代',mode:'wash',bg:['#dfe6ef','#b9c9e0'],pal:['#6b5aa8','#c96f9a','#4a9aa8','#e0b45a'],ink:'#2a2440',lw:1.2,outline:0},
- cyber:{n:'赛博朋克',g:'数字当代',mode:'neon',bg:['#160b2e','#08131f'],pal:['#ff2e88','#00e5ff','#a855f7','#e8c07d'],ink:'#00e5ff',lw:1.8,outline:0},
- pixel:{n:'像素艺术',g:'数字当代',mode:'pixel',bg:['#101426','#080b16'],pal:['#7ad1ff','#ff7ab8','#b58aff','#ffe08a'],ink:'#0a0a12',lw:1,outline:0},
- flat:{n:'扁平插画',g:'数字当代',mode:'flat',bg:['#e8f2f5','#cfe3ea'],pal:['#3a7d8a','#e0895a','#6ba8a0','#4a6fa8'],ink:'#264a55',lw:1,outline:0}
-};
-var STYLE_ORDER=['中国绘画','东方绘画','西方古典','西方现代','数字当代'];
+var FORM_ORDER=['中国古典诗','宋词 · 小令','宋词 · 中调','宋词 · 长调','元曲'];
 var LAYOUTS={horiz:'横排',vert:'竖排'};
 
 /* ================= 工具 ================= */
@@ -697,170 +548,25 @@ function genLine(n,mood,keys,dou,r){
   if(s.length>n)s=s.slice(0,n);
   return s;
 }
-/* 中文模板诗 */
-var MODERN_TPL=[
- function(a,b,c,v,adj){return a+'把夜色折成两半\n一半落在'+b+'上\n一半，我替你收着。';},
- function(a,b,c,v,adj){return '我反复梦见'+a+'\n醒来时，'+b+'\n正缓慢地'+v+'。';},
- function(a,b,c,v,adj){return a+'不说话\n'+b+'也不说话\n只有风替我们'+v+'。';}
-];
-var PROSE_TPL=[
- function(a,b,c,v,adj){return '黄昏的时候，'+a+'开始变得'+adj+'。它并不急着说什么，只是把影子一点点铺到'+b+'上，像一句写了很久、却始终没有寄出的信。';},
- function(a,b,c,v,adj){return '我沿着'+b+'走了很久，'+a+'一直跟在身后。风把'+c+'吹得很轻，轻到几乎听不见——可正是这点声音，让整座夜都有了呼吸。';}
-];
-var MENGLONG_TPL=[
- function(a,b,c,v,adj){return a+'是'+adj+'的耳朵\n贴着'+b+'的背面\n听一枚'+c+'，缓慢地'+v+'。';},
- function(a,b,c,v,adj){return '谁把'+a+'折进'+b+'\n折痕里藏着'+c+'\n和一个不肯醒来的'+v+'。';}
-];
-/* 英文诗 */
-var EN_LINES=[
- 'The {A} rises slowly over {B}.','I watched the {A} drift into {B},',
- 'and all the {A} was quiet.','A {A} waits where {B} ends,',
- 'between the {A} and the {B}.','The {A} remembers what {B} forgets,',
- 'and falls like {A} upon {B}.','No voice, only {A} and {B},',
- 'the {A} keeps the shape of {B}.'
-];
-var EN_COUPLET=['And still the {A} shines on,','the {B} and I, alone.'];
-var LIMERICK=[
- 'There once was {A} by {B},',
- 'So {A} it startled {B};',
- 'It danced and it sang,',
- 'Till the valley rang,',
- 'And {A} slipped quietly home.'
-];
-function enWord(keys,r){var k=pick(keys,r);return pick(EN_W[k],r);}
-function fill(tpl,keys,r){
-  return tpl.replace(/(\b(?:The|A|the|a|an|An)\s+)?\{([AB])\}/g,function(m,art,slot){
-    var w=enWord(keys,r); if(art)w=w.replace(/^(the|a|an)\s+/i,''); return (art||'')+w;
-  });
-}
-
-/* ================= 生成诗 ================= */
+/* ================= 生成诗（唐诗写法规则生成，作语料重装失败时的兜底） ================= */
 function makePoem(formId,mood,keys,seed){
   var F=FORMS[formId],r=rng(seed),lines=[],title;
-  if(F.kind==='line'){
-    for(var i=0;i<F.lens.length;i++)lines.push(genLine(F.lens[i],mood,keys,(i===2||i===4)&&F.lens.length>=6,r));
-    title=N2(keys,r)+'·'+N2(keys,r);
-  }else if(F.kind==='tpl'||F.kind==='prose'||F.kind==='menglong'){
-    var TP=F.kind==='tpl'?MODERN_TPL:(F.kind==='prose'?PROSE_TPL:MENGLONG_TPL),tpl=pick(TP,r),M=MOOD[mood];
-    lines=tpl(N2(keys,r),N2(keys,r),N2(keys,r),pick(M.v,r),pick(M.a,r)).split('\n');
-    title=N2(keys,r)+'的独白';
-  }else if(F.kind==='limerick'){
-    lines=LIMERICK.map(function(t){return fill(t,keys,r);}); title='A Tale of '+fill('{A}',keys,r).replace(/^(the|a|an)\s+/i,'');
-  }else{ /* en */
-    for(var j=0;j<F.lines;j++)lines.push(fill(pick(EN_LINES,r),keys,r));
-    if(formId==='ensonnet'){lines.push(fill(EN_COUPLET[0],keys,r));lines.push(fill(EN_COUPLET[1],keys,r));}
-    title=fill('{A} and {B}',keys,r).replace(/^(the|a|an)\s+/i,'');
-  }
-  return {title:title,lines:lines,form:formId,formName:F.n,tag:F.g,lang:F.lang,layout:F.lang==='en'?'horiz':state.layout,mood:mood,moodName:MOOD[mood].n};
-}
-
-/* ================= 绘制：统一原语 + 画风模式 ================= */
-function bbox(pts){var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;pts.forEach(function(p){x0=Math.min(x0,p[0]);y0=Math.min(y0,p[1]);x1=Math.max(x1,p[0]);y1=Math.max(y1,p[1]);});return {x0:x0,y0:y0,x1:x1,y1:y1};}
-function path(ctx,pts,close){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);if(close)ctx.closePath();}
-/* 按画风模式渲染一个形状 */
-function render(ctx,pts,S,r,opt){
-  opt=opt||{};var m=S.mode,color=opt.color||S.pal[0],bb=bbox(pts);
-  if(m==='neon'){
-    ctx.save();ctx.shadowColor=color;ctx.shadowBlur=14;ctx.strokeStyle=color;ctx.lineWidth=opt.lw||S.lw;
-    ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(var i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);
-    if(!opt.open)ctx.closePath();ctx.stroke();ctx.stroke();ctx.restore();return;
-  }
-  if(m==='line'){
-    ctx.strokeStyle=color;ctx.lineWidth=opt.lw||S.lw;ctx.setLineDash(hatchOn(S)?[4,4]:[]);
-    path(ctx,pts,!opt.open);ctx.stroke();ctx.setLineDash([]);
-    if(S.hatch){ctx.save();path(ctx,pts,true);ctx.clip();ctx.strokeStyle=color;ctx.lineWidth=.6;for(var h=bb.x0;h<bb.x1;h+=7){ctx.beginPath();ctx.moveTo(h,bb.y0);ctx.lineTo(h+ (bb.y1-bb.y0),bb.y1);ctx.stroke();}ctx.restore();}
-    return;
-  }
-  if(m==='dab'){
-    var n=opt.dab||46;for(var d=0;d<n;d++){var px=bb.x0+r()*(bb.x1-bb.x0),py=bb.y0+r()*(bb.y1-bb.y0);ctx.fillStyle=S.pal[Math.floor(r()*S.pal.length)];ctx.globalAlpha=.5+r()*.4;ctx.beginPath();ctx.arc(px,py,2+r()*4,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;return;
-  }
-  if(m==='pixel'){
-    var st=14;for(var px2=bb.x0;px2<bb.x1;px2+=st)for(var py2=bb.y0;py2<bb.y1;py2+=st){if(r()>.35){ctx.fillStyle=S.pal[Math.floor(r()*S.pal.length)];ctx.fillRect(px2,py2,st-1,st-1);}}return;
-  }
-  if(m==='geo'||m==='flat'||m==='wash'||m==='ink'){
-    if(m==='ink'){
-      var g=ctx.createLinearGradient(0,bb.y0,0,bb.y1);g.addColorStop(0,color);g.addColorStop(1,'rgba(0,0,0,0.02)');ctx.fillStyle=g;
-    }else if(m==='wash'){ctx.fillStyle=color;ctx.globalAlpha=opt.alpha||.32;}
-    else ctx.fillStyle=color;
-    path(ctx,pts,true);ctx.fill();
-    if(m==='wash')ctx.globalAlpha=1;
-    if(S.outline){ctx.strokeStyle=S.ink;ctx.lineWidth=Math.max(.6,S.lw*.5);ctx.stroke();}
-    return;
-  }
-}
-function hatchOn(S){return false;}
-function bg(ctx,W,H,S,mood,r){
-  var g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,S.bg[0]);g.addColorStop(1,S.bg[1]);ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  ctx.fillStyle=MOOD[mood].tint;ctx.fillRect(0,0,W,H);
-  if(S.mode==='pixel'){ctx.strokeStyle='rgba(255,255,255,.05)';ctx.lineWidth=1;for(var x=0;x<W;x+=16){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}for(var y=0;y<H;y+=16){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}}
-  else{ctx.save();for(var i=0;i<500;i++){ctx.fillStyle='rgba(120,110,90,'+(r()*0.03)+')';ctx.fillRect(r()*W,r()*H,1.5,1.5);}ctx.restore();}
-}
-function drawScene(ctx,W,H,keys,mood,seed,styleId){
-  var S=STYLES[styleId]||STYLES.ink,r=rng(seed),has=function(k){return keys.indexOf(k)>=0;};
-  ctx.clearRect(0,0,W,H);bg(ctx,W,H,S,mood,r);
-  if(has('mountain')||keys.length<3){
-    for(var L=0;L<3;L++){var baseY=H*(0.42+L*0.06),pts=[],x=-20;pts.push([x,baseY+60]);while(x<W+20){var nx=x+70+r()*50,peak=baseY-(35+r()*55);pts.push([(x+nx)/2,peak]);pts.push([nx,baseY+(r()-.5)*20]);x=nx;}pts.push([W+20,H]);pts.push([-20,H]);render(ctx,pts,S,r,{color:S.pal[(L+0)%S.pal.length],alpha:.30+L*.08,dab:60});}
-  }
-  if(has('cloud')){for(var c=0;c<4;c++){var cx=r()*W,cy=70+r()*120;var pts2=[];for(var a=0;a<Math.PI*2;a+=.5)pts2.push([cx+Math.cos(a)*(70+r()*40),cy+Math.sin(a)*12]);render(ctx,pts2,S,r,{color:S.pal[(c+1)%S.pal.length],alpha:.18,dab:26,open:false});}}
-  if(has('water')){for(var w=0;w<10;w++){var yy=H*0.7+w*13,x0=r()*W*0.35,ln=[];for(var t=0;t<=1;t+=.2)ln.push([x0+t*(120+r()*180),yy+Math.sin(t*6+w)*4]);render(ctx,ln,S,r,{color:S.pal[(w+1)%S.pal.length],alpha:.4,dab:16,open:true,lw:1.2});}}
-  if(has('moon')){var mx=W*0.78,my=H*0.2,mr=42,mp=[];for(var a2=0;a2<Math.PI*2;a2+=.3)mp.push([mx+Math.cos(a2)*mr,my+Math.sin(a2)*mr]);
-    if(S.mode==='neon'||S.mode==='line'){render(ctx,mp,S,r,{color:S.pal[3]||S.pal[0],open:false,lw:2});}
-    else{var gg=ctx.createRadialGradient(mx,my,4,mx,my,mr*2.2);gg.addColorStop(0,S.pal[3]||'#fff3cf');gg.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(mx,my,mr*2.2,0,Math.PI*2);ctx.fill();ctx.fillStyle=S.pal[3]||'#fff3cf';ctx.beginPath();ctx.arc(mx,my,mr,0,Math.PI*2);ctx.fill();}
-  }
-  if(has('star')){ctx.fillStyle=S.pal[3]||S.pal[0];for(var s=0;s<28;s++){if(S.mode==='pixel')ctx.fillRect(r()*W,r()*H*.5,4,4);else{ctx.beginPath();ctx.arc(r()*W,r()*H*.5,r()*2+.6,0,Math.PI*2);ctx.fill();}}}
-  if(has('bamboo')){for(var b=0;b<3;b++){var bx=W*.1+b*26,top=H*(.3+r()*.1),bl=[[bx,H*.82],[bx+6,H*.55],[bx+3,top]];render(ctx,bl,S,r,{color:S.pal[(b+1)%S.pal.length],open:true,lw:2,dab:14});for(var lf=0;lf<5;lf++){var ly=top+lf*40,lxx=bx+4;render(ctx,[[lxx,ly],[lxx+28,ly-12],[lxx+50*(r()>.5?1:-1),ly-20]],S,r,{color:S.pal[(b+2)%S.pal.length],open:true,lw:1.2,dab:8});}}}
-  if(has('willow')){var wx=W*.15,wp=[[wx,H*.86],[wx-10,H*.55],[wx+20,H*.34]];render(ctx,wp,S,r,{color:S.pal[1]||S.pal[0],open:true,lw:2.4,dab:20});for(var br=0;br<10;br++){var bx2=wx+10+br*2,by=H*.36+br*10;render(ctx,[[bx2,by],[bx2+18,by+30],[bx2+6,by+75]],S,r,{color:S.pal[1]||S.pal[0],open:true,lw:1,dab:10});}}
-  if(has('flower')){var fx=W*.13,fy=H*.6;render(ctx,[[fx,H*.9],[fx+40,fy],[fx+120,fy-30]],S,r,{color:S.pal[2]||S.pal[0],open:true,lw:2,dab:20});for(var f=0;f<14;f++){var px=fx+18+r()*110,py=fy-8+(r()-.5)*70;render(ctx,[[px-4,py],[px+4,py],[px,py+4],[px,py-4]],S,r,{color:S.pal[1]||S.pal[0],dab:6});}}
-  if(has('bird')){for(var bd=0;bd<5;bd++){var x=W*(.4+r()*.45),y=H*(.16+r()*.2),sz=9;render(ctx,[[x-sz,y],[x,y-sz*.7],[x+sz,y],[x,y-sz*.2]],S,r,{color:S.pal[0],open:true,lw:1.6,dab:8});}}
-  if(has('boat')){var bx3=W*(.42+r()*.2),by2=H*.78;render(ctx,[[bx3-32,by2],[bx3+32,by2],[bx3+18,by2+14],[bx3-18,by2+14]],S,r,{color:S.pal[2]||S.pal[0]});render(ctx,[[bx3,by2],[bx3+2,by2-30]],S,r,{color:S.pal[0],open:true,lw:2,dab:6});}
-  if(has('pavilion')){var tx=W*.8,ty=H*.6;render(ctx,[[tx-26,ty],[tx,ty-16],[tx+26,ty]],S,r,{color:S.pal[0],open:true,lw:2,dab:12});render(ctx,[[tx-18,ty],[tx-18,ty+34],[tx+18,ty+34],[tx+18,ty]],S,r,{color:S.pal[0],open:true,lw:1.6,dab:10});}
-  if(has('snow')){ctx.fillStyle=S.pal[3]||'#fff';for(var sn=0;sn<60;sn++){if(S.mode==='pixel')ctx.fillRect(r()*W,r()*H*.85,3,3);else{ctx.beginPath();ctx.arc(r()*W,r()*H*.85,1+r()*2,0,Math.PI*2);ctx.fill();}}}
-  /* 题款 */
-  var light=(S.mode==='neon'||S.mode==='pixel'||S.bg[0].charAt(0)==='#');
-  var inkColor=(S.mode==='neon')?'#00e5ff':((S.mode==='flat'&&S.bg[0].charAt(0)==='#'&&parseInt(S.bg[0].slice(1,3),16)<80)?'#fff':(S.mode==='ink'||S.mode==='line'||S.mode==='flat'&&S.g==='中国绘画'?'rgba(40,34,24,.82)':'rgba(40,34,24,.72)'));
-  ctx.fillStyle=inkColor;ctx.textAlign='center';ctx.textBaseline='top';
-  var lines=(state.poem?state.poem.lines:[]).slice(0,3),en=(state.poem&&state.poem.lang==='en');
-  if(en){ctx.font='13px Georgia,serif';for(var i=0;i<lines.length;i++)ctx.fillText(lines[i].slice(0,24),W-130,26+i*20);}
-  else{ctx.font='17px KaiTi,STKaiti,serif';var tx2=W-40;for(var j=0;j<lines.length;j++){for(var k=0;k<lines[j].length;k++)ctx.fillText(lines[j][k],tx2,40+k*22);tx2-=24;}}
-  ctx.fillStyle='rgba(170,45,40,.85)';ctx.fillRect(W-56,H-88,38,38);ctx.fillStyle='#fff';ctx.font='bold 14px KaiTi,serif';ctx.textAlign='left';ctx.fillText('诗',W-46,H-82);ctx.fillText('画',W-26,H-60);
+  for(var i=0;i<F.lens.length;i++)lines.push(genLine(F.lens[i],mood,keys,(i===2||i===4)&&F.lens.length>=6,r));
+  title=N2(keys,r)+'·'+N2(keys,r);
+  return {title:title,lines:lines,form:formId,formName:F.n,tag:F.g,lang:'zh',layout:state.layout,mood:mood,moodName:MOOD[mood].n};
 }
 
 /* ================= 状态与交互 ================= */
 /* ===== AI 实时模式：OpenAI 兼容 API（公开 Key，仅用于课程作业演示） ===== */
 var AI={base:'https://router.aionclaw.com/v1',
         key:'sk-0mmAeoDoPrtcSRHR8dBkb7U5KFSXuBrItexIfBMa6SkTbqLA',
-        chat:'deepseek-flash', image:'doubao-seedream-4-5-251128'};
-var STYLE_PROMPT={
- ink:'中国传统水墨画，宣纸质感，浓淡墨色晕染，大量留白，题款印章，意境悠远',
- gongbi:'中国工笔重彩画，细腻线条，矿物颜料设色，工整华丽',
- xieyi:'中国写意画，泼墨简笔，笔触奔放，气韵生动',
- qinglv:'中国青绿山水画，石青石绿设色，金碧辉煌，层峦叠嶂',
- baimiao:'中国白描，纯墨线勾勒，不设色，线条流畅',
- ukiyoe:'日本浮世绘风格，木版画，平涂色块，粗黑轮廓线',
- zen:'禅意极简画，大量留白，寥寥数笔，宁静空寂',
- oil:'西方古典油画，厚涂笔触，深沉色调，明暗对比',
- watercolor:'水彩画，透明晕染，清新淡雅，水痕交融',
- sketch:'铅笔素描，灰阶明暗，细腻排线',
- engraving:'铜版刻画，黑白线刻，精细交叉排线',
- impression:'印象派，短促笔触与色点，光影斑驳，户外写生',
- cubism:'立体主义，几何块面，多视角拼接，抽象重构',
- minimal:'极简主义，纯色块，几何构图，克制留白',
- pop:'波普艺术，高饱和撞色，平涂，流行视觉',
- abstract:'抽象表现主义，泼洒色块，自由笔触，强烈情感',
- surreal:'超现实主义，梦境般奇幻场景，柔和诡谲色调',
- cyber:'赛博朋克，霓虹灯光，紫青配色，未来都市夜景',
- pixel:'像素艺术，8-bit 方块构图，复古电子游戏风',
- flat:'扁平插画，简洁几何形状，明快配色，现代设计感'
-};
-var state={poem:null,keys:[],seed:0,autoSubject:'',themeChars:null,wantMain:4,wantCore:[],form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
+        chat:'deepseek-flash'};
+var state={poem:null,keys:[],seed:0,autoSubject:'',themeChars:null,wantMain:4,wantCore:[],form:'wujue',mood:'jing',layout:'horiz',nonce:0,mode:'offline',checks:{poem:null}};
 function $(id){return document.getElementById(id);}
 function buildSelects(){
   var fs=$('formSel');
   FORM_ORDER.forEach(function(g){var og=document.createElement('optgroup');og.label=g;Object.keys(FORMS).forEach(function(id){if(FORMS[id].g!==g)return;var o=document.createElement('option');o.value=id;o.textContent=FORMS[id].n;og.appendChild(o);});fs.appendChild(og);});
   $('formCount').textContent='('+Object.keys(FORMS).length+' 种)';
-  var ss=$('styleSel');
-  STYLE_ORDER.forEach(function(g){var og=document.createElement('optgroup');og.label=g;Object.keys(STYLES).forEach(function(id){if(STYLES[id].g!==g)return;var o=document.createElement('option');o.value=id;o.textContent=STYLES[id].n;og.appendChild(o);});ss.appendChild(og);});
-  $('styleCount').textContent='('+Object.keys(STYLES).length+' 种)';
 }
 function segBind(id,cb){$(id).addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var bs=$(id).querySelectorAll('button');for(var i=0;i<bs.length;i++)bs[i].classList.remove('on');b.classList.add('on');cb(b.getAttribute('data-v'));});}
 segBind('moodSeg',function(v){state.mood=v;});
@@ -869,22 +575,16 @@ segBind('modeSeg',function(v){
   state.mode=v;
   $('modeHint').textContent=v==='ai'?'AI 实时 · 每次不同':'离线 · 可复现';
   $('modeTip').textContent=v==='ai'
-    ?'AI 模式：调用大语言模型按诗体写诗、再据诗句与画风由模型作画，每次结果都不同（需联网）。'
+    ?'AI 模式：调用大语言模型按诗体与主题写诗，每次结果都不同（需联网）。'
     :'离线模式：从古诗词网 18.9 万首真实诗句中按意象、情感与格律排列组合重装，每次生成都不同、断网可用。';
-  $('genBtn').textContent=v==='ai'?'✦ AI 写诗作画':'✦ 生成诗与画';
+  $('genBtn').textContent=v==='ai'?'✦ AI 写诗':'✦ 生成诗';
   $('regenBtn').textContent=v==='ai'?'↻ AI 再写一首':'↻ 换个写法重生成';
-  // 切换模式时恢复对应画布
-  if(v==='offline'){$('artAI').style.display='none';$('art').style.display='block';if(state.seed)redraw();}
-  else{$('art').style.display='none';if(state.aiImage)$('artAI').style.display='block';}
 });
 $('formSel').addEventListener('change',function(){state.form=this.value;if(typeof renderMeterRef==='function')renderMeterRef();});
-$('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem){var gid=(GROUPS_CN.indexOf(STYLES[state.style].g)>=0)?pickGallery(state.keys):null;state.gallery=gid;if($('artGallery')){if(gid){$('artGallery').src='gallery/'+gid+'.jpg';$('artGallery').style.display='block';$('art').style.display='none';}else{$('artGallery').style.display='none';$('art').style.display='block';redraw();}}else redraw();}if(typeof renderStyleRef==='function')renderStyleRef();});
 function renderPoem(p){
-  var box=$('poemBox'),dark=(S_isDark(state.style));box.className='poem-box '+(dark?'poem-canvas':'poem-paper');
+  var box=$('poemBox');box.className='poem-box poem-paper';
   $('poemFormTag').textContent='— '+p.formName;
-  if(p.lang==='en'){
-    box.innerHTML='<div class="poem-en"><span class="pt">'+p.title+'</span>'+p.lines.map(function(l){return '<div>'+l+'</div>';}).join('')+'</div>';
-  }else if(p.layout==='vert'){
+  if(p.layout==='vert'){
     // 列数越多字号越小，保证每句独立成列、横向铺开不挤在一处
     var n=p.lines.length+1,fs=n>18?12:(n>12?14:(n>8?16:18));
     box.innerHTML='<div class="poem-vert" style="font-size:'+fs+'px"><div class="pl pt">'+p.title+'</div>'+p.lines.map(function(l){return '<div class="pl">'+l+'</div>';}).join('')+'</div>';
@@ -892,8 +592,6 @@ function renderPoem(p){
     box.innerHTML='<div class="poem-hlines"><span class="pt">'+p.title+'</span>'+p.lines.map(function(l){return '<span class="ln">'+l+'</span>';}).join('')+'</div>';
   }
 }
-function S_isDark(id){var s=STYLES[id],c=s.bg[0].slice(1,3);return parseInt(c,16)<90;}
-function redraw(){drawScene($('art').getContext('2d'),800,600,state.keys,state.mood,state.seed,state.style);}
 /* ENH:CORPUS-BEGIN */
 /* ===== 精品诗库：原创作品，按诗体+主题+情感打分选诗 ===== */
 var CORPUS={"wujue": [["秋江", ["月落千山静", "江空一雁过", "扁舟人不语", "独钓满船秋"], ["moon", "mountain", "water", "bird", "boat"], "jing"], ["雪夜", ["寒雪封山路", "孤亭覆白襟", "无人来问渡", "唯有水声深"], ["snow", "pavilion", "mountain", "water"], "bei"]], "qijue": [["春水", ["一江春水绕青山", "柳外孤亭半掩关", "燕子不归花落尽", "斜风细雨到人间"], ["water", "mountain", "willow", "pavilion", "bird", "flower"], "jing"], ["望月", ["皓月当空照古今", "清光万里一何深", "何人共此千山夜", "独倚扁舟听水音"], ["moon", "mountain", "boat", "water"], "bei"]], "wulv": [["秋山", ["远岫浮云外", "清江落照间", "疏林藏古寺", "寒水带苍山", "雁度长空静", "舟归野渡闲", "何当携浊酒", "坐看月如环"], ["mountain", "cloud", "water", "bird", "boat", "moon"], "jing"], ["客思", ["孤舟依古岸", "寒雨入江流", "野径无人迹", "空山有暮愁", "灯前书万里", "梦里水千山", "不知今夜月", "曾照几人还"], ["boat", "water", "mountain", "moon"], "bei"]], "qilv": [["江晚", ["落日衔山江水长", "孤舟系在白云旁", "千重远岫浮烟色", "十里平芜带夕阳", "雁字横空书未就", "渔歌临水意难忘", "谁家亭上一杯酒", "与此清光共举觞"], ["mountain", "water", "boat", "cloud", "bird", "pavilion"], "zhuang"], ["秋思", ["西风一夜过江皋", "吹落梧桐满旧桥", "明月有情来照水", "孤舟无语自随潮", "瓶中残菊香犹在", "灯下寒蛩声渐遥", "欲寄相思何处是", "青山隐隐路迢迢"], ["water", "moon", "boat", "flower", "mountain"], "bei"]], "gushi": [["山行", ["朝辞白云里", "暮宿青溪边", "山路何盘盘", "流水何涓涓", "松风拂我衣", "山月照我眠"], ["cloud", "water", "mountain", "moon", "bamboo"], "you"], ["江上", ["孤舟行万里", "江水日夜深", "两岸猿声里", "千峰暮色沉", "思君不可见", "江水空悠悠"], ["boat", "water", "mountain", "moon"], "bei"]], "yuefu": [["长相思", ["江南秋水绿如天", "江北雪如盐", "相思遥在白云边", "乃在白云边", "白云飘渺千万里", "一日一回来"], ["water", "snow", "cloud", "mountain"], "bei"], ["采莲曲", ["江南采莲水满塘", "莲叶何田田", "鱼戏莲叶东西间", "日落水如烟", "舟轻人语笑声甜", "明月照江船"], ["water", "flower", "boat", "moon"], "xi"]], "rumengling": [["春晓", ["昨夜风吹疏雨", "晓来花落无数", "倚窗问东风", "却道春归何处", "留住", "留住", "且与莺花同住"], ["flower", "bird", "willow"], "bei"], ["秋夜", ["月照疏桐庭院", "雁声飞过长天", "孤灯照不眠", "问君何日归还", "归去", "归去", "一夜西风又起"], ["moon", "bird", "pavilion"], "bei"]], "yijiangnan": [["江南", ["江南春色好", "柳外莺啼风雨歇", "一江烟水绿如蓝", "长忆旧江南", "梦回长在画桥西"], ["water", "flower", "willow"], "xi"], ["秋夜", ["秋夜月如练", "千里关山同一色", "数声寒雁过疏林", "何处不关心", "一江秋水向东流"], ["moon", "water", "mountain", "bird"], "bei"]], "huanxisha": [["春游", ["柳外清风拂面来", "一江春水绕楼台", "孤帆远影几时回", "不知何处雁归来", "又是一年春色好", "月明独立小桥头"], ["water", "bird", "flower", "moon"], "jing"], ["江村", ["漠漠轻阴落杏花", "村南村北有人家", "一湾流水绕桑麻", "日暮途长途更远", "清风何处不相逢", "月明归去踏平沙"], ["flower", "water", "moon"], "xi"]], "tianjingsha": [["秋思", ["疏林暮色寒鸦", "短亭烟柳人家", "远山残照孤舟", "秋声四起", "相思人在天涯"], ["bird", "water", "willow", "mountain", "boat"], "bei"], ["江夜", ["孤舟远水寒沙", "小桥疏柳人家", "一声渔笛残霞", "月明风静", "江天万里无涯"], ["boat", "water", "willow", "moon"], "jing"]], "modern": [["月光快递", "我把月光折成信封\n寄到没有地址的地方\n风替我贴上邮票\n而你，替我收下", ["moon"], "jing"], ["空山来信", "空山不说话\n只把落叶一封封寄来\n我拆开，是去年的雨\n和一枚未干的月亮", ["mountain", "moon"], "bei"]], "prose": [["江边的下午", "江水把下午拉得很长。一只船慢慢过去，像谁在纸上轻轻划了一笔，又舍不得擦掉。我坐在岸边，看光从水面爬到石头上，再退回去——原来时间也会犹豫。", ["water", "boat"], "jing"], ["雪夜书", "雪落下来的时候，整座山都在慢慢变白，像一封写到一半的信，忽然找不到措辞。我在灯下读旧年的诗，纸上有风，有月，有一个人迟迟未归。", ["snow", "mountain", "moon"], "bei"]], "menglong": [["白昼的月", "白昼的月是一枚\n被谁遗忘的印章\n盖在山的额头\n风读不懂\n只有水，反复翻看", ["moon", "mountain", "water"], "you"], ["雨的背面", "雨落在雨的背面\n一把伞撑开另一把伞\n我在其中听见\n春天折叠的声音\n和一个没说完的黄昏", ["flower"], "you"]], "daoyou": [["加班", ["键盘敲到眼发花", "需求改了第八茬", "若问工资涨没涨", "老板说先看未来"], ["moon"], "xi"], ["减肥", ["晚饭只吃半碗饭", "夜深偷摸啃饼干", "秤上数字纹丝动", "怪它不懂我心宽"], ["moon"], "xi"]], "zhhaiku": [["秋", ["月落寒江上", "一舟载不动秋色", "风紧雁声长"], ["moon", "water", "boat", "bird"], "bei"], ["春", ["柳外雨初晴", "燕子衔来半片云", "花落在无声"], ["willow", "bird", "cloud", "flower"], "jing"]], "haiku": [["古池", ["古池秋水静", "一蛙跳入水中央", "有声清且浅"], ["water"], "jing"], ["月夜", ["月色满千山", "远山静卧白云旁", "风过不惊眠"], ["moon", "mountain", "cloud"], "jing"]], "tanka": [["春", ["落花轻且薄", "随水漂过石桥东", "春夜月如钩", "照见桥边旧题字", "又是一年春又来"], ["flower", "water", "moon"], "bei"], ["秋", ["秋风一夜起", "芦苇白头水连天", "孤舟一叶还", "遥向远山深处去", "两岸暮色满江寒"], ["boat", "water", "mountain"], "bei"]], "enfree": [["The River Remembers", "The river remembers every boat that passed,\neven the ones that never said goodbye.\nI stood on the bridge between two mountains\nand let the water speak for me.\nThe moon came out, unpaid, unasked,\nand made a second river in the sky.", ["water", "boat", "mountain", "moon"], "jing"], ["Snow Letter", "Snow fell all night on the empty pavilion.\nBy morning the hills had rewritten themselves\nin a language I almost understood.\nI wanted to send you a page,\nbut the ink kept turning into weather.", ["snow", "pavilion", "mountain"], "bei"]], "ensonnet": [["Mountain and Moon", "When evening lays its hand upon the hill,\nThe river keeps the last of borrowed light;\nA boat goes by, and everything is still\nExcept the stars that practise being night.\nThe willow leans to hear the water speak,\nThe snow remembers where the flower grew;\nWe ask the moon why some are far, some near,\nIt only answers: I have seen all too.\nSo let the wind carry what words cannot,\nAnd let the mountain hold what we forget;\nThe seasons turn, the tides return, and yet\nThe heart keeps one small lantern burning still.\nIf distance is the price of seeing far,\nI pay it gladly, under one same star.", ["mountain", "water", "boat", "moon", "willow", "snow", "flower", "star"], "jing"], ["A Winter Question", "The snow has covered every path but one,\nThe one that leads back to the year we lost.\nI keep your letter folded in my coat,\nAnd read it slowly, as the river does.\nThe moon is cold, the mountain colder still,\nThe boat is gone, the pavilion is bare;\nI ask the wind if you remember me,\nIt says: the question is the answer here.\nNo season stays, no flower holds its red,\nBut something in the quiet stays the same:\nThe way the water carries what we said,\nThe way the dark keeps one enduring flame.\nSo let it snow. Let every road be gone.\nI know the way. My heart has walked it on.", ["snow", "moon", "mountain", "boat", "pavilion", "flower", "water"], "bei"]], "limerick": [["A Boat", "There once was a boat on the sea,\nSo small it could hardly hold three;\nIt danced with the tide,\nWith the moon as its guide,\nAnd sailed to the edge of the sea.", ["boat", "water", "moon"], "xi"], ["A Moon", "There once was a moon over Spain,\nThat fell in the river like rain;\nIt shone on the hill,\nAnd the willow stood still,\nAnd never came down again.", ["moon", "water", "mountain", "willow"], "jing"]], "enhaiku": [["Dawn", "Fog on the river—\none boat slips through the willow\nwithout a sound.", ["water", "boat", "willow"], "jing"], ["Autumn", "Cold moon on the peak,\nthe last bird crosses the sky—\nwinter in one word.", ["moon", "mountain", "bird"], "bei"]], "ode": [["Ode to the Snow", "O snow, that falls without a single sound,\nAnd lays a white sheet on the sleeping hill,\nYou teach the world how to begin again:\nTo cover, and to keep, and to be still.\nThe river slows beneath your quiet weight,\nThe boat is moored, the pavilion is bare;\nEven the wind, that never ceased to speak,\nIs hushed to listen at your frozen air.\nI do not ask you to remain. You know\nThat everything you touch will melt away;\nBut while you fall, the mountain and I share\nOne brief, white, unremembered holiday.", ["snow", "mountain", "water", "boat", "pavilion"], "jing"], ["Ode to the Moon", "O patient moon, that rises every night\nAbove the same old mountains, unafraid,\nYou have seen empires build and fall away,\nAnd watched the river turn its centuries.\nThe poet sleeps; the boatman counts his oars;\nThe willow dreams of water in its sleep.\nYou ask nothing of us, and yet we look,\nAnd find our own unfinished faces there.\nTeach us to rise like you: to give our light\nTo those who never asked, who never knew\nThat we were there, that we were always there—\nTo shine, and not to need a witness too.", ["moon", "mountain", "water", "boat", "willow"], "jing"]]};
@@ -959,7 +657,7 @@ function addSpaceTime(s,plan,r,n){
    规律：好诗不是随机拼词，而是「成法的意象搭配 + 章法句序 + 诗法句法」。
    所有文体都先取一组共现意象群，再按该文体章法安排起承转合，最后套句法模板造句。 */
 var IMAGE_GROUPS=[[["moon", "cloud", "water", "mountain"], "月夜江行", "jing"], [["mountain", "bamboo", "pavilion", "moon"], "山居幽篁", "you"], [["water", "boat", "bird", "mountain"], "孤舟远岫", "bei"], [["willow", "flower", "bird", "water"], "春江柳色", "xi"], [["snow", "mountain", "pavilion", "bird"], "寒江雪霁", "bei"], [["moon", "star", "water", "boat"], "星河夜渡", "jing"], [["flower", "willow", "cloud", "rain"], "暮春烟雨", "bei"], [["mountain", "cloud", "water", "pavilion"], "空山烟雨", "you"], [["bird", "mountain", "water", "moon"], "寒山归鸟", "bei"], [["boat", "water", "willow", "flower"], "江南采莲", "xi"], [["bamboo", "water", "moon", "pavilion"], "竹里馆", "you"], [["snow", "flower", "mountain", "water"], "雪中梅", "jing"], [["moon", "water", "boat", "cloud"], "明月江舟", "jing"], [["mountain", "cloud", "water", "flower"], "白云流水", "you"], [["willow", "flower", "water", "bird"], "落花流水", "bei"], [["willow", "mountain", "water", "moon"], "秋风远山", "bei"], [["water", "cloud", "boat", "mountain"], "夜雨江舟", "bei"]];
-var CRAFT={"jue": {"n": "起承转合", "desc": "一二句正说铺景，三四句转折抒情（七绝常法，见《唐诗三百首》七绝题解）", "plan": ["起·景", "承·景", "转·情", "合·意"]}, "wujue": {"n": "以景结情", "desc": "前句叙事写景，末句以景收束、情在景中（如《鹿柴》返景入深林）", "plan": ["景", "景", "动", "景结情"]}, "lv": {"n": "对仗铺陈", "desc": "首联点题，中二联对仗，尾联收束（律诗正格）", "plan": ["起", "对", "对", "对", "对", "转", "合"]}, "ci": {"n": "铺叙含蓄", "desc": "上片铺景叙事，下片转折言情，末句含蓄不尽（词的常法）", "plan": ["铺", "铺", "铺", "转", "情", "含蓄"]}, "qu": {"n": "白描直陈", "desc": "以口语白描取景，句句可见，末句点破（元曲本色）", "plan": ["白描", "白描", "白描", "点破"]}, "modern": {"n": "意象叠加", "desc": "具体物象并置，不用抽象抒情，让物象自己说话（现代诗承唐诗意象之法）", "plan": ["物象", "物象", "转折", "留白"]}, "en": {"n": "Image + Turn", "desc": "Concrete images first, then a volta (turn) at the end — the same craft as Tang jue", "plan": ["image", "image", "image", "turn"]}};
+var CRAFT={"jue": {"n": "起承转合", "desc": "一二句正说铺景，三四句转折抒情（七绝常法，见《唐诗三百首》七绝题解）", "plan": ["起·景", "承·景", "转·情", "合·意"]}, "wujue": {"n": "以景结情", "desc": "前句叙事写景，末句以景收束、情在景中（如《鹿柴》返景入深林）", "plan": ["景", "景", "动", "景结情"]}, "lv": {"n": "对仗铺陈", "desc": "首联点题，中二联对仗，尾联收束（律诗正格）", "plan": ["起", "对", "对", "对", "对", "转", "合"]}, "ci": {"n": "铺叙含蓄", "desc": "上片铺景叙事，下片转折言情，末句含蓄不尽（词的常法）", "plan": ["铺", "铺", "铺", "转", "情", "含蓄"]}, "qu": {"n": "白描直陈", "desc": "以口语白描取景，句句可见，末句点破（元曲本色）", "plan": ["白描", "白描", "白描", "点破"]}, };
 var TANG={"5": ["{I}不见人", "{I}{V}{I}", "但闻{I}声", "独坐{I}中", "{I}生{I}处", "遥看{I}色", "疑是{I}间", "{I}入{I}来", "空山{V}后", "江上{V}人", "月出{I}鸟", "风静{I}闲"], "7": ["{I}{V}{I}{X}{X}", "独有{I}{V}{I}", "不见{I}空{V}人", "借问{I}何处{V}", "唯有{I}{V}{I}", "正是{I}{V}{I}时", "忽如{I}{V}{I}", "可怜{I}{V}{I}", "最是{I}{V}{I}处", "一{V}{I}{V}{I}", "无数{I}{V}{I}"], "3": ["{I}何处", "问{I}", "见{I}", "{I}无声"], "4": ["{I}{V}{I}", "空{I}寂寂", "{I}独{V}", "{I}在{I}"], "2": ["{I}", "{V}{I}", "{I}{X}"]};
 var SHORT={"2": ["{I}", "{I}{V}", "{D}"], "3": ["{I}{V}", "{I}{X}", "{V}{I}"], "4": ["{I}{V}{I}", "{I}{D}{X}", "{A}{V}"]};
 var S5=["{I}{V}{I}", "{I}{D}{V}{I}", "{I}{V}{I}{X}", "{A}{V}{I}{X}", "{I}{I}{V}{I}"];
@@ -1026,9 +724,9 @@ function craftPoem(formId,mood,themeKeys,seed){
   grp.forEach(function(k){if(keys.indexOf(k)<0)keys.push(k);});
   keys=applySubject(keys);
   keys=applySubject(keys);
-  var craftKind=F.kind==='line'?(F.lens.length>=6?'lv':'jue'):(F.kind==='en'||F.kind==='limerick'?'en':'modern');
+  var craftKind=(F.lens.length>=6?'lv':'jue');
   var plan=CRAFT[craftKind].plan;
-  if(F.kind==='line'){
+  {
     for(var i=0;i<F.lens.length;i++){
       var p=plan[i%plan.length],ln;
       // 律诗（五律/七律）中二联对仗：用「天地/日月/山川」等词对构造字数相等的两句
@@ -1048,51 +746,12 @@ function craftPoem(formId,mood,themeKeys,seed){
       lines.push(ln);
     }
     title=craftKey(pick(keys,r),r)+'·'+craftKey(pick(keys,r),r);
-  }else if(F.kind==='limerick'){
-    lines=LIMERICK.map(function(t){return fill(t,keys,r);});
-    title='A Tale of '+fill('{A}',keys,r).replace(/^(the|a|an)\s+/i,'');
-  }else if(F.kind==='en'){
-    for(var j=0;j<F.lines;j++){
-      var w1=enWord(keys,r).replace(/^(the|a|an)\s+/i,''),w2=enWord(keys,r).replace(/^(the|a|an)\s+/i,'');
-      if(w2.toLowerCase()===w1.toLowerCase())w2='river';
-      var plural=/s$/i.test(w1)&&!/ss$/i.test(w1);
-      var verb=pick(plural?['fade','wait','return','fall','float']:['fades','waits','returns','falls','floats'],r);
-      var enLine='The '+w1+' '+verb+' where the '+w2+' ends.';
-      lines.push(enLine);
-    }
-    if(formId==='ensonnet')lines.push(fill(EN_COUPLET[0],keys,r),fill(EN_COUPLET[1],keys,r));
-    title=fill('{A} and {B}',keys,r).replace(/^(the|a|an)\s+/i,'');
-  }else{
-    // 现代诗/散文诗/朦胧诗：用意象群的物象叠加，章法用「铺—转—留白」
-    var a=craftKey(pick(keys,r),r),b2=craftKey(pick(keys,r),r),c=craftKey(pick(keys,r),r),v=craftVerb(mood,r);
-    if(F.kind==='prose'){
-      lines=['当'+a+'遇上'+b2+'，'+c+'便'+v+'了起来。','我站在它们之间，听见'+a+'与'+b2+'的低语——',
-             '像一句写了很久、始终没有寄出的信。','而'+c+'，替我收着。'].join('\n').split('\n');
-    }else if(F.kind==='menglong'){
-      lines=[a+'是'+pick(MOOD[mood].a,r)+'的耳朵','贴着'+b2+'的背面','听一枚'+c+'，缓慢地'+v+'。'].join('\n').split('\n');
-    }else{
-      lines=[a+'把夜色折成两半','一半落在'+b2+'上','一半，我替你收着。','远处，'+c+'正缓慢地'+v+'。'].join('\n').split('\n');
-    }
-    title=a+'的独白';
   }
-  return {title:title,lines:lines,form:formId,formName:F.n,tag:F.g,lang:F.lang,
-          layout:F.lang==='en'?'horiz':state.layout,mood:mood,moodName:MOOD[mood].n,crafted:true};
+  return {title:title,lines:lines,form:formId,formName:F.n,tag:F.g,lang:'zh',
+          layout:state.layout,mood:mood,moodName:MOOD[mood].n,crafted:true};
 }
 /* ENH:CRAFT-END */
-/* ENH:GALLERY-BEGIN */
-/* ===== 精品画库：6 张中国画（对应《唐诗三百首》意象群）===== */
-var GALLERY={"autumn_river": {"n": "秋夜江舟", "keys": ["moon", "water", "boat", "bird", "mountain"]}, "bamboo_moon": {"n": "空山幽篁", "keys": ["bamboo", "pavilion", "mountain", "moon", "cloud"]}, "spring_willow": {"n": "春江柳色", "keys": ["willow", "flower", "bird", "water", "cloud"]}, "snow_river": {"n": "寒江雪霁", "keys": ["snow", "pavilion", "mountain", "water", "bird"]}, "flower_moon": {"n": "花间明月", "keys": ["flower", "moon", "cloud", "water"]}, "starry_ferry": {"n": "星河夜渡", "keys": ["star", "moon", "boat", "water", "mountain"]}};
-var GROUPS_CN=['中国绘画','东方绘画'];
-function pickGallery(keys){
-  var best=null,bestScore=0;
-  Object.keys(GALLERY).forEach(function(id){
-    var g=GALLERY[id],score=0;
-    g.keys.forEach(function(k){if(keys.indexOf(k)>=0)score++;});
-    if(score>bestScore){bestScore=score;best=id;}
-  });
-  return bestScore>=2?best:null;
-}
-/* ENH:GALLERY-END */
+
 /* ENH:FACTORY-BEGIN */
 /* ===== 真实要素排列组合重装：素材来自 18.9 万首古诗词原文 ===== */
 var FACTORY_READY = (typeof PL !== 'undefined');
@@ -1252,7 +911,6 @@ function factoryPoem(formId, mood, subject, themeKeys, seed){
   if(!FACTORY_READY) return null;
   var F = FORMS[formId];
   if(!F) return null;
-  if(!F.lens || !F.lens.length) return factoryFreePoem(formId, mood, subject, themeKeys, seed);
   var r = rng(seed), lens = F.lens;
   var want = (themeKeys && themeKeys.length) ? themeKeys : (PL.subjects[subject] || ['moon','water','mountain']);
   var dominant = want[0], lines = [], used = {}, domCount = 0;
@@ -1310,145 +968,6 @@ function factoryPoem(formId, mood, subject, themeKeys, seed){
   return {title:tw+'·'+F.n.slice(0,2), lines:lines, form:formId, formName:F.n,
           tag:F.g, lang:F.lang, layout:state.layout, mood:mood, moodName:MOOD[mood].n,
           crafted:false, factory:true};
-}
-/* ===== 8 种非格律体裁的语料驱动重装 =====
-   中文（现代诗/散文诗/朦胧诗）：真实句 + 真实连接词按铺—转—留白重组
-   英文（自由诗/十四行/五行打油/俳句/颂歌）：意象对由语料共现矩阵决定，
-   词表与句式骨架为站点既有（语料为古诗词，不含英文原文） */
-var FREE_SUBTAG = {
-  '山水田园':['写景','山水','田园'], '赠别怀远':['送别','离别','思乡'],
-  '边塞出征':['边塞','爱国'], '思妇宫怨':['相思','闺怨'],
-  '咏史怀古':['怀古','咏物'], '写景':['写景','山水','月亮'], '抒情':['抒情','相思']
-};
-/* 主题意象 → 语料主题标签：让自由诗也从紧扣主题的语料中取句 */
-var FREE_IMGTAG = {
-  autumn:['秋天','写景'], moon:['月亮'], willow:['柳树','离别'], snow:['梅花','写景'],
-  bamboo:['隐逸','山水'], mountain:['山水','田园'], water:['山水'], boat:['羁旅','思乡'],
-  pavilion:['山水','羁旅'], bird:['离别','写景'], star:['写景'], cloud:['写景'],
-  flower:['写景','相思'], rain:['写景'], wind:['写景'], sun:['写景'], night:['写景']
-};
-function freeTags(subject, keys){
-  var tags=[],i,j,tg;
-  var st=FREE_SUBTAG[subject]||[];
-  for(i=0;i<st.length;i++) tags.push(st[i]);
-  for(i=0;i<(keys||[]).length;i++){
-    tg=FREE_IMGTAG[keys[i]];
-    if(tg) for(j=0;j<tg.length;j++) if(tags.indexOf(tg[j])<0) tags.push(tg[j]);
-  }
-  return tags;
-}
-function freePile(subject, mood, r, keys){
-  var F = PL.free || {}, arr = [], i, q, tb, m;
-  var tags = freeTags(subject, keys);
-  for(i=0;i<tags.length;i++){
-    if(F.byTag && F.byTag[tags[i]]){
-      tb=F.byTag[tags[i]]; m=Math.min(200,tb.length);
-      for(q=0;q<m;q++) arr.push(tb[Math.floor(r()*tb.length)]);   // 随机取样，每次生成都不同
-    }
-  }
-  if(F.byEmo && F.byEmo[mood]){
-    tb=F.byEmo[mood]; m=Math.min(120,tb.length);
-    for(q=0;q<m;q++) arr.push(tb[Math.floor(r()*tb.length)]);
-  }
-  var base = PL.pool['5'] || [];
-  for(i=0;i<400 && i<base.length;i++) arr.push(base[i]);
-  return arr;
-}
-function freePick(arr, n, used, r){
-  var out = [], guard = 0;
-  while(out.length < n && guard++ < 400){
-    var s = arr[Math.floor(r()*arr.length)];
-    if(!s || used[s]) continue;
-    used[s] = 1; out.push(s);
-  }
-  return out;
-}
-function factoryFreePoem(formId, mood, subject, themeKeys, seed){
-  var F = FORMS[formId];
-  if(!F || !window.PL) return null;
-  var r = rng(seed), kind = F.kind, F2 = PL.free || {};
-  var conn = (F2.connect && F2.connect.length) ? F2.connect : ['何处','不知','唯有'];
-  if(kind === 'tpl' || kind === 'prose' || kind === 'menglong'){
-    var pile = freePile(subject, mood, r, themeKeys), used = {}, lines, title;
-    var sents = freePick(pile, 8, used, r);
-    if(!sents.length) return null;
-    if(kind === 'prose'){
-      var longs = F2.longLines || [], body = [];
-      if(longs.length) body.push(longs[Math.floor(r()*longs.length)]);
-      body.push(sents[0] + '。');
-      if(sents[1]) body.push(conn[Math.floor(r()*conn.length)] + '，' + sents[1] + '。');
-      if(sents[2]) body.push(sents[2] + '。');
-      lines = body;
-      title = sents[0].slice(0,2) + '·散文';
-    }else if(kind === 'menglong'){
-      var a=sents[0], b=sents[1]||sents[0], c=sents[2]||a;
-      lines = [a.slice(0,2)+'是'+b.slice(0,2)+'的'+pick(['影子','回声','背面'],r),
-               '贴着'+c.slice(0,2)+'的边缘',
-               conn[Math.floor(r()*conn.length)]+'，听一枚'+a.slice(0,2)+'缓慢地'+pick(['沉','浮','暗'],r),
-               b.slice(0,2)+'不说话'];
-      title = a.slice(0,2)+'·朦胧';
-    }else{
-      lines = [sents[0], pick(['而','却','又'],r)+'，'+sents[1], sents[2]];
-      if(sents[3]) lines.push(sents[3]);
-      title = sents[0].slice(0,2)+'的独白';
-    }
-    return {title:title, lines:lines, form:formId, formName:F.n, tag:F.g, lang:'zh',
-            layout:state.layout, mood:mood, moodName:MOOD[mood].n, crafted:false, factory:true, free:true};
-  }
-  /* 英文类：意象对来自语料共现矩阵 */
-  var KEY_EN = {'moon':['the moon',0],'mountain':['the mountains',1],'water':['the river',0],
-    'willow':['the willow',0],'snow':['falling snow',0],'flower':['the blossoms',1],
-    'bird':['a lone bird',0],'boat':['a small boat',0],'bamboo':['green bamboo',0],
-    'cloud':['white clouds',1],'pavilion':['an old pavilion',0],'star':['the stars',1]};
-  var co = PL.co || [], pairs = [], i;
-  for(i=0;i<co.length;i++){ if(KEY_EN[co[i][0]] && KEY_EN[co[i][1]]) pairs.push(co[i]); }
-  if(!pairs.length) pairs = [['moon','water']];
-  var pr = pairs[Math.floor(r()*pairs.length)];
-  var A = KEY_EN[pr[0]][0], B = KEY_EN[pr[1]][0];
-  var Apl = KEY_EN[pr[0]][1], Bpl = KEY_EN[pr[1]][1];
-  // 复数主语的动词变形
-  function v3(sing, plur, isPl){ return isPl ? plur : sing; }
-  var lines = [], title;
-  if(kind === 'limerick'){
-    lines = ['There once was ' + A + ' by ' + B + ',',
-             'So ' + pr[0] + ' it startled ' + B + ';',
-             'It danced and it sang,', 'Till the valley rang,',
-             'And ' + A + ' slipped quietly home.'];
-    title = 'A Tale of ' + pr[0];
-  }else{
-    // 模板拆成「主语 + 动词 + 补语」三段，按单复数与冠词正确拼接，避免 "The the …"
-    var SK2 = [
-      ['', ' rises slowly over ', ''],
-      ['I watched ', ' drift into ', ','],
-      ['and all ', ' was quiet.', ''],
-      ['', ' waits where ', ' ends,'],
-      ['between ', ' and ', '.'],
-      ['', ' remembers what ', ' forgets,'],
-      ['and falls like ', ' upon ', '.'],
-      ['No voice, only ', ' and ', ','],
-      ['', ' keeps the shape of ', '.']
-    ];
-    var NL = F.lines || 6;
-    for(i=0;i<NL;i++){
-      var t = SK2[i % SK2.length];
-      var subjA = t[0] === '' ? A.charAt(0).toUpperCase() + A.slice(1) : A;
-      var mid = t[1];
-      // 「I watched ... drift」是 watch sb do 结构，动词必须用原形，不受主语单复数影响
-      if(t[0] === 'I watched '){
-        mid = ' drift into ';
-      }else if(/rise|wait|remember|keep/.test(mid)){
-        mid = mid.replace(' rises', ' ' + v3('rises','rise',Apl))
-                 .replace(' waits', ' ' + v3('waits','wait',Apl))
-                 .replace(' remembers', ' ' + v3('remembers','remember',Apl))
-                 .replace(' keeps', ' ' + v3('keeps','keep',Apl));
-      }
-      lines.push(t[0] + subjA + mid + B + t[2]);
-    }
-    if(formId === 'ensonnet'){ lines.push('And still ' + A + ' shines on,', 'the ' + B + ' and I, alone.'); }
-    title = pr[0].charAt(0).toUpperCase() + pr[0].slice(1) + ' and ' + pr[1];
-  }
-  return {title:title, lines:lines, form:formId, formName:F.n, tag:F.g, lang:'en', layout:'horiz',
-          mood:mood, moodName:MOOD[mood].n, crafted:false, factory:true, free:true};
 }
 /* ENH:FACTORY-END */
 /* ENH:FULLLIB-BEGIN */
@@ -1528,7 +1047,7 @@ function generateOffline(){
   // 主题字面：用户写下的每个字都作为选句依据（紧扣关键词）
   state.themeChars=themeChars(theme);
   // 量产重装：以 18.9 万首真实语料提取的句库为主力，按诗体格律排列组合（每次不同）。
-  // 精品原创诗库按 nonce 少量穿插；未覆盖诗体（现代诗/散文诗等）回退唐诗写法规则生成。
+  // 精品原创诗库按 nonce 少量穿插；语料重装失败时回退唐诗写法规则生成。
   var picked=(state.nonce%7===0)?pickCorpus(state.form,state.mood,keys,state.nonce):null;
   // 主题意象优先，推断题材的意象只作补充
   var main=themeImgs(theme);
@@ -1543,27 +1062,11 @@ function generateOffline(){
   var fp=null;
   try{ fp=factoryPoem(state.form,state.mood,state.autoSubject,want,baseSeed); }catch(e){ fp=null; }
   var poem=picked?corpusToPoem(picked,state.form):(fp||craftPoem(state.form,state.mood,keys,baseSeed));
-  var seed=hash(poem.lines.join('')+poem.title+'|'+state.style);
-  state.poem=poem;state.keys=keys;state.seed=seed;state.aiImage=null;
-  // 精品画库：中国绘画/东方绘画画风且主题匹配时，展示对应 AI 精选画作；否则用 Canvas
-  var gid=(GROUPS_CN.indexOf(STYLES[state.style].g)>=0)?pickGallery(keys):null;
-  state.gallery=gid;
+  var seed=hash(poem.lines.join('')+poem.title);
+  state.poem=poem;state.keys=keys;state.seed=seed;
   renderPoem(poem);
-  if(gid){
-    if(!$('artGallery')){
-      var im=document.createElement('img');im.id='artGallery';im.className='art-gallery';
-      im.alt='精选中国画：'+GALLERY[gid].n;$('art').parentNode.appendChild(im);
-    }
-    $('artGallery').src='gallery/'+gid+'.jpg';$('artGallery').style.display='block';
-    $('art').style.display='none';
-  }else{
-    if($('artGallery'))$('artGallery').style.display='none';
-    $('art').style.display='block';redraw();
-  }
-  $('artAI').style.display='none';$('artEmpty').style.display='none';
-  $('imgChips').innerHTML=keys.map(function(k){return '<span class="chip">'+IMG[k].n+'</span>';}).join('')+(picked?'<span class="chip" style="color:#2dd4bf">精选原创</span>':(poem.factory?'<span class="chip" style="color:#7dd3a0">真实诗句重装</span>':(poem.crafted?'<span class="chip" style="color:#c4a4f8">唐诗写法</span>':'')))+(gid?'<span class="chip" style="color:#e8c07d">精选画作</span>':'');
-  $('poemStat').innerHTML=(picked?'<b style="color:#2dd4bf">精选原创</b> · ':(poem.factory?'<b style="color:#7dd3a0">真实诗句重装</b> · ':(poem.crafted?'<b style="color:#a855f7">唐诗写法</b> · ':'')))+'诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
-  if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
+  $('poemStat').innerHTML=(picked?'<b style="color:#2dd4bf">精选原创</b> · ':(poem.factory?'<b style="color:#7dd3a0">真实诗句重装</b> · ':(poem.crafted?'<b style="color:#a855f7">唐诗写法</b> · ':'')))+'诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 意象 <b>'+keys.length+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 种子 <b>'+seed.toString(16).slice(0,6)+'</b>';
+  if(window.ENH){window.ENH.unlock('poet');}
 }
 /* ---------- AI 实时生成 ---------- */
 function aiHeaders(){return {'Content-Type':'application/json','Authorization':'Bearer '+AI.key};}
@@ -1589,8 +1092,6 @@ function parseAiPoem(text,fid,theme){
 function generateAI(){
   var theme=$('theme').value.trim()||'山水';
   var btn=$('genBtn');btn.disabled=true;
-  $('artLoading').style.display='flex';$('artEmpty').style.display='none';
-  $('artAI').style.display='none';$('art').style.display='none';
   var moodWord=MOOD[state.mood].n,formIns=formInstruction(state.form);
   var fullTheme=theme+'（情感基调：'+moodWord+'）';
   var prompt='你是人工智能诗人。'+formIns+'\n主题：'+theme+'，情感基调：'+moodWord+'。\n'
@@ -1606,33 +1107,17 @@ function generateAI(){
     var poem=parseAiPoem(txt,state.form,theme);
     if(!poem.lines.length)throw new Error('未能解析出诗句');
     state.poem=poem;
+    state.seed=hash(poem.lines.join('')+poem.title);
     renderPoem(poem);
-    // 从诗句/主题提取画面意象，交由画风提示词统一成一幅画
-    var sceneHint=poem.lines.slice(0,4).join('，');
-    var imgPrompt=STYLE_PROMPT[state.style]+'。画面内容：'+fullTheme+'；诗意：'+sceneHint+'。不要出现文字、水印。';
-    $('artLoading').firstChild.textContent='✦ 诗已成，AI 正在作画…';
-    return fetch(AI.base+'/images/generations',{method:'POST',headers:aiHeaders(),
-      body:JSON.stringify({model:AI.image,prompt:imgPrompt,n:1,size:'2048x2048',response_format:'b64_json'})})
-      .then(function(r2){if(!r2.ok)throw new Error('作画请求失败 HTTP '+r2.status);return r2.json();})
-      .then(function(d2){
-        var b64=d2.data&&d2.data[0]&&d2.data[0].b64_json;
-        if(!b64)throw new Error('模型未返回图片');
-        var url='data:image/jpeg;base64,'+b64;
-        state.aiImage=url;
-        $('artAI').src=url;$('artAI').style.display='block';
-        $('artLoading').style.display='none';$('artEmpty').style.display='none';
-        $('imgChips').innerHTML='<span class="chip">AI 实时生成</span><span class="chip">'+STYLES[state.style].n+'</span><span class="chip">'+AI.chat+'</span><span class="chip">'+AI.image+'</span>';
-        $('poemStat').innerHTML='模式 <b>AI 实时</b> · 诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 画风 <b>'+STYLES[state.style].n+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 模型 <b>'+AI.chat+' / '+AI.image+'</b>';
-        if(window.ENH){window.ENH.unlock('poet');window.ENH.unlock('painter');}
-        toast('✦ AI 诗画已生成');
-      });
+    $('poemStat').innerHTML='模式 <b>AI 实时</b> · 诗体 <b>'+poem.formName+'</b> · 情感 <b>'+poem.moodName+'</b> · 排版 <b>'+LAYOUTS[state.layout]+'</b> · 模型 <b>'+AI.chat+'</b>';
+    if(window.ENH){window.ENH.unlock('poet');}
+    toast('✦ AI 诗已生成');
   }).catch(function(e){
-    $('artLoading').style.display='none';
     toast('AI 生成失败：'+(e.message||'网络错误')+'，已切换回离线模式');
     // 失败降级到离线
     state.mode='offline';
     var bs=$('modeSeg').querySelectorAll('button');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-v')==='offline');
-    $('modeHint').textContent='离线 · 可复现';$('genBtn').textContent='✦ 生成诗与画';$('regenBtn').textContent='↻ 换个写法重生成';
+    $('modeHint').textContent='离线 · 可复现';$('genBtn').textContent='✦ 生成诗';$('regenBtn').textContent='↻ 换个写法重生成';
     generateOffline();
   }).then(function(){btn.disabled=false;});
 }
@@ -1643,25 +1128,17 @@ $('genBtn').onclick=function(){state.nonce++;generate();};
 $('regenBtn').onclick=function(){state.nonce++;generate();};
 $('theme').addEventListener('keydown',function(e){if(e.key==='Enter'){state.nonce++;generate();}});
 $('copyPoem').onclick=function(){if(!state.poem)return;var t=poemText();if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('诗已复制');},function(){toast('请手动复制');});else toast('请手动复制');};
-$('dlPoem').onclick=function(){if(!state.poem)return;dl(new Blob([poemText()],{type:'text/plain;charset=utf-8'}),'诗中有画-'+state.poem.title+'.txt');toast('诗已下载');};
-$('dlArt').onclick=function(){
-  if(!state.poem)return;
-  var a=document.createElement('a');a.download='诗中有画-'+state.poem.title+'-'+STYLES[state.style].n+'.png';
-  a.href=state.aiImage?state.aiImage:$('art').toDataURL('image/png');
-  document.body.appendChild(a);a.click();document.body.removeChild(a);toast('画作已下载');
-};
-function poemText(){var p=state.poem;return '《'+p.title+'》\n'+p.lines.join('\n')+'\n\n—— '+p.formName+' · '+p.moodName+' · 实验室 3 诗中有画';}
+$('dlPoem').onclick=function(){if(!state.poem)return;dl(new Blob([poemText()],{type:'text/plain;charset=utf-8'}),'星算诗台-'+state.poem.title+'.txt');toast('诗已下载');};
+function poemText(){var p=state.poem;return '《'+p.title+'》\n'+p.lines.join('\n')+'\n\n—— '+p.formName+' · '+p.moodName+' · 实验室 3 星算诗台';}
 function dl(blob,name){var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){try{URL.revokeObjectURL(a.href);}catch(e){}},1000);}
 function toast(m){if(window.ENH)window.ENH.toast(m);}
 $('reportBtn').onclick=function(){
-  if(!state.poem){toast('请先生成诗与画');return;}
-  var p=state.poem,isAI=state.mode==='ai'&&state.aiImage;
-  var md=['# 实验室 3 · 诗中有画 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 画风：'+STYLES[state.style].n+'（'+STYLES[state.style].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗 / '+AI.image+' 作画）':'真实诗句排列组合重装'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、画作','',isAI?'- 由文生图模型按诗句与画风实时生成，每次不同':('- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、')+'\n- 种子：`'+state.seed.toString(16)+'`（同诗同画风可复现）'),'','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'真实诗句按格律排列组合重装（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。','', '## 五、自检与改写（对照讲义第 30 / 24 章）','',
+  if(!state.poem){toast('请先生成一首诗');return;}
+  var p=state.poem,isAI=state.mode==='ai';
+  var md=['# 实验室 3 · 星算诗台 · 实验报告','','> 生成时间：'+new Date().toLocaleString('zh-CN'),'','## 一、输入','','- 主题：'+($('theme').value.trim()||'（空，按情感随机取景）'),'- 情感：'+p.moodName,'- 诗体：'+p.formName+'（'+FORMS[p.form].g+'）','- 排版：'+LAYOUTS[state.layout],'- 生成方式：'+(isAI?'AI 实时（'+AI.chat+' 写诗）':'真实诗句排列组合重装'),'','## 二、生成的诗','','《'+p.title+'》','',p.lines.join('\n'),'','## 三、意象与种子','','- 意象：'+state.keys.map(function(k){return IMG[k].n;}).join('、'),'- 种子：`'+state.seed.toString(16)+'`（同主题同诗体可复现）','','## 四、原理','','需求 → 意象（表示，第 15/16 章）→ '+(isAI?'大模型按格律生成诗句、文生图模型据诗意作画（第 20 章大模型时代 / 第 18 章多模态）':'真实诗句按格律排列组合重装（规则+学习，第 10/11/20 章）→ 意象映射成像素（多模态，第 18 章），种子固定保证可复现（第 19 章）')+'。','', '## 五、自检与改写（对照讲义第 30 章）','',
     state.checks.poem?'- 诗自检：'+state.checks.poem.sum+'\n'+state.checks.poem.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 诗自检：未执行',
-    state.checks.art?'- 画自检：'+state.checks.art.sum+'\n'+state.checks.art.items.map(function(x){return '  · ['+(x.k==='ok'?'通过':(x.k==='bad'?'需改':'提示'))+'] '+x.t+(x.d?'：'+x.d:'');}).join('\n'):'- 画自检：未执行',
     ($('poemDiff').innerHTML||'').trim()?'- 已执行「自检 → 改写」，修订前后对照见页面第 ⑪ 区。':'- 尚未执行改写。',''].join('\n');
-  var imgSrc=isAI?state.aiImage:$('art').toDataURL('image/png');
-  var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 诗中有画 · 实验报告</h1><img src="'+ imgSrc +'" alt="生成的画作"><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
+  var html='<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>实验室 3 · 实验报告</title><style>body{font-family:system-ui,"Microsoft YaHei",sans-serif;background:#0a0a0f;color:#e8e8f0;max-width:860px;margin:40px auto;padding:0 24px;line-height:1.8}h1{color:#2dd4bf}h2{color:#a855f7;border-bottom:1px solid #26263a;padding-bottom:6px;margin-top:24px}img{max-width:100%;border-radius:12px;border:1px solid #26263a}pre{white-space:pre-wrap;background:#16161f;border:1px solid #26263a;border-radius:12px;padding:18px;font-size:14px;color:#c8c8dd}@media print{body{background:#fff;color:#111}h1,h2{color:#222}pre{background:#f6f6f6;color:#111}}</style></head><body><h1>🧪 实验室 3 · 星算诗台 · 实验报告</h1><pre>'+esc(md)+'</pre><p style="color:#9a9ab8;font-size:12px">人工智能概论 · 由 he-yikang.github.io/homework/lab3.html 生成</p></body></html>';
   var w=window.open('','_blank');if(w){w.document.write(html);w.document.close();}else toast('弹窗被拦截');
   if(window.ENH)window.ENH.unlock('report');
 };
@@ -1678,9 +1155,7 @@ function selfCheckPoem(){
   if(!state.poem){toast('请先生成一首诗');return;}
   var p=state.poem,F=FORMS[p.form]||FORMS.wujue,items=[],bad=0;
   // 形式层：逐项核对（讲义第30章：字数/句数可逐项核对）
-  if(p.lang==='en'){
-    items.push({k:'ok',t:'英文诗 · 形式',d:'英文诗按行与节奏评价，字数不作逐字核对；共 '+p.lines.length+' 行。'});
-  }else if(F.lens){
+  if(F.lens){
     var exp=F.lens,got=p.lines.map(zhLen),mismatch=[];
     for(var i=0;i<Math.min(exp.length,got.length);i++)if(exp[i]!==got[i])mismatch.push('第'+(i+1)+'句 '+got[i]+'/'+exp[i]+'字');
     if(got.length!==exp.length)mismatch.push('句数 '+got.length+'/'+exp.length);
@@ -1703,26 +1178,6 @@ function selfCheckPoem(){
   state.checks.poem={items:items,sum:sum,bad:bad};
   $('poemCheck').innerHTML=chkHTML(items,sum);
 }
-function selfCheckArt(){
-  if(!state.poem){toast('请先生成一幅画');return;}
-  var items=[],bad=0,isAI=state.mode==='ai'&&state.aiImage,st=STYLES[state.style];
-  // 内容保留：意象是否都进了画（讲义第24章：内容描述画了什么）
-  if(state.keys.length){
-    items.push({k:'ok',t:'内容 · '+state.keys.length+' 个意象已入画',d:state.keys.map(function(k){return IMG[k].n;}).join('、')+'；主体由诗句/主题决定，切画风不应改变它。'});
-  }else{
-    items.push({k:'warn',t:'内容 · AI 模式按诗意取景',d:'画的内容由诗句＋主题提示词决定，意象未逐一列出；请对照诗句看主体是否保留。'});
-  }
-  // 风格接近：参数是否匹配所选画风
-  items.push({k:'ok',t:'风格 · 已用「'+st.n+'」',d:'画风参数（mode='+st.mode+' / 背景 / 色板 / 线宽）来自所选画风库，20 种画风各不相同。'});
-  // 可复现 / 不可复现
-  items.push(isAI?{k:'warn',t:'可复现 · AI 模式每次不同',d:'文生图模型按提示词现场作画，同诗同画风也不保证同图；若要固定，请切离线模式。'}
-                 :{k:'ok',t:'可复现 · 同诗同画风同图',d:'种子 = 诗句哈希，随机墨点/波纹/飞鸟位置固定（第 19 章）。'});
-  // 人眼观察清单（讲义第24章：房屋河岸有没有变形）
-  items.push({k:'warn',t:'人眼 · 请检查局部是否变形',d:'像看「图宾根小城」那样核对：主体轮廓是否可辨、风格有没有错贴到不相干的物体、细部有没有走形。自动指标不能替代这一步。'});
-  var sum='内容保留 / 风格接近 / 局部观察分开看 · '+st.n+'（讲义第 24 章）';
-  state.checks.art={items:items,sum:sum,bad:bad};
-  $('artCheck').innerHTML=chkHTML(items,sum);
-}
 function revisePoem(){
   if(!state.poem){toast('请先生成一首诗');return;}
   if(!state.checks.poem)selfCheckPoem();
@@ -1734,10 +1189,10 @@ function revisePoemOffline(p,old){
   var theme=$('theme').value.trim(),seedBase=hash(theme+'|'+state.form+'|'+state.mood+'|'+(++state.nonce));
   var keys=parseImages(theme,rng(seedBase));
   var np=makePoem(state.form,state.mood,keys,seedBase);
-  var seed=hash(np.lines.join('')+np.title+'|'+state.style);
+  var seed=hash(np.lines.join('')+np.title);
   state.poem=np;state.keys=keys;state.seed=seed;
-  renderPoem(np);redraw();
-  $('poemCheck').innerHTML='';$('artCheck').innerHTML='';state.checks.poem=null;state.checks.art=null;
+  renderPoem(np);
+  $('poemCheck').innerHTML='';state.checks.poem=null;
   $('poemDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（离线按问题重新生成）</div><div class="diff-poem">《'+esc(p.title)+'》\n'+esc(old.join('\n'))+'\n\n→ 《'+esc(np.title)+'》\n'+esc(np.lines.join('\n'))+'</div></div>';
   toast('已按自检问题改写（离线规则重生成）');
 }
@@ -1764,42 +1219,8 @@ function revisePoemAI(p,old){
   }).catch(function(e){toast('改写失败：'+(e.message||'网络错误'));})
   .then(function(){btn.disabled=false;});
 }
-function reviseArt(){
-  if(!state.poem){toast('请先生成一幅画');return;}
-  var before=state.mode==='ai'&&state.aiImage?state.aiImage:$('art').toDataURL('image/png');
-  if(state.mode==='ai')reviseArtAI(before);else reviseArtOffline(before);
-}
-function reviseArtOffline(before){
-  // 离线：按自检问题强化意象——把主题意象重新取全并用新种子重绘
-  var theme=$('theme').value.trim(),seedBase=hash(theme+'|'+state.form+'|'+state.mood+'|'+(++state.nonce)+'|rev');
-  var keys=parseImages(theme,rng(seedBase)),seed=hash(state.poem.lines.join('')+'|'+state.style+'|'+seedBase);
-  state.keys=keys;state.seed=seed;redraw();
-  $('artCheck').innerHTML='';state.checks.art=null;
-  $('artDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（强化意象 + 新种子重绘）</div><div class="diff-imgs"><figure><img src="'+before+'" alt="改写前"><figcaption>改写前</figcaption></figure><figure><img src="'+$('art').toDataURL('image/png')+'" alt="改写后"><figcaption>改写后</figcaption></figure></div></div>';
-  toast('已按自检问题重绘（离线规则）');
-}
-function reviseArtAI(before){
-  var btn=$('reviseArtBtn');btn.disabled=true;
-  $('artLoading').style.display='flex';$('artLoading').firstChild.textContent='✎ 正在按问题重画…';
-  var st=STYLE_PROMPT[state.style],scene=state.poem.lines.slice(0,4).join('，');
-  var prompt=st+'。画面内容：'+($('theme').value.trim()||'山水')+'；诗意：'+scene+'。'
-    +'注意：保留主体结构不让它变形，画风只改变颜色、纹理与笔触，不要把风格错贴到不相干的物体上。不要出现文字、水印。';
-  fetch(AI.base+'/images/generations',{method:'POST',headers:aiHeaders(),body:JSON.stringify({model:AI.image,prompt:prompt,n:1,size:'2048x2048',response_format:'b64_json'})})
-  .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
-  .then(function(d){
-    var b64=d.data&&d.data[0]&&d.data[0].b64_json;if(!b64)throw new Error('模型未返回图片');
-    var url='data:image/jpeg;base64,'+b64;state.aiImage=url;$('artAI').src=url;
-    $('artLoading').style.display='none';
-    $('artCheck').innerHTML='';state.checks.art=null;
-    $('artDiff').innerHTML='<div class="diff-row"><div class="dl">✎ 改写前 → 改写后（提示词加入「保主体 / 防错贴」约束）</div><div class="diff-imgs"><figure><img src="'+before+'" alt="改写前"><figcaption>改写前</figcaption></figure><figure><img src="'+url+'" alt="改写后"><figcaption>改写后</figcaption></figure></div></div>';
-    toast('已按自检问题重画（AI 模式）');
-  }).catch(function(e){$('artLoading').style.display='none';toast('重画失败：'+(e.message||'网络错误'));})
-  .then(function(){btn.disabled=false;});
-}
 $('checkPoemBtn').addEventListener('click',selfCheckPoem);
 $('revisePoemBtn').addEventListener('click',revisePoem);
-$('checkArtBtn').addEventListener('click',selfCheckArt);
-$('reviseArtBtn').addEventListener('click',reviseArt);
 /* ================= 盲评擂台（对照讲义第30章） ================= */
 var blind={a:null,b:null,right:null,picked:null,streak:0,best:0,rounds:0,defect:''};
 function blindScoreSave(){try{localStorage.setItem('hw_lab3_blind_v1',JSON.stringify({streak:blind.streak,best:blind.best,rounds:blind.rounds}));}catch(e){}}
@@ -1869,7 +1290,7 @@ $('blindArena').addEventListener('click',function(e){
 });
 blindScoreLoad();blindScoreUI();
 globalThis.__LAB3_BLIND__={newRound:blindNew,pick:blindPick,getState:function(){return {a:blind.a,b:blind.b,right:blind.right,picked:blind.picked,defect:blind.defect,streak:blind.streak};},makeGood:blindGood,makeBad:blindBad};
-/* ================= 意象速查 / 画风图鉴 ================= */
+/* ================= 意象速查 ================= */
 function renderImgRef(){
   $('imgRefGrid').innerHTML=Object.keys(IMG).map(function(k){
     var im=IMG[k];return '<button class="img-ref-btn" data-im="'+k+'" title="把「'+esc(im.n)+'」填入主题"><b>'+esc(im.n)+'</b><small>'+esc(im.w[0])+'</small></button>';
@@ -1899,50 +1320,10 @@ $('meterGrid').addEventListener('click',function(e){
 $('meterGrid').addEventListener('keydown',function(e){
   if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-fid]');if(c){e.preventDefault();applyForm(c.getAttribute('data-fid'));}}
 });
-function renderStyleRef(){
-  var html=STYLE_ORDER.map(function(g){
-    var items=Object.keys(STYLES).filter(function(id){return STYLES[id].g===g;});
-    if(!items.length)return '';
-    return '<div class="style-ref-group"><div class="sg-t">'+esc(g)+'</div><div class="style-ref-chips">'
-      +items.map(function(id){return '<span class="style-ref-chip'+(id===state.style?' on':'')+'" data-st="'+id+'" role="button" tabindex="0" title="切换到'+esc(STYLES[id].n)+'">'+esc(STYLES[id].n)+'</span>';}).join('')
-      +'</div></div>';
-  }).join('');
-  $('styleRefBox').innerHTML=html;
-}
-function applyStyle(id){
-  if(!STYLES[id])return;
-  state.style=id;$('styleSel').value=id;
-  $('artStyleTag').textContent='— '+STYLES[id].n;
-  renderStyleRef();
-  if(state.poem&&state.mode==='offline')redraw();
-  toast('画风已切换为'+STYLES[id].n+(state.poem?'（画作已重绘）':''));
-}
-/* 意象画法图谱：说明取自 drawScene 的真实绘制分支 */
-var IMG_HOW={
- moon:{t:'画面右上，半径约 42 的圆',d:'深色/线描画风只勾圆轮廓；其余画风用<b>径向渐变光晕</b>＋实心圆表现月色，取色板第 4 色。'},
- mountain:{t:'三层叠嶂的折线山峦',d:'随机折线连成峰谷，自下而上三层，透明度递增（.30→.46）拉出远近；取景不足 3 个意象时自动补远山。'},
- water:{t:'十道正弦波纹',d:'在画面下半部画 10 条带正弦起伏的横线，透明度 .4、线宽 1.2，波纹位置由种子决定。'},
- willow:{t:'主干＋十条垂枝',d:'先画一段弯曲主干，再从上往下垂 10 条细枝，每条末端有轻微摆动，像风里的柳丝。'},
- snow:{t:'六十点随机飞雪',d:'画面上方 85% 区域撒 60 个白点；像素画风改用 3×3 方块，其余用大小不一的圆点。'},
- flower:{t:'花枝＋十四朵小花',d:'一段斜出的枝干上散落 14 朵四点小花，位置由种子随机，取色板第 1/2 色。'},
- bird:{t:'五只飞鸟的折线',d:'每只用四点折线画成「人」字形的展翅剪影，分布在画面上半部右上区域。'},
- boat:{t:'一叶扁舟＋桅杆',d:'梯形船身加一条竖桅，位置随机落在画面中下部水面上。'},
- bamboo:{t:'三竿修竹＋竹叶',d:'三根带节的竹竿，每竿配 5 组斜向竹叶，叶长由种子决定方向。'},
- cloud:{t:'四组椭圆云弧',d:'用椭圆弧线闭合成云团，随机分布在上半部，透明度 .18 叠出层次。'},
- pavilion:{t:'一角亭子的屋顶与柱',d:'先画三角屋顶，再画四柱围成的亭身，固定在画面右侧中景。'},
- star:{t:'二十八点星子',d:'上半部撒 28 个亮点；像素画风用 4×4 方块，其余用小圆点，取色板末色。'}
-};
-function renderImgAtlas(){
-  $('imgAtlasGrid').innerHTML=Object.keys(IMG).map(function(k){
-    var h=IMG_HOW[k]||{t:IMG[k].n,d:'按画风笔法绘制。'};
-    return '<details><summary><span class="sm-mk">◆</span><b>'+esc(IMG[k].n)+'</b><span class="sm-w">'+esc(h.t)+'</span></summary>'
-      +'<div class="sm-body">'+h.d+'<br><button class="sm-btn" data-im="'+k+'">填入主题「'+esc(IMG[k].w[0])+'」→</button></div></details>';
-  }).join('');
-}
 function renderMoodAtlas(){
   $('moodAtlasGrid').innerHTML=Object.keys(MOOD).map(function(k){
     var M=MOOD[k];
-    return '<details'+(k===state.mood?' class="on" open':'')+'><summary><span class="m-dot" style="background:'+M.tint.replace(/[\d.]+\)$/,'1)')+'"></span><b>'+esc(M.n)+'</b><small>画面色调 '+M.tint.match(/[\d.]+(?=\))/)[0]+' 透明度</small></summary>'
+    return '<details'+(k===state.mood?' class="on" open':'')+'><summary><span class="m-dot" style="background:'+M.tint.replace(/[\d.]+\)$/,'1)')+'"></span><b>'+esc(M.n)+'</b><small>情感色调 · 用词 '+M.v.length+' 组</small></summary>'
       +'<div class="m-body"><div class="m-row"><span>动词</span> '+M.v.join(' · ')+'</div>'
       +'<div class="m-row"><span>形容</span> '+M.a.join(' · ')+'</div>'
       +'<div class="m-row"><span>句尾</span> '+M.t.join(' · ')+'</div>'
@@ -1965,18 +1346,10 @@ function fillImagery(k){
   $('theme').value=word;$('theme').focus();
   toast('已填入「'+word+'」，点生成即可围绕它取景');
 }
-['imgRefGrid','imgAtlasGrid'].forEach(function(id){
-  $(id).addEventListener('click',function(e){
-    var b=e.target.closest('[data-im]');if(b)fillImagery(b.getAttribute('data-im'));
-  });
+$('imgRefGrid').addEventListener('click',function(e){
+  var b=e.target.closest('[data-im]');if(b)fillImagery(b.getAttribute('data-im'));
 });
-$('styleRefBox').addEventListener('click',function(e){
-  var c=e.target.closest('[data-st]');if(c)applyStyle(c.getAttribute('data-st'));
-});
-$('styleRefBox').addEventListener('keydown',function(e){
-  if(e.key==='Enter'||e.key===' '){var c=e.target.closest('[data-st]');if(c){e.preventDefault();applyStyle(c.getAttribute('data-st'));}}
-});
-renderImgRef();renderMeterRef();renderStyleRef();renderImgAtlas();renderMoodAtlas();
+renderImgRef();renderMeterRef();renderMoodAtlas();
 /* ================= 我的诗集 ================= */
 var COLL_KEY='hw_lab3_libs_v1', OLD_KEY='hw_lab3_collection_v1', COLL_MAX=80;
 function collId(){return Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,7);}
@@ -2003,32 +1376,21 @@ function renderLibSel(){
   var sel=$('collSel');
   sel.innerHTML=libs.map(function(L){return '<option value="'+L.id+'"'+(L.id===activeId?' selected':'')+'>'+esc(L.title)+'（'+L.items.length+' 首）</option>';}).join('');
 }
-/* 生成小尺寸缩略图（离线重绘 / AI 图缩放），只存缩略图避免 localStorage 超限 */
-function makeThumb(cb){
-  var c=document.createElement('canvas');c.width=480;c.height=360;var x=c.getContext('2d');
-  function done(){var u;try{u=c.toDataURL('image/jpeg',0.68);}catch(e){u='';}cb(u);}
-  if(state.mode==='ai'&&state.aiImage){
-    var im=new Image();im.onload=function(){x.drawImage(im,0,0,480,360);done();};im.onerror=function(){x.fillStyle='#0b0b12';x.fillRect(0,0,480,360);done();};im.src=state.aiImage;
-  }else if(state.poem){drawScene(x,480,360,state.keys,state.mood,state.seed,state.style);done();}
-  else done();
-}
 function favCurrent(){
   if(!state.poem){toast('请先生成一首诗');return;}
   var L=curLib();
   if(L.items.length>=COLL_MAX){toast('《'+L.title+'》已满（'+COLL_MAX+' 首），请先移除一些或换一本诗集');return;}
   var p=state.poem;
-  makeThumb(function(thumb){
-    L.items.unshift({
-      id:collId(),title:p.title,lines:p.lines.slice(),form:p.form,formName:p.formName,
-      group:(FORMS[p.form]&&FORMS[p.form].g)||'',lang:p.lang,layout:p.layout,
-      mood:p.mood,moodName:p.moodName,style:state.style,styleName:STYLES[state.style].n,
-      ai:state.mode==='ai',theme:$('theme').value.trim(),seed:state.seed,
-      thumb:thumb,time:new Date().toLocaleString('zh-CN')
-    });
-    collSave();renderColl();
-    if(window.ENH)window.ENH.unlock('anthologist');
-    toast('《'+p.title+'》已收入《'+L.title+'》');
+  L.items.unshift({
+    id:collId(),title:p.title,lines:p.lines.slice(),form:p.form,formName:p.formName,
+    group:(FORMS[p.form]&&FORMS[p.form].g)||'',lang:p.lang,layout:p.layout,
+    mood:p.mood,moodName:p.moodName,
+    ai:state.mode==='ai',theme:$('theme').value.trim(),seed:state.seed,
+    time:new Date().toLocaleString('zh-CN')
   });
+  collSave();renderColl();
+  if(window.ENH)window.ENH.unlock('anthologist');
+  toast('《'+p.title+'》已收入《'+L.title+'》');
 }
 function renderColl(){
   var L=curLib();
@@ -2040,10 +1402,10 @@ function renderColl(){
   empty.style.display='none';
   grid.innerHTML=L.items.map(function(it,i){
     return '<div class="coll-card" data-id="'+it.id+'" role="button" tabindex="0" aria-label="查看《'+esc(it.title)+'》">'
-      +'<div class="cov">'+(it.thumb?'<img src="'+it.thumb+'" alt="'+esc(it.title)+' 的画作">':'')+'<span class="no">第 '+(i+1)+' 首</span></div>'
+      +'<div class="cov"><span class="no">第 '+(i+1)+' 首</span></div>'
       +'<button class="del" data-del="'+it.id+'" title="移出诗集" aria-label="移出诗集">✕</button>'
       +'<div class="meta"><b>《'+esc(it.title)+'》</b>'
-      +'<span class="tags">'+esc(it.formName)+' · '+esc(it.styleName)+(it.ai?' · ✦AI':'')+'</span>'
+      +'<span class="tags">'+esc(it.formName)+(it.ai?' · ✦AI':'')+'</span>'
       +'<span class="frag">'+it.lines.slice(0,3).map(esc).join('<br>')+(it.lines.length>3?'<br>…':'')+'</span></div></div>';
   }).join('');
 }
@@ -2052,29 +1414,25 @@ function openCollItem(id){
   var it=collFind(id);if(!it)return;
   var en=it.lang==='en';
   $('collModalBody').innerHTML=
-     '<div><img class="cm-art" src="'+(it.thumb||'')+'" alt="'+esc(it.title)+' 的画作">'
-    +'<div class="cm-ops"><button class="btn sm" id="cmCopy">复制诗</button><button class="btn sm" id="cmDl">下载画作</button></div></div>'
-    +'<div><h3>《'+esc(it.title)+'》</h3>'
+     '<div><h3>《'+esc(it.title)+'》</h3>'
     +'<div class="cm-poem'+(en?' en':'')+'">'+it.lines.map(esc).join('<br>')+'</div>'
-    +'<div class="cm-info">诗体：'+esc(it.formName)+'（'+esc(it.group||'—')+'）<br>画风：'+esc(it.styleName)+'<br>情感：'+esc(it.moodName)+'<br>生成方式：'+(it.ai?'AI 实时':'离线可复现')+'<br>主题：'+esc(it.theme||'—')+'<br>收藏于：'+esc(it.time)+'</div></div>';
+    +'<div class="cm-info">诗体：'+esc(it.formName)+'（'+esc(it.group||'—')+'）<br>情感：'+esc(it.moodName)+'<br>生成方式：'+(it.ai?'AI 实时':'离线可复现')+'<br>主题：'+esc(it.theme||'—')+'<br>收藏于：'+esc(it.time)+'</div>';
   $('collModal').classList.add('show');
   $('cmCopy').onclick=function(){var t='《'+it.title+'》\n'+it.lines.join('\n');if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast('诗已复制');},function(){toast('请手动复制');});else toast('请手动复制');};
-  $('cmDl').onclick=function(){if(!it.thumb){toast('无画作');return;}var a=document.createElement('a');a.download='诗集-'+it.title+'.jpg';a.href=it.thumb;document.body.appendChild(a);a.click();document.body.removeChild(a);toast('画作已下载');};
 }
 function collBookHTML(){
   var escB=esc,L=curLib();
-  var cover='<section class="cover"><div class="seal">诗中有画</div><h1>'+escB(L.title)+'</h1>'
+  var cover='<section class="cover"><div class="seal">星算诗台</div><h1>'+escB(L.title)+'</h1>'
     +(L.author?'<p class="author">'+escB(L.author)+'　编</p>':'')
     +(L.preface?'<p class="preface">'+escB(L.preface).replace(/\n/g,'<br>')+'</p>':'')
     +'<p class="sub">共 '+L.items.length+' 首 · 生成于 '+new Date().toLocaleString('zh-CN')+'</p>'
     +'<p class="sub">人工智能概论 · 实验室 3 · he-yikang.github.io/homework</p></section>';
   var pages=L.items.map(function(it,i){
     var en=it.lang==='en';
-    return '<section class="pg"><div class="art"><img src="'+(it.thumb||'')+'" alt="'+escB(it.title)+'"></div>'
-      +'<div class="txt"><div class="no">NO. '+('0'+(i+1)).slice(-2)+'</div>'
+    return '<section class="pg"><div class="txt"><div class="no">NO. '+('0'+(i+1)).slice(-2)+'</div>'
       +'<h2>《'+escB(it.title)+'》</h2>'
       +'<div class="poem'+(en?' en':'')+'">'+it.lines.map(escB).join('<br>')+'</div>'
-      +'<div class="meta">'+escB(it.formName)+'（'+escB(it.group||'—')+'） · '+escB(it.styleName)+' · '+escB(it.moodName)+' · '+(it.ai?'AI 实时':'离线可复现')+'<br>主题：'+escB(it.theme||'—')+'</div></div></section>';
+      +'<div class="meta">'+escB(it.formName)+'（'+escB(it.group||'—')+'） · '+escB(it.moodName)+' · '+(it.ai?'AI 实时':'离线可复现')+'<br>主题：'+escB(it.theme||'—')+'</div></div></section>';
   }).join('');
   return '<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><title>'+escB(L.title)+'</title><style>'
     +'*{box-sizing:border-box}body{margin:0;background:#0a0a0f;color:#e8e8f0;font-family:system-ui,"Microsoft YaHei",sans-serif}'
@@ -2083,7 +1441,7 @@ function collBookHTML(){
     +'.cover h1{font-family:"KaiTi","STKaiti",serif;font-size:52px;color:#f0e8d0;letter-spacing:8px;margin:0}'
     +'.cover .author,.cover .preface{font-family:"KaiTi",serif;color:#c4a4f8;font-size:18px;margin-top:20px;line-height:1.9}'
     +'.cover .sub{color:#6f6f90;font-size:12px;margin-top:14px}'
-    +'.pg{max-width:900px;margin:0 auto;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;padding:48px 32px;border-bottom:1px solid #26263a}'
+    +'.pg{max-width:760px;margin:0 auto;min-height:100vh;display:grid;grid-template-columns:1fr;gap:34px;align-items:center;padding:48px 32px;border-bottom:1px solid #26263a}'
     +'.pg .art img{width:100%;border-radius:12px;border:1px solid #26263a;display:block}'
     +'.pg .no{font-size:11px;color:#6f6f90;letter-spacing:3px;margin-bottom:10px}'
     +'.pg h2{font-family:"KaiTi",serif;font-size:28px;color:#e8c07d;margin:0 0 18px}'
@@ -2153,7 +1511,7 @@ $('collFile').addEventListener('change',function(){
 $('collClear').addEventListener('click',function(){var L=curLib();if(!L.items.length){toast('《'+L.title+'》已是空的');return;}if(!window.confirm('确定清空《'+L.title+'》的 '+L.items.length+' 首作品？此操作不可撤销，建议先备份。'))return;L.items=[];collSave();renderColl();toast('《'+L.title+'》已清空');});
 collLoad();renderColl();
 globalThis.__LAB3_COLL__={get:function(){return curLib();},getLibs:function(){return libs;},fav:favCurrent,bookHTML:collBookHTML,render:renderColl};
-globalThis.__LAB3__={getPoem:function(){return state.poem;},getState:function(){return {theme:$('theme').value.trim(),form:state.form,mood:state.mood,style:state.style,layout:state.layout,mode:state.mode,keys:state.keys.slice(),seed:state.seed,hasAI:!!state.aiImage};},generate:generate};
+globalThis.__LAB3__={getPoem:function(){return state.poem;},getState:function(){return {theme:$('theme').value.trim(),form:state.form,mood:state.mood,layout:state.layout,mode:state.mode,keys:state.keys.slice(),seed:state.seed,hasAI:state.mode==='ai'};},generate:generate};
 window.addEventListener('scroll',function(){var b=$('totop');if(window.scrollY>400)b.classList.add('show');else b.classList.remove('show');});
 buildSelects();
 })();
@@ -2188,14 +1546,14 @@ var ITEMS=[
  {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
  {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
  {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
- {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'✨ 星算诗台 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 生成 格律 词牌 诗人 主题 情感 第三篇'},
  {t:'⚔ 盲评擂台 · 哪首诗更合格',u:'lab3.html#blindTest',d:'扩展',k:'盲评 擂台 格律 评估 对比 连胜 两首诗 读者判断 第30章'},
  {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
  {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
 /* /ENH:CMD */
  {t:'首页 · 课程作业导航',u:'index.html',d:'首页',k:'首页 home index 导航'},
- {t:'作业 3 · 人工智能应用：诗中有画',u:'homework3.html',d:'作业 3',k:'应用 诗 画 诗人 绘画 多模态 大模型 第三篇'},
- {t:'实验室 3 · 诗中有画交互项目',u:'lab3.html',d:'实验室 3',k:'诗 画 生成 水墨 现代 线描 英文诗 意象 实验室3'},
+ {t:'作业 3 · 人工智能应用：星算诗台',u:'homework3.html',d:'作业 3',k:'应用 诗 诗人 多模态 大模型 第三篇'},
+ {t:'实验室 3 · 星算诗台',u:'lab3.html',d:'实验室 3',k:'诗 生成 格律 意象 主题 情感 实验室3'},
  {t:'作业 1 · AI 编程工具作品展示',u:'homework1.html',d:'作业 1',k:'workbuddy deepseek trae 幻方 质数 agent'},
  {t:'实验室 1 · 幻方与质数互动实验室',u:'lab1.html',d:'实验室 1',k:'幻方 质数 互动 算法 动画 实验室1'},
  {t:'作业 2 · MLP 学习参数的实现和可视化',u:'homework2.html',d:'作业 2',k:'MLP 对比报告 参数 可视化 训练'},
@@ -2272,13 +1630,13 @@ window.addEventListener('scroll',function(){var h=document.documentElement.scrol
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 36 章</b><small>《人工智能通识》36 章逐章对照本站实践（含第三篇「人工智能应用」），可搜索、按篇筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>16 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
     <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
     <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
-    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html"><b>I · 星算诗台</b><small>输入需求写诗，紧扣主题与情感，第三篇「人工智能应用」交互项目</small></a>
     <a href="lab3.html#blindTest"><b>J · 盲评擂台</b><small>按讲义第 30 章的读者盲评法，两首打乱的诗选哪首格律合格，揭晓后逐项核对、连胜计分</small></a>
     <a href="atlas.html#graph"><b>M · 知识依赖图谱</b><small>36 章按篇连成主干，跨篇虚线标先修关系，点节点直达讲义与实验</small></a>
   </div>
@@ -2303,7 +1661,6 @@ var ACHV=[
  {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
- {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
  {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'},
  {id:'blindjudge',t:'盲评慧眼',d:'在实验室 3 的盲评擂台连胜 3 场'}
 ];
@@ -2361,11 +1718,11 @@ var TOUR={
   {t:'梯度显微镜与 3D 决策空间',d:'看懂「为什么学得动」：优化轨迹、逐层梯度、可旋转的置信度曲面。',s:'#grad'},
   {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
  'homework3.html':{next:'lab3.html',steps:[
-  {t:'作业 3 · 人工智能应用：诗中有画',d:'把「人工智能诗人」与「AI 绘画大师」接成一条流水线：需求 → 诗 → 画，讲清工作原理。',s:'#origin'},
+  {t:'作业 3 · 人工智能应用：星算诗台',d:'把「人工智能诗人」做成一条可复现的流水线：需求 → 主题与情感 → 意象 → 按格律重装成诗，讲清工作原理。',s:'#origin'},
   {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
  'lab3.html':{next:'atlas.html',steps:[
-  {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
-  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#styleRef'},
+  {t:'星算诗台 · 创作台',d:'输入主题选诗体（28 种，含 22 种词牌曲牌），现场生成一首紧扣主题与情感的诗。',s:'#studio'},
+  {t:'同一主题，五种情感',d:'静/愁/喜/壮/幽任意切换，看同一主题如何写出不同情绪；主题字与情感基准同时约束选句。',s:'#refine'},
   {t:'盲评擂台 · 哪首更合格',d:'讲义第 30 章让读者不知道作者是谁再比较：两首打乱的诗盲选，揭晓后按形式与表达逐项核对。',s:'#blindTest'}]},
  'atlas.html':{next:null,steps:[
   {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},

@@ -166,13 +166,13 @@
         </a>
         <a class="card" href="homework3.html">
             <span class="tag" style="color:#e8c07d">第 3 次作业</span>
-            <h2>人工智能应用：诗中有画</h2>
-            <p>把「人工智能诗人」与「AI 绘画大师」接成一条流水线：需求 → 诗 → 画。讲清工作原理，并回望前两篇的表示、规则、学习与多模态知识。</p>
+            <h2>人工智能应用：星算诗台</h2>
+            <p>把「人工智能诗人」做成一条可复现的流水线：需求 → 主题与情感 → 意象 → 按格律重装成诗。讲清工作原理，并回望前两篇的表示、规则与学习知识。</p>
         </a>
         <a class="card" href="lab3.html" style="border-color:rgba(232,192,125,.35)">
             <span class="tag" style="color:#e8c07d">✦ 实验室 3 · LIVE</span>
-            <h2>诗中有画交互项目</h2>
-            <p>40 种诗体（22 种词牌）、20 种画风自由组合：输入主题，现场生成一首诗和一幅画；横排竖排随意切换，同一首诗换画风看意象如何变成笔墨。</p>
+            <h2>星算诗台</h2>
+            <p>28 种诗体（22 种词牌）：输入主题与情感，现场生成一首紧扣主题、关键词与情感基调的新诗；横排竖排随意切换，还能盲评擂台对照格律、自检改写、收入诗集。</p>
         </a>
     </div>
 
@@ -197,7 +197,7 @@
 <!-- ENH:INDEX -->
 <div id="enh-achv"></div>
 <div style="max-width:720px;margin:16px 0 0;padding:14px 20px;border:1px solid rgba(168,85,247,.3);border-radius:14px;background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(59,130,246,.06));font-size:13px;color:var(--text-dim);line-height:1.7">
-  ✦ <b style="color:#e8e8f0">扩展能力</b>（梯度显微镜、知识地图、成就、导览、实验报告、挑战链接、3D 决策空间、对照时间轴）不改动四栏结构，作为扩展层挂在各页。
+  ✦ <b style="color:#e8e8f0">扩展能力</b>（梯度显微镜、知识地图、成就、导览、实验报告、挑战链接、3D 决策空间、对照时间轴）不改动栏目结构，作为扩展层挂在各页。
   <a href="atlas.html" style="color:#2dd4bf;text-decoration:none">🧭 打开知识地图</a> ·
   <a href="atlas.html#course" style="color:#2dd4bf;text-decoration:none">📖 课程教材 36 章对照</a> ·
   <a href="https://zhumy.github.io/Introduction_to_Artificial_Intelligence/" target="_blank" rel="noopener" style="color:#2dd4bf;text-decoration:none">↗ 课程讲义原站</a> ·
@@ -244,7 +244,7 @@ var ITEMS=[
  {t:'🔬 梯度显微镜 · 优化轨迹与逐层梯度',u:'lab2.html#grad',d:'扩展',k:'梯度 优化 SGD Momentum Adam 等高线 消失 学习率'},
  {t:'🧊 3D 决策空间 · 可旋转置信度曲面',u:'lab2.html#space3d',d:'扩展',k:'3D 曲面 旋转 置信度 决策边界'},
  {t:'📄 实验报告 / 挑战链接',u:'lab2.html#report',d:'扩展',k:'报告 导出 打印 Markdown 挑战 出题 分享'},
- {t:'🎨 诗中有画 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 画 生成 水墨 现代 线描 英文诗 诗人 绘画 多模态 第三篇'},
+ {t:'✨ 星算诗台 · 第三篇交互项目',u:'lab3.html',d:'扩展',k:'诗 生成 格律 词牌 诗人 主题 情感 第三篇'},
  {t:'⚔ 盲评擂台 · 哪首诗更合格',u:'lab3.html#blindTest',d:'扩展',k:'盲评 擂台 格律 评估 对比 连胜 两首诗 读者判断 第30章'},
  {t:'🏅 探索进度 · 跨页成就',u:'index.html#enh-achv',d:'扩展',k:'成就 徽章 进度 探索 导览'},
  {t:'↗ README · 扩展模块说明',u:'https://github.com/he-yikang/homework#enhance',d:'外链',k:'readme 扩展 说明 关联 仓库'},
@@ -338,13 +338,13 @@ window.addEventListener('scroll',function(){
     <a href="atlas.html#course"><b>📖 课程坐标系 · 教材 36 章</b><small>《人工智能通识》36 章逐章对照本站实践（含第三篇「人工智能应用」），可搜索、按篇筛选、标记已读，并直达讲义原文</small></a>
     <a href="lab2.html#grad"><b>A · 梯度与优化显微镜</b><small>可拖动初始点的 loss 等高线、SGD / Momentum / Adam 轨迹对比、逐层梯度、学习率三态</small></a>
     <a href="atlas.html#map"><b>B · 课程知识地图</b><small>确定性算法 → 梯度下降 → 泛化，节点直达对应实验室控件</small></a>
-    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>16 枚徽章、进度环，记录你探索过的每一个实验</small></a>
+    <a href="index.html#enh-achv"><b>C · 跨页成就进度</b><small>15 枚徽章、进度环，记录你探索过的每一个实验</small></a>
     <a href="#" id="enh-tour-link"><b>D · 自动导览</b><small>自动滚动、高亮、旁白字幕，按全站顺序逐页导览</small></a>
     <a href="lab2.html#report"><b>E · 一键实验报告</b><small>参数 + 曲线 + 决策边界 + 自动结论，可打印或复制 Markdown</small></a>
     <a href="lab2.html#challenge"><b>F · 挑战链接</b><small>把数据集与目标打包成链接发给同学，达标解锁徽章</small></a>
     <a href="lab2.html#space3d"><b>G · 3D 决策空间</b><small>可拖动旋转的置信度曲面，看网络如何把平面折起来</small></a>
     <a href="atlas.html#timeline"><b>H · 确定性 vs 学习</b><small>几次作业算法过程并排播放，标出共同点与分界</small></a>
-    <a href="lab3.html"><b>I · 诗中有画</b><small>输入需求写诗、按诗句意象生成画，第三篇「人工智能应用」交互项目</small></a>
+    <a href="lab3.html"><b>I · 星算诗台</b><small>输入需求写诗，紧扣主题与情感，第三篇「人工智能应用」交互项目</small></a>
     <a href="lab3.html#blindTest"><b>J · 盲评擂台</b><small>按讲义第 30 章的读者盲评法，两首打乱的诗选哪首格律合格，揭晓后逐项核对、连胜计分</small></a>
     <a href="atlas.html#graph"><b>M · 知识依赖图谱</b><small>36 章按篇连成主干，跨篇虚线标先修关系，点节点直达讲义与实验</small></a>
   </div>
@@ -369,7 +369,6 @@ var ACHV=[
  {id:'atlas',t:'串起来了',d:'逛完知识地图与对照时间轴'},
  {id:'course',t:'课程坐标系',d:'在教材脉络里标记 5 章已读，把作业挂回课程章节'},
  {id:'poet',t:'人工智能诗人',d:'在实验室 3 生成一首诗'},
- {id:'painter',t:'AI 绘画大师',d:'在实验室 3 按诗句生成一幅水墨画'},
  {id:'anthologist',t:'诗集编纂者',d:'在实验室 3 把一首诗收入「我的诗集」'},
  {id:'blindjudge',t:'盲评慧眼',d:'在实验室 3 的盲评擂台连胜 3 场'}
 ];
@@ -427,11 +426,11 @@ var TOUR={
   {t:'梯度显微镜与 3D 决策空间',d:'看懂「为什么学得动」：优化轨迹、逐层梯度、可旋转的置信度曲面。',s:'#grad'},
   {t:'实验报告与挑战链接',d:'把实验变成能交的报告，或打包成挑战链接发给同学。',s:'#report'}]},
  'homework3.html':{next:'lab3.html',steps:[
-  {t:'作业 3 · 人工智能应用：诗中有画',d:'把「人工智能诗人」与「AI 绘画大师」接成一条流水线：需求 → 诗 → 画，讲清工作原理。',s:'#origin'},
+  {t:'作业 3 · 人工智能应用：星算诗台',d:'把「人工智能诗人」做成一条可复现的流水线：需求 → 主题与情感 → 意象 → 按格律重装成诗，讲清工作原理。',s:'#origin'},
   {t:'回望前两篇知识',d:'逐章对照：表示、规则、学习、网络结构、多模态、大模型——应用站在基础的肩膀上。',s:'#basis'}]},
  'lab3.html':{next:'atlas.html',steps:[
-  {t:'诗中有画 · 创作台',d:'输入主题选诗体（含英文诗）与画风（水墨/现代/线描），现场生成一首诗和一幅画。',s:'#studio'},
-  {t:'同一首诗，二十种画风',d:'五类画风任意切换，看同一意象如何变成墨色、色块、线条或霓虹；种子固定，画作可复现。',s:'#styleRef'},
+  {t:'星算诗台 · 创作台',d:'输入主题选诗体（28 种，含 22 种词牌曲牌），现场生成一首紧扣主题与情感的诗。',s:'#studio'},
+  {t:'同一主题，五种情感',d:'静/愁/喜/壮/幽任意切换，看同一主题如何写出不同情绪；主题字与情感基准同时约束选句。',s:'#refine'},
   {t:'盲评擂台 · 哪首更合格',d:'讲义第 30 章让读者不知道作者是谁再比较：两首打乱的诗盲选，揭晓后按形式与表达逐项核对。',s:'#blindTest'}]},
  'atlas.html':{next:null,steps:[
   {t:'课程知识地图',d:'把几次作业串成一条概念链，点节点可以直接跳到对应实验室的具体控件。',s:'#map'},
