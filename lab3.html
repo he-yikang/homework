@@ -266,7 +266,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <div class="seg" id="modeSeg">
             <button data-v="offline" class="on">⚙ 离线生成</button><button data-v="ai">✦ AI 实时</button>
           </div>
-          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：从古诗词网 18.9 万首真实诗句中按意象、题材、情感与格律排列组合重装，每次生成都不同、断网可用。</p>
+          <p class="tip" id="modeTip" style="margin-top:6px">离线模式：从古诗词网 18.9 万首真实诗句中按意象、情感与格律排列组合重装，每次生成都不同、断网可用。</p>
           <p class="tip" id="fullLibStat" style="margin-top:4px;color:#7dd3a0">全量语料加载中 <b>0%</b></p>
         </div>
         <div class="ctl">
@@ -278,17 +278,6 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
           <div class="seg" id="moodSeg">
             <button data-v="jing" class="on">静</button><button data-v="bei">愁</button><button data-v="xi">喜</button><button data-v="zhuang">壮</button><button data-v="you">幽</button>
           </div>
-        </div>
-        <div class="ctl">
-          <label>题材 <span style="color:#6f6f90">《唐诗三百首》六大类</span></label>
-          <select id="subjectSel">
-            <option value="">不限 · 随主题</option>
-            <option value="山水田园">山水田园</option>
-            <option value="赠别怀远">赠别怀远</option>
-            <option value="边塞出征">边塞出征</option>
-            <option value="思妇宫怨">思妇宫怨</option>
-            <option value="咏史怀古">咏史怀古</option>
-          </select>
         </div>
         <div class="ctl">
           <label>诗体 <span style="color:#6f6f90" id="formCount"></span></label>
@@ -306,7 +295,7 @@ code{font-family:ui-monospace,Consolas,monospace;background:rgba(255,255,255,.06
         </div>
         <button class="btn primary" id="genBtn">✦ 生成诗与画</button>
         <button class="btn" id="regenBtn">↻ 换个写法重生成</button>
-        <p class="tip">主题里的字会自动匹配意象（月/山/水/柳/雪/花/鸟/舟/竹/云/亭/星）；留空则按情感随机取景。诗体与画风见下拉分组，可随时切换。</p>
+        <p class="tip">主题里的字会自动匹配意象（月/山/水/柳/雪/花/鸟/舟/竹/云/亭/星）；留空则按情感随机取景。生成的诗会<b>紧扣你写的主题、关键词与情感基调</b>：主题里的字会直接进入选句，情感基调决定选哪些情绪词与句式。诗体与画风见下拉分组，可随时切换。</p>
       </section>
 
       <section class="panel" id="how">
@@ -662,6 +651,24 @@ var LAYOUTS={horiz:'横排',vert:'竖排'};
 function hash(s){var h=2166136261>>>0;for(var i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
 function rng(seed){var a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
 function pick(arr,r){return arr[Math.floor(r()*arr.length)%arr.length];}
+/* 主题字面（紧扣关键词）：用户输入的实义字全部作为选句依据 */
+var STOPCHARS={};
+'的了着过是在也都就还又和与及或于为之其所以但而况亦将且则乃此很太被把对从向让给并且如若因'.split('').forEach(function(c){STOPCHARS[c]=1;});
+function themeChars(theme){
+  var o={}, t=(theme||'').replace(/[\s,，。、；;：:!！?？~、]+/g,'');
+  for(var i=0;i<t.length;i++){ var c=t.charAt(i); if(!STOPCHARS[c]) o[c]=1; }
+  return o;
+}
+/* 主题直接命中的意象（不含随机补足），用于选句时优先 */
+function themeImgs(theme){
+  var out=[],seen={};
+  for(var ch of (theme||'')){
+    var got=THEME[ch];
+    if(got)got.forEach(function(k){if(!seen[k]){seen[k]=1;out.push(k);}});
+    for(var k in IMG){if(IMG[k].n===ch&&!seen[k]){seen[k]=1;out.push(k);}}
+  }
+  return out;
+}
 function parseImages(theme,r){
   var keys=[],seen={};
   for(var ch of (theme||'')){
@@ -845,7 +852,7 @@ var STYLE_PROMPT={
  pixel:'像素艺术，8-bit 方块构图，复古电子游戏风',
  flat:'扁平插画，简洁几何形状，明快配色，现代设计感'
 };
-var state={poem:null,keys:[],seed:0,subject:'',form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
+var state={poem:null,keys:[],seed:0,autoSubject:'',themeChars:null,wantMain:4,form:'wujue',style:'ink',mood:'jing',layout:'horiz',nonce:0,mode:'offline',aiImage:null,checks:{poem:null,art:null}};
 function $(id){return document.getElementById(id);}
 function buildSelects(){
   var fs=$('formSel');
@@ -863,14 +870,13 @@ segBind('modeSeg',function(v){
   $('modeHint').textContent=v==='ai'?'AI 实时 · 每次不同':'离线 · 可复现';
   $('modeTip').textContent=v==='ai'
     ?'AI 模式：调用大语言模型按诗体写诗、再据诗句与画风由模型作画，每次结果都不同（需联网）。'
-    :'离线模式：从古诗词网 18.9 万首真实诗句中按意象、题材、情感与格律排列组合重装，每次生成都不同、断网可用。';
+    :'离线模式：从古诗词网 18.9 万首真实诗句中按意象、情感与格律排列组合重装，每次生成都不同、断网可用。';
   $('genBtn').textContent=v==='ai'?'✦ AI 写诗作画':'✦ 生成诗与画';
   $('regenBtn').textContent=v==='ai'?'↻ AI 再写一首':'↻ 换个写法重生成';
   // 切换模式时恢复对应画布
   if(v==='offline'){$('artAI').style.display='none';$('art').style.display='block';if(state.seed)redraw();}
   else{$('art').style.display='none';if(state.aiImage)$('artAI').style.display='block';}
 });
-$('subjectSel').addEventListener('change',function(){state.subject=this.value;});
 $('formSel').addEventListener('change',function(){state.form=this.value;if(typeof renderMeterRef==='function')renderMeterRef();});
 $('styleSel').addEventListener('change',function(){state.style=this.value;$('artStyleTag').textContent='— '+STYLES[this.value].n;if(state.poem){var gid=(GROUPS_CN.indexOf(STYLES[state.style].g)>=0)?pickGallery(state.keys):null;state.gallery=gid;if($('artGallery')){if(gid){$('artGallery').src='gallery/'+gid+'.jpg';$('artGallery').style.display='block';$('art').style.display='none';}else{$('artGallery').style.display='none';$('art').style.display='block';redraw();}}else redraw();}if(typeof renderStyleRef==='function')renderStyleRef();});
 function renderPoem(p){
@@ -903,10 +909,12 @@ function pickCorpus(form,mood,keys,nonce){
     if(p[3]===mood)score+=2;
     scored.push({p:p,s:score});
   }
-  // 同诗体的全部精品诗按「主题/情感贴合度」降序，按 nonce 轮转取用，
-  // 保证点「生成」时换一首；规则生成另占 2/3 次数、每次 seed 不同。
+  // 同诗体的全部精品诗按「主题/情感贴合度」降序，
+  // 并只在最贴合的一批里按 nonce 轮转取用——避免出现
+  // 「选了『壮』却拿到『静』的诗」这种不贴题的结果。
   scored.sort(function(a,b){return b.s-a.s;});
-  return scored[nonce%scored.length].p;
+  var top=scored.filter(function(x){return x.s===scored[0].s;});
+  return top[nonce%top.length].p;
 }
 function corpusToPoem(p,form){
   var F=FORMS[form],lines=Array.isArray(p[1])?p[1]:p[1].split('\n');
@@ -920,8 +928,20 @@ var SUBJECTS={"山水田园": {"keys": ["mountain", "bamboo", "cloud", "water", 
 var SPACE=["天涯", "故乡", "他乡", "客路", "江上", "山中", "人间", "关山", "万里", "千里"];
 var TIME=["春夜", "秋夜", "日暮", "清晨", "黄昏", "夜半", "十年", "经年", "明朝"];
 var ANTITHESIS={"天地": ["天", "地"], "日月": ["日", "月"], "山川": ["山", "川"], "山水": ["山", "水"], "古今": ["古", "今"], "岁月": ["岁", "月"], "南北": ["南", "北"], "东西": ["东", "西"]};
+/* 题材不再让用户手选，改为由「主题文本 + 已匹配意象」自动推断（唐诗六大类），
+   推断结果只用于补充意象与时空词，绝不覆盖用户输入的主题与关键词 */
+function inferSubject(theme, keys){
+  var best='', bestScore=0;
+  for(var s in SUBJECTS){
+    var sub=SUBJECTS[s], sc=0;
+    for(var i=0;i<sub.keys.length;i++) if(keys.indexOf(sub.keys[i])>=0) sc+=2;
+    for(var j=0;j<sub.words.length;j++) if(theme && theme.indexOf(sub.words[j])>=0) sc+=3;
+    if(sc>bestScore){bestScore=sc;best=s;}
+  }
+  return bestScore>=3 ? best : '';
+}
 function applySubject(keys){
-  var sub=SUBJECTS[state.subject];if(!sub)return keys;
+  var sub=SUBJECTS[state.autoSubject];if(!sub)return keys;
   var out=keys.slice();sub.keys.forEach(function(k){if(out.indexOf(k)<0)out.push(k);});
   return out;
 }
@@ -929,8 +949,8 @@ function addSpaceTime(s,plan,r,n){
   // 时空坐标只替换句内成分，不增加字数（保持格律）
   if(!/转|情|合|turn/.test(plan))return s;
   var z=s.replace(/[，。？]/g,'');
-  if(state.subject==='赠别怀远'&&z.length>=4)return z.slice(0,-2)+pick(SPACE,r).slice(0,2);
-  if(state.subject==='咏史怀古'&&z.length>=4)return z.slice(0,-2)+pick(['古今','往事','故国'],r);
+  if(state.autoSubject==='赠别怀远'&&z.length>=4)return z.slice(0,-2)+pick(SPACE,r).slice(0,2);
+  if(state.autoSubject==='咏史怀古'&&z.length>=4)return z.slice(0,-2)+pick(['古今','往事','故国'],r);
   return s;
 }
 /* ENH:SYSTEMATIC-END */
@@ -1088,16 +1108,34 @@ function plKeys(s){
   }
   return out;
 }
-function plCandidate(n, want, r){
-  var pool = (PL.byImg[String(n)]||{}), seen = {}, arr = [], i, j, s;
-  // 优先放命中题材意象的句子
+function plCandidate(n, want, r, mood){
+  var pool = (PL.byImg[String(n)]||{}), seen = {}, hit = [], rest = [], groups = [], emo = [], i, j, s;
+  // 情感句：与当前情感基调吻合的真实句，单独成组
+  var el = mood ? (emoByLen(mood)[n]||[]) : [];
+  for(i=0;i<el.length;i++){ s=el[i]; if(!seen[s]){seen[s]=1;emo.push(s);} }
+  // 命中主题意象的句子按意象分组收集：采样时各组轮转，保证每个主题意象都被覆盖
   for(i=0;i<want.length;i++){
-    var a = pool[want[i]]||[];
-    for(j=0;j<a.length;j++){ s=a[j]; if(s.length===n && !seen[s]){seen[s]=1;arr.push(s);} }
+    var a = pool[want[i]]||[], g = [];
+    for(j=0;j<a.length;j++){ s=a[j]; if(s.length===n && !seen[s]){seen[s]=1;g.push(s);hit.push(s);} }
+    groups.push(g);
   }
   var base = PL.pool[String(n)]||[];
-  for(j=0;j<base.length;j++){ s=base[j]; if(s.length===n && !seen[s]){seen[s]=1;arr.push(s);} }
-  return arr;
+  // 全量句池可达数十万条，只随机取一部分作备选，避免每次构建巨型数组
+  var need=240, tries=0, maxTry=base.length*2+60;
+  while(rest.length<need && tries++<maxTry){
+    s=base[Math.floor(r()*base.length)];
+    if(s && s.length===n && !seen[s]){seen[s]=1;rest.push(s);}
+  }
+  // 主题 ∩ 情感 的句子：既含主题意象又合当前基调，最优候选，优先取用
+  var cross=[], emoKeep=[], tmp=emo.slice(), maxCheck=Math.min(2500,tmp.length);
+  for(i=0;i<maxCheck;i++){
+    var pi=Math.floor(r()*tmp.length), c2=tmp.splice(pi,1)[0], hitAny=false;
+    var ks2=plKeys(c2);
+    for(var kk in ks2){ if(want.indexOf(kk)>=0){hitAny=true;break;} }
+    if(hitAny) cross.push(c2); else emoKeep.push(c2);
+  }
+  emo = emoKeep.concat(tmp);
+  return {hit:hit, rest:rest, groups:groups, emo:emo, cross:cross};
 }
 var PL_COMMON = null;
 function plCommonRatio(s){
@@ -1115,11 +1153,42 @@ function plCommonRatio(s){
 function plBadCue(s){
   return /(佛|僧|偈|禅|菩萨|兜率|涅槃|卿|棘|燄|箓|醮|斋醮|太守|尚书|侍郎|知府|县尉)/.test(s) ? 1 : 0;
 }
+/* 句子级情感索引：按情感基调给真实句打标，用于「紧扣情感基调」的选句 */
+var PL_EMO_IDX = {};
+function emoIndex(mood){
+  if(PL_EMO_IDX[mood]) return PL_EMO_IDX[mood];
+  var src = (PL.free && PL.free.byEmo && PL.free.byEmo[mood]) || [], idx = {};
+  for(var i=0;i<src.length;i++) idx[src[i]] = 1;
+  PL_EMO_IDX[mood] = idx;
+  return idx;
+}
+/* 情感句按句长分组：候选池里优先给出与当前基调吻合的句子 */
+var PL_EMO_LEN = {};
+function emoByLen(mood){
+  if(PL_EMO_LEN[mood]) return PL_EMO_LEN[mood];
+  var byLen = {}, src = (PL.free && PL.free.byEmo && PL.free.byEmo[mood]) || [];
+  for(var i=0;i<src.length;i++){
+    var s=src[i], L=s.length;
+    if(!byLen[L]) byLen[L]=[];
+    byLen[L].push(s);
+  }
+  PL_EMO_LEN[mood] = byLen;
+  return byLen;
+}
 function plScore(s, want, mood, pos, total, prev, over, dominant, r){
-  var ks = plKeys(s), k, v = 0, hit = 0;
-  for(k in ks) if(want.indexOf(k)>=0) hit++;
-  v += 5*hit;
+  var ks = plKeys(s), k, v = 0, hit = 0, hasWant = false;
+  for(k in ks) if(want.indexOf(k)>=0){ hit++; hasWant=true; }
+  v += 6*hit;
   if(!Object.keys(ks).length) v -= 3;
+  // 主题字面命中：句中直接出现用户写下的字 → 紧扣关键词（每字最多计 3 次）
+  var tc = state.themeChars;
+  if(tc){
+    var c2 = 0;
+    for(var i=0;i<s.length;i++) if(tc[s.charAt(i)]) c2++;
+    if(c2>3) c2=3;
+    v += 2.6*c2;
+    if(c2) v += 3;
+  }
   // 诗性加权：句子里的字越常见越像诗
   v += (plCommonRatio(s) - 0.92) * 14;
   v -= plBadCue(s) * 6;
@@ -1133,8 +1202,11 @@ function plScore(s, want, mood, pos, total, prev, over, dominant, r){
   var first = PL.first[String(s.length)]||[], last = PL.last[String(s.length)]||[];
   if(pos===0 && first.indexOf(s)>=0) v += 2;
   if(pos===total-1 && last.indexOf(s)>=0) v += 2;
+  // 情感基调：字面情绪词 tint + 句子级情感标注
+  // 句子若同时命中主题意象，情感分给满；否则只给少量，避免冲淡主题
   var tint = PL.moodTint[mood]||'';
-  for(var c=0;c<s.length;c++) if(tint.indexOf(s.charAt(c))>=0) v += 1.5;
+  for(var c=0;c<s.length;c++) if(tint.indexOf(s.charAt(c))>=0) v += 3;
+  if(emoIndex(mood)[s]) v += hasWant ? 9 : 4;
   var rh = PL.rhyme[String(s.length)]||'';
   if(pos%2===1 && rh.indexOf(s.charAt(s.length-1))>=0) v += 1;
   return v + r()*3;
@@ -1148,12 +1220,25 @@ function factoryPoem(formId, mood, subject, themeKeys, seed){
   var want = (themeKeys && themeKeys.length) ? themeKeys : (PL.subjects[subject] || ['moon','water','mountain']);
   var dominant = want[0], lines = [], used = {}, domCount = 0;
   for(var i=0;i<lens.length;i++){
-    var n = lens[i], cand = plCandidate(n, want, r);
-    if(!cand.length) return null;
-    // 随机采样 60 个候选打分，兼顾质量与速度
-    var sample = [], idx, tries = Math.min(60, cand.length);
-    var tmp = cand.slice();
-    for(var t=0;t<tries;t++){ idx = Math.floor(r()*tmp.length); sample.push(tmp.splice(idx,1)[0]); }
+    var n = lens[i], cand = plCandidate(n, want, r, mood);
+    if(!cand.hit.length && !cand.rest.length) return null;
+    // 采样打分：① 主题∩情感的句子优先 ② 主题意象各组轮转
+    // ③ 其余情感句 ④ 全量句池随机补 —— 三重贴合同时生效
+    var sample = [], idx, t, gi = 0, guard = 0;
+    for(t=0;t<cand.cross.length && sample.length<22;t++){
+      idx=Math.floor(r()*cand.cross.length); sample.push(cand.cross.splice(idx,1)[0]);
+    }
+    var mainGroups = Math.max(1, Math.min(cand.groups.length, state.wantMain||cand.groups.length));
+    while(sample.length<44 && guard++<240){
+      var g = cand.groups[gi % mainGroups];
+      if(g && g.length){ idx=Math.floor(r()*g.length); sample.push(g.splice(idx,1)[0]); }
+      gi++;
+    }
+    for(t=0;t<cand.emo.length && sample.length<54;t++){
+      idx=Math.floor(r()*cand.emo.length); sample.push(cand.emo.splice(idx,1)[0]);
+    }
+    var nRest = Math.min(60-sample.length, cand.rest.length);
+    for(t=0;t<nRest;t++){ idx=Math.floor(r()*cand.rest.length); sample.push(cand.rest.splice(idx,1)[0]); }
     var quota = Math.max(1, Math.floor(lens.length/2));
     var over = domCount >= quota, prev = lines.length?plKeys(lines[lines.length-1]):null;
     var best = null, bestV = -1e9;
@@ -1168,9 +1253,15 @@ function factoryPoem(formId, mood, subject, themeKeys, seed){
     lines.push(best); used[best]=1;
     if(plKeys(best)[dominant]) domCount++;
   }
-  // 标题：首句出现的二字意象词，否则用题材首字
-  var tw = '', wk;
-  for(wk in IMG){ var ws2=IMG[wk].w; for(var z=0;z<ws2.length;z++) if(lines[0].indexOf(ws2[z])>=0){tw=ws2[z];break;} if(tw)break; }
+  // 标题：优先用用户主题里的意象词 → 主题实义字 → 首句意象词（紧扣主题）
+  var tw = '', wk, th=($('theme').value||'').replace(/[\s,，。、；;：:]+/g,'');
+  if(th){
+    for(wk in IMG){ var ws2=IMG[wk].w; for(var z=0;z<ws2.length;z++) if(th.indexOf(ws2[z])>=0){tw=ws2[z];break;} if(tw)break; }
+    if(!tw) tw = th.slice(0,2);
+  }
+  if(!tw){
+    for(wk in IMG){ var ws3=IMG[wk].w; for(var z=0;z<ws3.length;z++) if(lines[0].indexOf(ws3[z])>=0){tw=ws3[z];break;} if(tw)break; }
+  }
   if(!tw) tw = PL.keyCN[want[0]]||'杂';
   return {title:tw+'·'+F.n.slice(0,2), lines:lines, form:formId, formName:F.n,
           tag:F.g, lang:F.lang, layout:state.layout, mood:mood, moodName:MOOD[mood].n,
@@ -1185,11 +1276,36 @@ var FREE_SUBTAG = {
   '边塞出征':['边塞','爱国'], '思妇宫怨':['相思','闺怨'],
   '咏史怀古':['怀古','咏物'], '写景':['写景','山水','月亮'], '抒情':['抒情','相思']
 };
-function freePile(subject, mood, r){
-  var F = PL.free || {}, arr = [], i, t;
-  var tags = FREE_SUBTAG[subject] || [];
-  for(i=0;i<tags.length;i++) if(F.byTag && F.byTag[tags[i]]) arr = arr.concat(F.byTag[tags[i]].slice(0, 200));
-  if(F.byEmo && F.byEmo[mood]) arr = arr.concat(F.byEmo[mood].slice(0, 120));
+/* 主题意象 → 语料主题标签：让自由诗也从紧扣主题的语料中取句 */
+var FREE_IMGTAG = {
+  autumn:['秋天','写景'], moon:['月亮'], willow:['柳树','离别'], snow:['梅花','写景'],
+  bamboo:['隐逸','山水'], mountain:['山水','田园'], water:['山水'], boat:['羁旅','思乡'],
+  pavilion:['山水','羁旅'], bird:['离别','写景'], star:['写景'], cloud:['写景'],
+  flower:['写景','相思'], rain:['写景'], wind:['写景'], sun:['写景'], night:['写景']
+};
+function freeTags(subject, keys){
+  var tags=[],i,j,tg;
+  var st=FREE_SUBTAG[subject]||[];
+  for(i=0;i<st.length;i++) tags.push(st[i]);
+  for(i=0;i<(keys||[]).length;i++){
+    tg=FREE_IMGTAG[keys[i]];
+    if(tg) for(j=0;j<tg.length;j++) if(tags.indexOf(tg[j])<0) tags.push(tg[j]);
+  }
+  return tags;
+}
+function freePile(subject, mood, r, keys){
+  var F = PL.free || {}, arr = [], i, q, tb, m;
+  var tags = freeTags(subject, keys);
+  for(i=0;i<tags.length;i++){
+    if(F.byTag && F.byTag[tags[i]]){
+      tb=F.byTag[tags[i]]; m=Math.min(200,tb.length);
+      for(q=0;q<m;q++) arr.push(tb[Math.floor(r()*tb.length)]);   // 随机取样，每次生成都不同
+    }
+  }
+  if(F.byEmo && F.byEmo[mood]){
+    tb=F.byEmo[mood]; m=Math.min(120,tb.length);
+    for(q=0;q<m;q++) arr.push(tb[Math.floor(r()*tb.length)]);
+  }
   var base = PL.pool['5'] || [];
   for(i=0;i<400 && i<base.length;i++) arr.push(base[i]);
   return arr;
@@ -1209,7 +1325,7 @@ function factoryFreePoem(formId, mood, subject, themeKeys, seed){
   var r = rng(seed), kind = F.kind, F2 = PL.free || {};
   var conn = (F2.connect && F2.connect.length) ? F2.connect : ['何处','不知','唯有'];
   if(kind === 'tpl' || kind === 'prose' || kind === 'menglong'){
-    var pile = freePile(subject, mood, r), used = {}, lines, title;
+    var pile = freePile(subject, mood, r, themeKeys), used = {}, lines, title;
     var sents = freePick(pile, 8, used, r);
     if(!sents.length) return null;
     if(kind === 'prose'){
@@ -1336,6 +1452,8 @@ function fullActivate(){
   PL.free = PL.free || {};
   if(M.byTag) PL.free.byTag = M.byTag;
   if(M.byEmo) PL.free.byEmo = M.byEmo;
+  // 全量情感库替换后，作废按精简库建好的情感索引缓存
+  PL_EMO_IDX = {}; PL_EMO_LEN = {};
   if(M.longLines) PL.free.longLines = M.longLines;
   if(M.connect) PL.free.connect = M.connect;
   if(M.turn) PL.free.turn = M.turn;
@@ -1361,12 +1479,24 @@ function generateOffline(){
   var theme=$('theme').value.trim();
   var baseSeed=hash(theme+'|'+state.form+'|'+state.mood+'|'+state.nonce);
   var keys=parseImages(theme,rng(baseSeed));
+  // 题材由主题自动推断（不再由用户手选），且只补充意象、绝不覆盖主题
+  state.autoSubject=inferSubject(theme,keys);
+  // 主题字面：用户写下的每个字都作为选句依据（紧扣关键词）
+  state.themeChars=themeChars(theme);
   // 量产重装：以 18.9 万首真实语料提取的句库为主力，按诗体格律排列组合（每次不同）。
   // 精品原创诗库按 nonce 少量穿插；未覆盖诗体（现代诗/散文诗等）回退唐诗写法规则生成。
   var picked=(state.nonce%7===0)?pickCorpus(state.form,state.mood,keys,state.nonce):null;
-  var want=PL.subjects[state.subject]||keys.slice(0,4);
+  // 主题意象优先，推断题材的意象只作补充
+  var main=themeImgs(theme);
+  var want=main.slice();
+  state.wantMain=main.length;
+  if(state.autoSubject){
+    var sk=SUBJECTS[state.autoSubject].keys;
+    for(var q=0;q<sk.length && want.length<6;q++) if(want.indexOf(sk[q])<0) want.push(sk[q]);
+  }
+  if(!want.length){ want=keys.slice(0,4); state.wantMain=want.length; }
   var fp=null;
-  try{ fp=factoryPoem(state.form,state.mood,state.subject,want,baseSeed); }catch(e){ fp=null; }
+  try{ fp=factoryPoem(state.form,state.mood,state.autoSubject,want,baseSeed); }catch(e){ fp=null; }
   var poem=picked?corpusToPoem(picked,state.form):(fp||craftPoem(state.form,state.mood,keys,baseSeed));
   var seed=hash(poem.lines.join('')+poem.title+'|'+state.style);
   state.poem=poem;state.keys=keys;state.seed=seed;state.aiImage=null;
@@ -1419,6 +1549,7 @@ function generateAI(){
   var moodWord=MOOD[state.mood].n,formIns=formInstruction(state.form);
   var fullTheme=theme+'（情感基调：'+moodWord+'）';
   var prompt='你是人工智能诗人。'+formIns+'\n主题：'+theme+'，情感基调：'+moodWord+'。\n'
+    +'要求：全诗必须紧扣上述主题与关键词——主题中的意象与词句要在诗中实打实出现，不得跑题、不得写成泛泛的山水诗；情感基调要贯穿全诗，用词与意象都要对应该情绪。\n'
     +'只输出诗本身：第一行写《标题》，随后每行一句诗。不要任何解释、注释、格律说明、代码块或 Markdown 标记。';
   fetch(AI.base+'/chat/completions',{method:'POST',headers:aiHeaders(),
     body:JSON.stringify({model:AI.chat,messages:[{role:'user',content:prompt}],max_tokens:2000,temperature:1.25})})
